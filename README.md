@@ -32,7 +32,7 @@
     LDAP_CONNECTION=default
     LDAP_HOST=192.168.x.x
     LDAP_USERNAME="CN=Blitzcode gMSA,CN=Managed Service Accounts,DC=Blitzcode,DC=company"
-    LDAP_PASSWORD="GMSP@ssword2024"
+    LDAP_PASSWORD="Managed2024."
     LDAP_PORT=389
     LDAP_BASE_DN="DC=Blitzcode,DC=company"
     LDAP_TIMEOUT=5
