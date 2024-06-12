@@ -7,9 +7,9 @@
 ## Configuración del proyecto Laravel
 
 1. Clona este repositorio en tu máquina local:
-
-    Utiliza el comando `git clone`.
-
+    ```bash
+    git clone https://github.com/blitzcode-company/Backoffice.git
+    ```
 2. Instala las dependencias del proyecto utilizando Composer:
 
     Ejecuta el comando `composer install` dentro del proyecto.
