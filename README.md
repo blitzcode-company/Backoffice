@@ -11,20 +11,22 @@
     git clone https://github.com/blitzcode-company/Backoffice.git
     ```
 2. Instala las dependencias del proyecto utilizando Composer:
-
-    Ejecuta el comando `composer install` dentro del proyecto.
-
-3. Instala Vite para compilar los activos de la aplicación:
+   ```bash
+   composer install
+   ```
+4. Instala Vite para compilar los activos de la aplicación:
 
     ```bash
     npm install vite --save-dev
     ```
 
-4. Copia el archivo de configuración de ejemplo para LDAP:
+5. Copia el archivo de configuración y genera la clave de la aplicación:
+   ```bash
+   cp .env.example .env
+   php artisan key:generate
+   ```
 
-   `cp .env.example .env`
-
-5. Abre el archivo `.env` y configura los parámetros de conexión LDAP según tu entorno:
+6. Abre el archivo `.env` y configura los parámetros de conexión LDAP según tu entorno:
 
     ```dotenv
     LDAP_CACHE=false
@@ -83,7 +85,7 @@
 3. Una vez que hayas configurado tanto el proyecto Laravel como el servidor Windows Server, puedes levantar el entorno utilizando Docker Compose:
 
     ```bash
-    docker-compose up
+    docker-compose up -d
     ```
 
 4. Esto iniciará el servidor de desarrollo de Laravel y el servicio de Vite para compilar los activos de la aplicación.
