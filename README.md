@@ -1,6 +1,8 @@
-# Configuración de Laravel con LDAP para Autenticación
+# Backoffice
 
-Este repositorio proporciona un ejemplo de cómo configurar un proyecto Laravel para la autenticación utilizando un servidor LDAP (Protocolo Ligero de Acceso a Directorios). Este README te guiará a través de los pasos necesarios para configurar tanto el proyecto Laravel como el servidor Windows Server, específicamente Active Directory, para la autenticación LDAP.
+<p align="center">
+    <img src="https://drive.google.com/uc?export=download&id=1yyVoEHmLQgzYpDJJJvjtpo1MHdZNP84k" width="200">
+</p>
 
 ## Configuración del proyecto Laravel
 
@@ -12,17 +14,23 @@ Este repositorio proporciona un ejemplo de cómo configurar un proyecto Laravel 
 
     Ejecuta el comando `composer install` dentro del proyecto.
 
-3. Copia el archivo de configuración de ejemplo para LDAP:
+3. Instala Vite para compilar los activos de la aplicación:
+
+    ```bash
+    npm install vite --save-dev
+    ```
+
+4. Copia el archivo de configuración de ejemplo para LDAP:
 
    `cp .env.example .env`
 
-4. Abre el archivo `.env` y configura los parámetros de conexión LDAP según tu entorno:
+5. Abre el archivo `.env` y configura los parámetros de conexión LDAP según tu entorno:
 
     ```dotenv
     LDAP_CACHE=false
     LDAP_LOGGING=true
     LDAP_CONNECTION=default
-    LDAP_HOST=10.0.2.15
+    LDAP_HOST=192.168.x.x
     LDAP_USERNAME="CN=Blitzcode gMSA,CN=Managed Service Accounts,DC=Blitzcode,DC=company"
     LDAP_PASSWORD="GMSP@ssword2024"
     LDAP_PORT=389
@@ -48,9 +56,6 @@ Este repositorio proporciona un ejemplo de cómo configurar un proyecto Laravel 
     - Mateo Sosa:
       - UID: Mateo Sosa
       - Correo electrónico: mateesosar@gmail.com
-    - Fabian Gonzalez:
-      - UID: Fabian Gonzalez
-      - Correo electrónico: fgonzalez.estudios@gmail.com
 
 4. Crea un grupo llamado `Blitzcode-team` y agrega a los usuarios mencionados anteriormente a este grupo.
 5. Asegúrate de que el grupo `Blitzcode-team` forme parte del grupo de administradores en Active Directory para que los usuarios tengan privilegios de administradores.
@@ -70,14 +75,17 @@ Este repositorio proporciona un ejemplo de cómo configurar un proyecto Laravel 
 2. Ejecuta los siguientes comandos de Artisan para migrar la base de datos y probar la conexión LDAP:
 
     ```bash
+    sudo chmod 777 storage/logs/laravel.log
     php artisan migrate
     php artisan ldap:test
     ```
 
-3. Una vez que hayas configurado tanto el proyecto Laravel como el servidor Windows Server, puedes ejecutar el servidor de desarrollo de Laravel:
+3. Una vez que hayas configurado tanto el proyecto Laravel como el servidor Windows Server, puedes levantar el entorno utilizando Docker Compose:
 
     ```bash
-    php artisan serve
+    docker-compose up
     ```
 
-4. Visita `http://localhost:8000` en tu navegador y deberías poder iniciar sesión utilizando las credenciales de los usuarios de Active Directory que has configurado.
+4. Esto iniciará el servidor de desarrollo de Laravel y el servicio de Vite para compilar los activos de la aplicación.
+
+5. Visita `http://192.168.x.x:8000` en tu navegador y deberías poder iniciar sesión utilizando las credenciales de los usuarios de Active Directory que has configurado.
