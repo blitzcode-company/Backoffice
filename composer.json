@@ -9,6 +9,7 @@
     "license": "MIT",
     "require": {
         "php": "^7.3|^8.0",
+        "directorytree/ldaprecord": "^3.6",
         "fruitcake/laravel-cors": "^2.0",
         "guzzlehttp/guzzle": "^7.0.1",
         "laravel/framework": "8.83.27",
@@ -60,6 +61,6 @@
         "preferred-install": "dist",
         "sort-packages": true
     },
-    "minimum-stability": "dev",
+    "minimum-stability": "stable",
     "prefer-stable": true
 }
