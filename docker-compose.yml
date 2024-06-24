@@ -10,8 +10,6 @@ services:
       - 8002:8000
     volumes:
       - .:/app
-    networks:
-      - blitzvideo-api_default
     environment:
       - DB_HOST=mysql
       - DB_DATABASE=Backoffice
@@ -29,8 +27,3 @@ services:
       - MYSQL_ROOT_PASSWORD=root
     volumes:
       - ./mysql:/var/lib/mysql
-    networks:
-      - blitzvideo-api_default
-networks:
-  blitzvideo-api_default:
-    external: true
