@@ -39,7 +39,7 @@ class LoginController extends Controller
         RateLimiter::clear($this->throttleKey($request));
         $request->session()->regenerate();
 
-        return redirect()->intended('dashboard');
+        return redirect()->intended('inicio');
     }
 
     public function logout()
