@@ -1,93 +1,64 @@
-# Backoffice
+<p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400"></a></p>
 
 <p align="center">
-    <img src="https://drive.google.com/uc?export=download&id=1yyVoEHmLQgzYpDJJJvjtpo1MHdZNP84k" width="200">
+<a href="https://travis-ci.org/laravel/framework"><img src="https://travis-ci.org/laravel/framework.svg" alt="Build Status"></a>
+<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/dt/laravel/framework" alt="Total Downloads"></a>
+<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/v/laravel/framework" alt="Latest Stable Version"></a>
+<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
 </p>
 
-## Configuración del proyecto Laravel
+## About Laravel
 
-1. Clona este repositorio en tu máquina local:
-    ```bash
-    git clone https://github.com/blitzcode-company/Backoffice.git
-    ```
-2. Instala las dependencias del proyecto utilizando Composer:
-   ```bash
-   composer install
-   ```
-4. Instala Vite para compilar los activos de la aplicación:
+Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
 
-    ```bash
-    npm install vite --save-dev
-    ```
+- [Simple, fast routing engine](https://laravel.com/docs/routing).
+- [Powerful dependency injection container](https://laravel.com/docs/container).
+- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
+- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
+- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
+- [Robust background job processing](https://laravel.com/docs/queues).
+- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
 
-5. Copia el archivo de configuración y genera la clave de la aplicación:
-   ```bash
-   cp .env.example .env
-   php artisan key:generate
-   ```
+Laravel is accessible, powerful, and provides tools required for large, robust applications.
 
-6. Abre el archivo `.env` y configura los parámetros de conexión LDAP según tu entorno:
+## Learning Laravel
 
-    ```dotenv
-    LDAP_CACHE=false
-    LDAP_LOGGING=true
-    LDAP_CONNECTION=default
-    LDAP_HOST=192.168.x.x
-    LDAP_USERNAME="CN=Blitzcode gMSA,CN=Managed Service Accounts,DC=Blitzcode,DC=company"
-    LDAP_PASSWORD="Managed2024."
-    LDAP_PORT=389
-    LDAP_BASE_DN="DC=Blitzcode,DC=company"
-    LDAP_TIMEOUT=5
-    LDAP_SSL=false
-    LDAP_TLS=false
-    LDAP_SASL=false
-    ```
+Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework.
 
-## Configuración del servidor Windows Server (Active Directory)
+If you don't feel like reading, [Laracasts](https://laracasts.com) can help. Laracasts contains over 1500 video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
 
-1. Abre el Administrador de servidores en tu servidor Windows.
-2. Ve a Herramientas > Usuarios y equipos de Active Directory.
-3. Crea una nueva unidad organizativa (UO) llamada Blitzcode-dev y dentro crea los siguientes usuarios:
+## Laravel Sponsors
 
-    - Diego Vega:
-      - UID: Diego Vega
-      - Correo electrónico: diegovegaganachipi@gmail.com
-    - Kevin Vidir:
-      - UID: Kevin Vidir
-      - Correo electrónico: kevinvidir@gmail.com
-    - Mateo Sosa:
-      - UID: Mateo Sosa
-      - Correo electrónico: mateesosar@gmail.com
+We would like to extend our thanks to the following sponsors for funding Laravel development. If you are interested in becoming a sponsor, please visit the Laravel [Patreon page](https://patreon.com/taylorotwell).
 
-4. Crea un grupo llamado `Blitzcode-team` y agrega a los usuarios mencionados anteriormente a este grupo.
-5. Asegúrate de que el grupo `Blitzcode-team` forme parte del grupo de administradores en Active Directory para que los usuarios tengan privilegios de administradores.
+### Premium Partners
 
-6. Crea una nueva cuenta de servicio administrado (gMSA) con los siguientes detalles:
+- **[Vehikl](https://vehikl.com/)**
+- **[Tighten Co.](https://tighten.co)**
+- **[Kirschbaum Development Group](https://kirschbaumdevelopment.com)**
+- **[64 Robots](https://64robots.com)**
+- **[Cubet Techno Labs](https://cubettech.com)**
+- **[Cyber-Duck](https://cyber-duck.co.uk)**
+- **[Many](https://www.many.co.uk)**
+- **[Webdock, Fast VPS Hosting](https://www.webdock.io/en)**
+- **[DevSquad](https://devsquad.com)**
+- **[Curotec](https://www.curotec.com/services/technologies/laravel/)**
+- **[OP.GG](https://op.gg)**
+- **[WebReinvent](https://webreinvent.com/?utm_source=laravel&utm_medium=github&utm_campaign=patreon-sponsors)**
+- **[Lendio](https://lendio.com)**
 
-    ```
-    Usuario: Blitzcode gMSA
-    Contraseña: gMSAP@ssword2024
-    Correo electrónico: Blitzcode.company@gmail.com
-    ```
+## Contributing
 
-## Uso del proyecto
+Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
 
-1. Asegúrate de crear una base de datos llamada `Backoffice` y detallarla en el archivo de configuración `.env`.
+## Code of Conduct
 
-2. Ejecuta los siguientes comandos de Artisan para migrar la base de datos y probar la conexión LDAP:
+In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
 
-    ```bash
-    sudo chmod 777 storage/logs/laravel.log
-    php artisan migrate
-    php artisan ldap:test
-    ```
+## Security Vulnerabilities
 
-3. Una vez que hayas configurado tanto el proyecto Laravel como el servidor Windows Server, puedes levantar el entorno utilizando Docker Compose:
+If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
 
-    ```bash
-    docker-compose up -d
-    ```
+## License
 
-4. Esto iniciará el servidor de desarrollo de Laravel y el servicio de Vite para compilar los activos de la aplicación.
-
-5. Visita `http://192.168.x.x:8000` en tu navegador y deberías poder iniciar sesión utilizando las credenciales de los usuarios de Active Directory que has configurado.
+The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
