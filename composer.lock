@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "885e482bdf990441373d40289279e9b0",
+    "content-hash": "7985c833e512ce7ad93d3356b8ed0336",
     "packages": [
         {
             "name": "asm89/stack-cors",
@@ -341,6 +341,73 @@
                 }
             ],
             "time": "2024-05-13T15:57:23+00:00"
+        },
+        {
+            "name": "directorytree/ldaprecord-laravel",
+            "version": "v3.3.3",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/DirectoryTree/LdapRecord-Laravel.git",
+                "reference": "518fd4c14f839ee9c2d7eb9d4697615f8e18748b"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/DirectoryTree/LdapRecord-Laravel/zipball/518fd4c14f839ee9c2d7eb9d4697615f8e18748b",
+                "reference": "518fd4c14f839ee9c2d7eb9d4697615f8e18748b",
+                "shasum": ""
+            },
+            "require": {
+                "directorytree/ldaprecord": "^v3.3",
+                "ext-json": "*",
+                "ext-ldap": "*",
+                "illuminate/support": "^8.0|^9.0|^10.0|^11.0",
+                "php": ">=8.1",
+                "ramsey/uuid": "*"
+            },
+            "require-dev": {
+                "laravel/pint": "^1.9",
+                "laravel/sanctum": "*",
+                "mockery/mockery": "^1.0",
+                "orchestra/testbench": "^6.0|^7.0|^8.0|^9.0",
+                "phpunit/phpunit": "^8.0|^9.0|^10.0|^11.0",
+                "spatie/ray": "^1.28"
+            },
+            "type": "project",
+            "extra": {
+                "laravel": {
+                    "providers": [
+                        "LdapRecord\\Laravel\\LdapServiceProvider",
+                        "LdapRecord\\Laravel\\LdapAuthServiceProvider"
+                    ]
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "LdapRecord\\Laravel\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "description": "LDAP Authentication & Management for Laravel.",
+            "keywords": [
+                "adldap2",
+                "laravel",
+                "ldap",
+                "ldaprecord"
+            ],
+            "support": {
+                "issues": "https://github.com/DirectoryTree/LdapRecord-Laravel/issues",
+                "source": "https://github.com/DirectoryTree/LdapRecord-Laravel/tree/v3.3.3"
+            },
+            "funding": [
+                {
+                    "url": "https://github.com/stevebauman",
+                    "type": "github"
+                }
+            ],
+            "time": "2024-06-17T03:43:03+00:00"
         },
         {
             "name": "doctrine/inflector",
