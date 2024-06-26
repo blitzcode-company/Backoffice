@@ -1,0 +1,30 @@
+@use '../partials/variables' as v;
+
+#sidebar-wrapper {
+    min-height: 100vh;
+    min-width: 250px;
+    background-color: #f8f9fa;
+    border-right: 1px solid #dee2e6;
+}
+
+.sidebar-heading {
+    background-color: v.$color-primary-dark;
+    color: v.$color-footer-text;
+    padding: 15px;
+}
+
+.list-group-item-action {
+    color: v.$color-primary-dark;
+}
+
+.list-group-item-action:hover {
+    background-color: v.$color-primary-light;
+    color: #fff;
+}
+
+.navbar,
+.sidebar-heading,
+.list-group-item-action.active {
+    background-color: v.$color-primary-dark;
+    color: #fff !important;
+}

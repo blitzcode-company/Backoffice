@@ -1,0 +1,17 @@
+@use '../partials/variables' as v;
+
+.btn-primary {
+    background-color: v.$color-primary-light;
+    color: #ffffff;
+    border: none;
+    padding: 10px 20px;
+    font-size: 18px;
+    border-radius: 4px;
+    cursor: pointer;
+    width: 100%;
+    max-width: 200px;
+}
+
+.btn-primary:hover {
+    background-color: v.$color-primary-hover;
+}

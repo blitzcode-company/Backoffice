@@ -4,8 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Blitzvideo - Backoffice</title>
-    <link rel="stylesheet" href="{{ asset('css/app.css') }}">
-    <link rel="stylesheet" href="{{ asset('css/styles.css') }}">
+    <link rel="stylesheet" href="{{ asset('css/main.css') }}">
     <link rel="icon" href="{{ asset('img/favicon.png') }}" type="image/png">
 </head>
 <body>
@@ -37,4 +36,6 @@
     <footer class="footer">
         <p class="footer-text">Este producto ha sido desarrollado con 💻 y ☕ por <a href="https://blitzcode.com" class="footer-link">Blitzcode Company &reg;</a></p>
     </footer>
-    <script src="{{ asset('js/app.js') }}"></
+    <script src="{{ asset('js/app.js') }}"></script>
+</body>
+</html>

@@ -1,0 +1,19 @@
+@use '../partials/variables' as v;
+
+.form-control {
+    width: 100%;
+    max-width: 350px;
+    padding: 10px;
+    font-size: 16px;
+    border: 1px solid v.$color-border; 
+    border-radius: 4px;
+    margin: 0 auto 10px;
+    box-sizing: border-box;
+}
+
+label {
+    color: v.$color-primary-dark;
+    display: block;
+    text-align: left;
+    margin-left: 5%;
+}

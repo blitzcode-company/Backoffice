@@ -1,0 +1,11 @@
+@use '../partials/variables' as v;
+
+.alert {
+    color: v.$color-alert-dark;  
+    background-color: v.$color-alert-light;
+    border: 1px solid #ffeeba;
+    padding: 5px;
+    margin-top: 5%;
+    margin-bottom: 5%;
+    border-radius: 4px;
+}

@@ -10,31 +10,32 @@ class UserController extends Controller
 {
     public function listarTodosLosUsuarios()
     {
-        $users = User::with('canal')->get();
-        return response()->json($users);
+        $users = User::with('canal')
+            ->where('name', '!=', 'Invitado')
+            ->take(10)
+            ->get();
+        return view('usuario.usuarios', compact('users'));
     }
 
-    public function listarUsuarioPorId($id)
+    public function mostrarUsuarioPorId($id)
     {
         $user = User::with('canal')->find($id);
 
         if (!$user) {
-            return response()->json(['message' => 'Usuario no encontrado'], 404);
+            abort(404, 'Usuario no encontrado');
         }
 
-        return response()->json($user);
+        return view('usuario.usuario', compact('user'));
     }
 
-    public function listarUsuariosPorNombre($nombre)
+    public function listarUsuariosPorNombre(Request $request)
     {
-        $users = User::with('canal')
-                    ->where('name', 'like', '%' . $nombre . '%')
-                    ->get();
-
-        if ($users->isEmpty()) {
-            return response()->json(['message' => 'No se encontraron usuarios con ese nombre'], 404);
+        $nombre = $request->input('nombre');
+        $query = User::with('canal')->where('name', '!=', 'Invitado');
+        if ($nombre) {
+            $query->where('name', 'like', '%' . $nombre . '%');
         }
-
-        return response()->json($users);
+        $users = $query->take(10)->get();
+        return view('usuario.usuarios', compact('users'));
     }
 }

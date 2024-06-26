@@ -1,0 +1,25 @@
+@use '../partials/variables' as v;
+
+.footer {
+    padding: 20px 0;
+    width: 100%;
+    background-color: v.$color-footer-background;
+    text-align: center;
+    margin-top: auto;
+}
+
+.footer-text {
+    color: v.$color-footer-text;
+    font-size: 14px;
+    margin: 0;
+}
+
+.footer-link {
+    color: v.$color-footer-link;
+    text-decoration: none;
+}
+
+.footer-link:hover {
+    color: v.$color-footer-link-hover;
+    text-decoration: underline;
+}
