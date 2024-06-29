@@ -88,7 +88,6 @@
     outline: none;
 }
 
-//----------------------------------------------------------------------------------------
 .user-details-container {
     max-width: 600px;
     margin: 0 auto;
@@ -102,7 +101,7 @@
 
 .user-photo-large img {
     width: 250px;
-    height: auto; 
+    height: 250px; 
     border-radius: 50%;
     object-fit: cover;
     margin: 0 auto;
@@ -168,3 +167,4 @@
 .btn-back i {
     margin-right: 5px;
 }
+

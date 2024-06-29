@@ -1,0 +1,62 @@
+@use '../partials/variables' as v;
+
+.modal-content {
+    background-color: v.$color-background;
+    border: 1px solid v.$color-border;
+    box-shadow: 0 0 10px v.$shadow-color;
+}
+
+.modal-header {
+    background-color: v.$color-primary-dark;
+    border-bottom: 1px solid v.$color-border;
+    border-top-left-radius: 0 !important;
+    border-top-right-radius: 0 !important;
+}
+
+.modal-title {
+    color: #fff;
+}
+
+.modal-body {
+    color: v.$color-primary-dark;
+    text-align: center;
+}
+
+.modal-footer {
+    background-color: v.$color-modal-header;
+    border-top: 1px solid v.$color-border;
+}
+
+.modal-footer .btn-primary {
+    color: v.$color-background;
+    padding: 5px 10px;
+    width: 20%;
+    max-width: 50px;
+    border: none;
+    outline: none;
+    box-shadow: none;
+}
+
+.modal-footer .btn-primary .btn-si {
+    background-color: v.$color-primary-light;
+}
+
+.modal-footer .btn-primary .btn-si:hover {
+    background-color: v.$color-primary-dark;
+}
+
+.modal-footer .btn-primary .btn-no {
+    background-color: v.$color-primary-light;
+}
+
+.modal-footer .btn-primary .btn-no:hover {
+    background-color: v.$color-primary-dark;
+}
+
+.modal-close {
+    color: #fff;
+    user-select: none;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+}

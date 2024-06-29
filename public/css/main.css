@@ -176,7 +176,7 @@ label {
 
 .user-photo-large img {
   width: 250px;
-  height: auto;
+  height: 250px;
   border-radius: 50%;
   -o-object-fit: cover;
      object-fit: cover;
@@ -244,6 +244,67 @@ label {
   margin-right: 5px;
 }
 
+.modal-content {
+  background-color: #ffffff;
+  border: 1px solid #ccc;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+.modal-header {
+  background-color: #042234;
+  border-bottom: 1px solid #ccc;
+  border-top-left-radius: 0 !important;
+  border-top-right-radius: 0 !important;
+}
+
+.modal-title {
+  color: #fff;
+}
+
+.modal-body {
+  color: #042234;
+  text-align: center;
+}
+
+.modal-footer {
+  background-color: #f3f3f3;
+  border-top: 1px solid #ccc;
+}
+
+.modal-footer .btn-primary {
+  color: #ffffff;
+  padding: 5px 10px;
+  width: 20%;
+  max-width: 50px;
+  border: none;
+  outline: none;
+  box-shadow: none;
+}
+
+.modal-footer .btn-primary .btn-si {
+  background-color: #0baafe;
+}
+
+.modal-footer .btn-primary .btn-si:hover {
+  background-color: #042234;
+}
+
+.modal-footer .btn-primary .btn-no {
+  background-color: #0baafe;
+}
+
+.modal-footer .btn-primary .btn-no:hover {
+  background-color: #042234;
+}
+
+.modal-close {
+  color: #fff;
+  user-select: none;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+}
+
 .container {
   width: 100%;
   max-width: 350px;
@@ -261,6 +322,10 @@ label {
   display: flex;
   flex-direction: column;
   justify-content: center;
+}
+
+.container.container-card {
+  box-shadow: none;
 }
 
 h3.login-text {
