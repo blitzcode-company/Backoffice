@@ -1,0 +1,112 @@
+@use '../partials/variables' as v;
+
+.canal-portada {
+    position: relative;
+    width: 100%;
+    height: 200px;
+    overflow: hidden;
+}
+
+.canal-portada img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.container-card {
+    margin-top: 20px;
+}
+
+.canal-photo-large {
+    position: relative;
+    width: 100%;
+    height: 312px;
+    overflow: hidden;
+}
+
+.canal-photo-large img {
+    width: 100%;
+    object-fit: cover;
+}
+
+.canal-info-box {
+    padding: 0;
+}
+
+.canal-info h2 {
+    font-size: 24px;
+    margin-bottom: 10px;
+}
+
+.btn-action {
+    margin-right: 10px;
+}
+
+.modal-close {
+    font-size: 30px;
+}
+
+.canal-foto-perfil {
+    width: 200px;
+    height: 200px;
+    overflow: hidden;
+    margin: 0 auto; 
+}
+
+.canal-foto-perfil-list {
+    width: 200px;
+    height: 200px;
+    overflow: hidden;
+    margin: 0 auto;
+    position: absolute;
+    top: 120px;
+    left: 25%;
+    right: 25%;
+}
+
+.canal-foto-perfil img,
+.canal-foto-perfil-list img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.card-body label {
+    margin: 0;
+    cursor: pointer;
+}
+
+.form-control.custom-textarea,
+.form-control.custom-input {
+    width: 90%;
+    max-width: 600px !important;
+}
+
+.canal-list-container {
+    display: grid;
+    grid-gap: 20px;
+    max-width: 1920px;
+    margin: 0 auto;
+}
+
+.card {
+    width: 100%; 
+}
+
+@media (min-width: 1200px) {
+    .canal-list-container {
+        grid-template-columns: repeat(3, 1fr);
+    }
+}
+
+@media (max-width: 1199px) and (min-width: 768px) {
+    .canal-list-container {
+        grid-template-columns: repeat(2, 1fr); 
+    }
+}
+
+@media (max-width: 767px) {
+    .canal-list-container {
+        grid-template-columns: 1fr; 
+    }
+}

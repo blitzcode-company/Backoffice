@@ -1,12 +1,11 @@
 @extends('layouts.app')
 
 @section('content')
-    <h1>Administración de Usuarios</h1>
     <div class="search-container">
         <form action="{{ route('usuarios-nombre') }}" method="POST">
             @csrf
             <input type="search" name="nombre" placeholder="Buscar usuario por nombre" class="search-bar" required>
-            <button type="submit" class="btn-info"><i class="fas fa-search"></i></button>
+            <button type="submit" class="btn-info" ><i class="fas fa-search"></i></button>
         </form>
     </div>
     <div class="create-user-button-container text-center mb-5 mt-5">
@@ -36,7 +35,7 @@
                             @endif
                         </div>
                         <div class="user-actions">
-                            <a href="{{ route('usuario', ['id' => $user->id]) }}" class="btn-info">
+                            <a href="{{ route('usuario', ['id' => $user->id]) }}" class="btn-info" style="margin-right: 50px !important;">
                                 <i class="fas fa-info-circle"></i>
                             </a>
                         </div>

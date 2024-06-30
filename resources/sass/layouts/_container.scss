@@ -21,6 +21,11 @@
 
 .container.container-card {
     box-shadow: none;
+    max-height: none;
+    height: none;
+    max-width: 1000px;
+    min-width: 100px;
+    margin: 0 auto;
 }
 
 h3.login-text {

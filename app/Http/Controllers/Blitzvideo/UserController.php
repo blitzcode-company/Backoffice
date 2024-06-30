@@ -10,13 +10,13 @@ use Illuminate\Support\Facades\Storage;
 class UserController extends Controller
 {
 
-    public function mostrarFormularioCrearUsuario()
+    public function MostrarFormularioCrearUsuario()
     {
 
         return view('usuario.crear-usuario');
     }
 
-    public function mostrarFormularioActualizarUsuario($id)
+    public function MostrarFormularioActualizarUsuario($id)
     {
         $user = User::with('canal')->find($id);
         if (!$user) {
@@ -25,7 +25,7 @@ class UserController extends Controller
         return view('usuario.editar-usuario', compact('user'));
     }
 
-    public function crearUsuario(Request $request)
+    public function CrearUsuario(Request $request)
     {
         $request->validate([
             'name' => 'required|string',
@@ -56,7 +56,7 @@ class UserController extends Controller
         }
     }
 
-    public function listarTodosLosUsuarios()
+    public function ListarTodosLosUsuarios()
     {
         $users = User::with('canal')
             ->where('name', '!=', 'Invitado')
@@ -65,7 +65,7 @@ class UserController extends Controller
         return view('usuario.usuarios', compact('users'));
     }
 
-    public function mostrarUsuarioPorId($id)
+    public function MostrarUsuarioPorId($id)
     {
         $user = User::with('canal')->find($id);
 
@@ -76,7 +76,7 @@ class UserController extends Controller
         return view('usuario.usuario', compact('user'));
     }
 
-    public function listarUsuariosPorNombre(Request $request)
+    public function ListarUsuariosPorNombre(Request $request)
     {
         $nombre = $request->input('nombre');
         $query = User::with('canal')->where('name', '!=', 'Invitado');
@@ -87,7 +87,7 @@ class UserController extends Controller
         return view('usuario.usuarios', compact('users'));
     }
 
-    public function eliminarUsuario($id)
+    public function EliminarUsuario($id)
     {
         try {
             $usuario = User::find($id);
@@ -110,7 +110,7 @@ class UserController extends Controller
         }
     }
 
-    public function actualizarUsuario(Request $request, $id)
+    public function ActualizarUsuario(Request $request, $id)
     {
         $usuario = User::find($id);
 

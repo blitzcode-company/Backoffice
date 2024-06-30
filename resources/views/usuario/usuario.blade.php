@@ -1,7 +1,6 @@
 @extends('layouts.app')
 
 @section('content')
-    <h1>Información de Usuario</h1>
 
     <div class="user-details-container">
         <div class="user-photo-large">
