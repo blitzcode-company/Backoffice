@@ -45,7 +45,7 @@
                 <a href="{{ route('inicio') }}" class="list-group-item list-group-item-action">Dashboard</a>
                 <a href="{{ route('usuarios') }}" class="list-group-item list-group-item-action">Usuarios</a>
                 <a href="{{ route('listar.canales') }}" class="list-group-item list-group-item-action">Canales</a>
-                <a href="{{ route('videos') }}" class="list-group-item list-group-item-action">Videos</a>
+                <a href="{{ route('listar.videos') }}" class="list-group-item list-group-item-action">Videos</a>
                 <a href="{{ route('publicidades') }}" class="list-group-item list-group-item-action">Publicidad</a>
                 <a href="{{ route('estadisticas') }}" class="list-group-item list-group-item-action">Estadísticas</a>
                 <a href="{{ route('anuncios') }}" class="list-group-item list-group-item-action">Anuncios</a>

@@ -8,7 +8,7 @@
             <button type="submit" class="btn-info" ><i class="fas fa-search"></i></button>
         </form>
     </div>
-    <div class="create-user-button-container text-center mb-5 mt-5">
+    <div class="create-user-button-container text-center my-4">
         <a href="{{ route('crear.usuario') }}" class="btn btn-primary">
             <i class="fas fa-user-plus"></i> Nuevo Usuario
         </a>

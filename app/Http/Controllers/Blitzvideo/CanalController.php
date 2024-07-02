@@ -129,7 +129,7 @@ class CanalController extends Controller
     {
         if ($request->hasFile('portada')) {
             $portada = $request->file('portada');
-            $folderPath = 'portadas' . $canal->id;
+            $folderPath = 'portadas/' . $canal->id;
             $rutaPortada = $portada->store($folderPath, 's3');
             $urlPortada = str_replace('minio', 'localhost', Storage::disk('s3')->url($rutaPortada));
             $canal->portada = $urlPortada;

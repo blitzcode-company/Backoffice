@@ -3,6 +3,7 @@
 use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\Blitzvideo\UserController;
 use App\Http\Controllers\Blitzvideo\CanalController;
+use App\Http\Controllers\Blitzvideo\VideoController; 
 use Illuminate\Support\Facades\Route;
 
 Route::get('login', [LoginController::class, 'showLoginForm'])->name('login');
@@ -34,11 +35,21 @@ Route::put('/canal/editar/{id}', [CanalController::class, 'EditarCanal'])->name(
 Route::get('/canal/editar/{id}', [CanalController::class, 'MostrarFormularioEditarCanal'])->name('update.canal');
 Route::delete('/canal/{id}', [CanalController::class, 'DarDeBajaCanal'])->name('eliminar.canal');
 
+Route::get('/videos', [VideoController::class, 'MostrarTodosLosVideos'])->name('listar.videos');
+Route::post('/videos', [VideoController::class, 'ListarVideosPorNombre'])->name('videos-nombre');
+Route::get('/subir-video', [VideoController::class, 'MostrarFormularioSubida'])->name('videos.subir');
+Route::post('/subir-video', [VideoController::class, 'SubirVideo'])->name('videos.subir');
+Route::delete('/videos/{id}/baja', [VideoController::class, 'BajaVideo'])->name('eliminar.video');
+Route::get('/canal/{id}/video', [VideoController::class, 'MostrarInformacionVideo'])->name('video');
+
+Route::get('/editar-video/{id}', [VideoController::class, 'MostrarFormularioEditar'])->name('videos.editar');
+Route::put('/video/{id}', [VideoController::class, 'EditarVideo'])->name('videos.actualizar');
+
 
 
 Route::get('/', function () {return view('inicio');})->name('inicio');
 
-Route::get('/videos', function () {return view('videos');})->name('videos');
+
 Route::get('/publicidades', function () {return view('publicidades');})->name('publicidades');
 Route::get('/estadisticas', function () {return view('estadisticas');})->name('estadisticas');
 Route::get('/anuncios', function () {return view('anuncios');})->name('anuncios');
