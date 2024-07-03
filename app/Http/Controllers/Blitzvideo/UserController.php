@@ -39,6 +39,7 @@ class UserController extends Controller
             $usuario->name = $request->input('name');
             $usuario->email = $request->input('email');
             $usuario->password = bcrypt($request->input('password'));
+            $usuario->premium = $request->has('premium'); 
             $usuario->save();
             $folderPath = 'perfil/' . $usuario->id;
 

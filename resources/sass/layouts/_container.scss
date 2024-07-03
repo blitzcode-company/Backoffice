@@ -33,3 +33,13 @@ h3.login-text {
     margin-bottom: 20px;
     text-transform: uppercase;
 }
+
+.chart-container {
+    width: 100%;
+    max-width: 800px;
+    min-width: 100px;
+    height: auto;
+    min-height: 300px;
+    max-height: 80vh;
+    text-align: center;
+}

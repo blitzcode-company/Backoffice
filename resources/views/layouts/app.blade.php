@@ -9,6 +9,7 @@
     <link rel="icon" href="{{ asset('img/favicon.png') }}" type="image/png">
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <link href="https://unpkg.com/tailwindcss@^2/dist/tailwind.min.css" rel="stylesheet">
 </head>
 
 <body>
@@ -46,7 +47,7 @@
                 <a href="{{ route('usuarios') }}" class="list-group-item list-group-item-action">Usuarios</a>
                 <a href="{{ route('listar.canales') }}" class="list-group-item list-group-item-action">Canales</a>
                 <a href="{{ route('listar.videos') }}" class="list-group-item list-group-item-action">Videos</a>
-                <a href="{{ route('publicidades') }}" class="list-group-item list-group-item-action">Publicidad</a>
+                <a href="{{ route('etiquetas') }}" class="list-group-item list-group-item-action">Etiquetas</a>
                 <a href="{{ route('estadisticas') }}" class="list-group-item list-group-item-action">Estadísticas</a>
                 <a href="{{ route('anuncios') }}" class="list-group-item list-group-item-action">Anuncios</a>
                 <a href="{{ route('ajustes') }}" class="list-group-item list-group-item-action">Ajustes</a>

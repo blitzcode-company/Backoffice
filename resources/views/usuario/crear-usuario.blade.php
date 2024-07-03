@@ -37,6 +37,13 @@
                                         <label for="password">Contraseña</label>
                                         <input type="password" name="password" id="password" class="form-control" required>
                                     </div>
+
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="checkbox" name="premium" id="premium">
+                                        <label class="form-check-label" for="premium">
+                                            Premium
+                                        </label>
+                                    </div>
                                 </div>
 
                                 <div class="col-md-6">
@@ -54,7 +61,7 @@
                                 </div>
                             </div>
 
-                            <button type="submit" class="btn btn-primary">Crear Usuario</button>
+                            <button type="submit" class="btn btn-primary mt-4">Crear Usuario</button>
 
                             @if ($errors->any())
                                 <div class="alert alert-danger">

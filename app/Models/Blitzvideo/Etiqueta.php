@@ -8,9 +8,9 @@ use Illuminate\Database\Eloquent\Model;
 class Etiqueta extends Model
 {
     use HasFactory;
-    
+
     protected $connection = 'blitzvideo';
-    
+
     protected $fillable = [
         'nombre',
     ];

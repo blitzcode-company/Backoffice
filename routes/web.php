@@ -3,7 +3,11 @@
 use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\Blitzvideo\UserController;
 use App\Http\Controllers\Blitzvideo\CanalController;
-use App\Http\Controllers\Blitzvideo\VideoController; 
+use App\Http\Controllers\Blitzvideo\VideoController;
+use App\Http\Controllers\Blitzvideo\EtiquetaController;
+
+use App\Http\Controllers\Chart\VideoChartController;
+use App\Http\Controllers\Chart\UserChartController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('login', [LoginController::class, 'showLoginForm'])->name('login');
@@ -45,12 +49,21 @@ Route::get('/canal/{id}/video', [VideoController::class, 'MostrarInformacionVide
 Route::get('/editar-video/{id}', [VideoController::class, 'MostrarFormularioEditar'])->name('videos.editar');
 Route::put('/video/{id}', [VideoController::class, 'EditarVideo'])->name('videos.actualizar');
 
+Route::get('/etiquetas', [EtiquetaController::class, 'ListarEtiquetas'])->name('etiquetas');
+Route::post('/etiquetas', [EtiquetaController::class, 'CrearEtiqueta'])->name('etiquetas.crear');
+Route::put('/etiquetas/{id}', [EtiquetaController::class, 'ActualizarEtiqueta'])->name('etiquetas.actualizar');
+Route::delete('/etiquetas/{id}', [EtiquetaController::class, 'EliminarEtiquetaYAsignaciones'])->name('etiquetas.eliminar');
+
+
+Route::get('/charts/usuarios-premium', [UserChartController::class, 'UsuariosPremium'])->name('charts.premium_users');
+Route::get('/charts/usuarios-activos', [UserChartController::class, 'UsuarioActivoInactivo'])->name('charts.active_users');
+Route::get('charts/usuarios-creadores', [UserChartController::class, 'UsuarioConCanal'])->name('charts.user_channel');
+Route::get('/charts/videos-por-etiqueta', [VideoChartController::class, 'VideosPorEtiqueta'])->name('charts.videos_por_etiqueta');
+Route::get('charts/videos-mas-vistados-por-mes', [VideoChartController::class, 'VideosMasVistadosElUltimoMes'])->name('charts.mas_visitados_por_mes');
 
 
 Route::get('/', function () {return view('inicio');})->name('inicio');
 
-
-Route::get('/publicidades', function () {return view('publicidades');})->name('publicidades');
 Route::get('/estadisticas', function () {return view('estadisticas');})->name('estadisticas');
 Route::get('/anuncios', function () {return view('anuncios');})->name('anuncios');
 Route::get('/perfil', function () {return view('perfil');})->name('perfil');
