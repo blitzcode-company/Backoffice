@@ -46,7 +46,7 @@ class UserController extends Controller
             if ($request->hasFile('foto')) {
                 $foto = $request->file('foto');
                 $rutaFoto = $foto->store($folderPath, 's3');
-                $urlFoto = str_replace('minio', 'localhost', Storage::disk('s3')->url($rutaFoto));
+                $urlFoto = str_replace('minio', env('BLITZVIDEO_HOST'), Storage::disk('s3')->url($rutaFoto));
                 $usuario->foto = $urlFoto;
                 $usuario->save();
             }
@@ -151,7 +151,7 @@ class UserController extends Controller
                 $folderPath = 'perfil/' . $usuario->id;
                 $foto = $request->file('foto');
                 $rutaFoto = $foto->store($folderPath, 's3');
-                $urlFoto = str_replace('minio', 'localhost', Storage::disk('s3')->url($rutaFoto));
+                $urlFoto = str_replace('minio', env('BLITZVIDEO_HOST'), Storage::disk('s3')->url($rutaFoto));
                 $usuario->foto = $urlFoto;
             }
 

@@ -13,6 +13,12 @@ class EtiquetaController extends Controller
     public function ListarEtiquetas()
     {
         $etiquetas = Etiqueta::on('blitzvideo')->get();
+        return $etiquetas;
+    }
+
+    public function MostrarEtiquetas()
+    {
+        $etiquetas = Etiqueta::on('blitzvideo')->get();
         return view('etiquetas', compact('etiquetas'));
     }
 
