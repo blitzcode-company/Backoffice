@@ -57,7 +57,7 @@ jobs:
       - name: Imprimir variables de entorno de la base de datos
         run: |
           echo "Variables de entorno de la base de datos:"
-          echo "DB_CONNECTION: DB_CONNECTION"
+          echo "DB_CONNECTION: `blitzvideo`"
           echo "DB_HOST: $BLITZVIDEO_DB_HOST"
           echo "DB_PORT: $BLITZVIDEO_DB_PORT"
           echo "DB_DATABASE: $BLITZVIDEO_DB_DATABASE"
