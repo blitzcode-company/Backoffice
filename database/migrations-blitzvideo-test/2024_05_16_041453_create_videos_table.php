@@ -8,7 +8,7 @@ return new class extends Migration
 {
     public function up(): void
     {
-        Schema::create('videos', function (Blueprint $table) {
+        Schema::connection('blitzvideo')->create('videos', function (Blueprint $table) {
             $table->id();
             $table->foreignId('canal_id')->constrained()->onDelete('cascade');
             $table->string('titulo');

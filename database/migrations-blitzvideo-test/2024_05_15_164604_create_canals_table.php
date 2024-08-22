@@ -8,7 +8,7 @@ class CreateCanalsTable extends Migration
 {
     public function up()
     {
-        Schema::create('canals', function (Blueprint $table) {
+        Schema::connection('blitzvideo')->create('canals', function (Blueprint $table) {
             $table->id();
             $table->foreignId('user_id');
             $table->string('nombre');

@@ -8,7 +8,7 @@ class CreateReportaComentarioTable extends Migration
 {
     public function up()
     {
-        Schema::create('reporta_comentario', function (Blueprint $table) {
+        Schema::connection('blitzvideo')->create('reporta_comentario', function (Blueprint $table) {
             $table->id();
             $table->foreignId('user_id')->constrained()->onDelete('cascade');
             $table->foreignId('comentario_id')->constrained()->onDelete('cascade');

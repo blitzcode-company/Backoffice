@@ -8,7 +8,7 @@ class CreateSuscribeTable extends Migration
 {
     public function up()
     {
-        Schema::create('suscribe', function (Blueprint $table) {
+        Schema::connection('blitzvideo')->create('suscribe', function (Blueprint $table) {
             $table->id();
             $table->unsignedBigInteger('user_id');
             $table->unsignedBigInteger('canal_id');

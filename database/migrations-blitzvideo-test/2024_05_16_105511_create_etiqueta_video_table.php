@@ -8,7 +8,7 @@ class CreateEtiquetaVideoTable extends Migration
 {
     public function up()
     {
-        Schema::create('etiqueta_video', function (Blueprint $table) {
+        Schema::connection('blitzvideo')->create('etiqueta_video', function (Blueprint $table) {
             $table->id();
             $table->foreignId('etiqueta_id')->constrained()->onDelete('cascade');
             $table->foreignId('video_id')->constrained()->onDelete('cascade');

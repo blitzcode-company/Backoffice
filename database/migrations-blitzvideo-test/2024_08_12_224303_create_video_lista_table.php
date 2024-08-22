@@ -8,7 +8,7 @@ class CreateVideoListaTable extends Migration
 {
     public function up()
     {
-        Schema::create('video_lista', function (Blueprint $table) {
+        Schema::connection('blitzvideo')->create('video_lista', function (Blueprint $table) {
             $table->id();
             $table->foreignId('playlist_id')->constrained()->onDelete('cascade');
             $table->foreignId('video_id')->constrained()->onDelete('cascade');

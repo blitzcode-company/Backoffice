@@ -8,7 +8,7 @@ class CreateMeGustaTable extends Migration
 {
     public function up()
     {
-        Schema::create('me_gusta', function (Blueprint $table) {
+        Schema::connection('blitzvideo')->create('me_gusta', function (Blueprint $table) {
             $table->id();
             $table->foreignId('usuario_id')->constrained('users')->onDelete('cascade');
             $table->foreignId('comentario_id')->constrained('comentarios')->onDelete('cascade');
