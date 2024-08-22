@@ -1,4 +1,4 @@
-name: CI Blitzvideo-api
+name: CI Backoffice-api
 
 on:
   push:
@@ -58,11 +58,11 @@ jobs:
         run: |
           echo "Variables de entorno de la base de datos:"
           echo "DB_CONNECTION: $DB_CONNECTION"
-          echo "DB_HOST: $DB_HOST"
-          echo "DB_PORT: $DB_PORT"
-          echo "DB_DATABASE: $DB_DATABASE"
-          echo "DB_USERNAME: $DB_USERNAME"
-          echo "DB_PASSWORD: $DB_PASSWORD"
+          echo "DB_HOST: $BLITZVIDEO_DB_HOST"
+          echo "DB_PORT: $BLITZVIDEO_DB_PORT"
+          echo "DB_DATABASE: $BLITZVIDEO_DB_DATABASE"
+          echo "DB_USERNAME: $BLITZVIDEO_DB_USERNAME"
+          echo "DB_PASSWORD: $BLITZVIDEO_DB_PASSWORD"
 
       - name: Esperar a que MySQL esté listo
         run: |
@@ -76,6 +76,9 @@ jobs:
       - name: Crear base de datos
         run: |
           mysql -u root -proot -h 127.0.0.1 -e "CREATE DATABASE IF NOT EXISTS blitzvideo;"
+
+      - name: Ejecutar migraciones de la base de datos de Blitzvideo
+        run: php artisan migrate --path=database/migrations-blitzvideo-test --force
 
       - name: Ejecutar sembradoras de la base de datos
         run: php artisan db:seed --force
