@@ -10,7 +10,7 @@ class Canal extends Model
     use SoftDeletes;
     
     protected $connection = 'blitzvideo';
-    
+
     protected $table = 'canals';
     protected $fillable = [
         'nombre', 'descripcion', 'portada', 'user_id',
@@ -23,5 +23,10 @@ class Canal extends Model
     public function videos()
     {
         return $this->hasMany(Video::class);
+    }
+
+    public function suscriptores()
+    {
+        return $this->belongsToMany(User::class, 'suscribe')->withTimestamps()->withTrashed();
     }
 }

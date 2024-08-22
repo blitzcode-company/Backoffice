@@ -10,7 +10,7 @@ class MeGusta extends Model
     use HasFactory;
 
     protected $connection = 'blitzvideo';
-    
+
     protected $table = 'me_gusta';
 
     protected $fillable = [

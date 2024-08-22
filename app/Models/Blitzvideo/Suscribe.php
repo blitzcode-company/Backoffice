@@ -5,29 +5,25 @@ namespace App\Models\Blitzvideo;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
-class Puntua extends Model
+class Suscribe extends Model
 {
     use SoftDeletes;
 
     protected $connection = 'blitzvideo';
 
-    protected $table = 'puntua';
+    protected $table = 'suscribe';
 
     protected $fillable = [
-        'user_id',
-        'video_id',
-        'valora',
+        'user_id', 'canal_id',
     ];
-
-    protected $dates = ['deleted_at'];
 
     public function user()
     {
         return $this->belongsTo(User::class);
     }
 
-    public function video()
+    public function canal()
     {
-        return $this->belongsTo(Video::class);
+        return $this->belongsTo(Canal::class);
     }
 }

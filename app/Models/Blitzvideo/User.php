@@ -4,10 +4,10 @@ namespace App\Models\Blitzvideo;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
-use Illuminate\Database\Eloquent\Model;
 
-class User extends Model
+class User extends Authenticatable
 {
     use HasFactory, Notifiable, SoftDeletes;
 
@@ -30,8 +30,29 @@ class User extends Model
         'email_verified_at' => 'datetime',
     ];
 
-    public function canal()
+    public function canales()
     {
-        return $this->hasOne(Canal::class, 'user_id');
+        return $this->hasMany(Canal::class);
     }
+
+    public function visitas()
+    {
+        return $this->hasMany(Visita::class);
+    }
+
+    public function playlists()
+    {
+        return $this->hasMany(Playlist::class);
+    }
+
+    public function reportaComentarios()
+    {
+        return $this->hasMany(ReportaComentario::class);
+    }
+
+    public function canalesSuscritos()
+    {
+        return $this->belongsToMany(Canal::class, 'suscribe')->withTimestamps()->withTrashed();
+    }
+
 }

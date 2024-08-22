@@ -18,7 +18,7 @@ class UserController extends Controller
 
     public function MostrarFormularioActualizarUsuario($id)
     {
-        $user = User::with('canal')->find($id);
+        $user = User::with('canales')->find($id);
         if (!$user) {
             abort(404, 'Usuario no encontrado');
         }
@@ -59,7 +59,7 @@ class UserController extends Controller
 
     public function ListarTodosLosUsuarios()
     {
-        $users = User::with('canal')
+        $users = User::with('canales')
             ->where('name', '!=', 'Invitado')
             ->take(10)
             ->get();
@@ -68,7 +68,7 @@ class UserController extends Controller
 
     public function MostrarUsuarioPorId($id)
     {
-        $user = User::with('canal')->find($id);
+        $user = User::with('canales')->find($id);
 
         if (!$user) {
             abort(404, 'Usuario no encontrado');
@@ -80,7 +80,7 @@ class UserController extends Controller
     public function ListarUsuariosPorNombre(Request $request)
     {
         $nombre = $request->input('nombre');
-        $query = User::with('canal')->where('name', '!=', 'Invitado');
+        $query = User::with('canales')->where('name', '!=', 'Invitado');
         if ($nombre) {
             $query->where('name', 'like', '%' . $nombre . '%');
         }

@@ -17,7 +17,8 @@ class Video extends Model
         'link',
         'activo',
         'canal_id',
-        'miniatura'
+        'miniatura',
+        'estado',
     ];
 
     public function canal()
@@ -44,5 +45,15 @@ class Video extends Model
     {
         $promedio = $this->puntuaciones()->avg('valora');
         return round($promedio);
+    }
+
+    public function getVisitasCountAttribute()
+    {
+        return $this->visitas()->count();
+    }
+
+    public function playlists()
+    {
+        return $this->belongsToMany(Playlist::class, 'video_lista');
     }
 }
