@@ -54,16 +54,6 @@ jobs:
       - name: Generar clave de aplicación
         run: php artisan key:generate
 
-      - name: Imprimir variables de entorno de la base de datos
-        run: |
-          echo "Variables de entorno de la base de datos:"
-          echo "DB_CONNECTION: `blitzvideo`"
-          echo "DB_HOST: $BLITZVIDEO_DB_HOST"
-          echo "DB_PORT: $BLITZVIDEO_DB_PORT"
-          echo "DB_DATABASE: $BLITZVIDEO_DB_DATABASE"
-          echo "DB_USERNAME: $BLITZVIDEO_DB_USERNAME"
-          echo "DB_PASSWORD: $BLITZVIDEO_DB_PASSWORD"
-
       - name: Esperar a que MySQL esté listo
         run: |
           echo "Esperando a que MySQL esté listo..."
@@ -78,10 +68,31 @@ jobs:
           mysql -u root -proot -h 127.0.0.1 -e "CREATE DATABASE IF NOT EXISTS blitzvideo;"
 
       - name: Ejecutar migraciones de la base de datos de Blitzvideo
-        run: php artisan migrate --path=database/migrations-blitzvideo-test --force
+        run: |
+          DB_CONNECTION=mysql \
+          DB_HOST=127.0.0.1 \
+          DB_PORT=3306 \
+          DB_DATABASE=blitzvideo \
+          DB_USERNAME=root \
+          DB_PASSWORD=root \
+          php artisan migrate --path=database/migrations-blitzvideo-test --force
 
-      - name: Ejecutar sembradoras de la base de datos
-        run: php artisan db:seed --force
+      - name: Ejecutar sembradoras de la base de datos de Blitzvideo
+        run: |
+          DB_CONNECTION=mysql \
+          DB_HOST=127.0.0.1 \
+          DB_PORT=3306 \
+          DB_DATABASE=blitzvideo \
+          DB_USERNAME=root \
+          DB_PASSWORD=root \
+          php artisan db:seed --force
 
       - name: Ejecutar pruebas de características
-        run: vendor/bin/phpunit --testdox tests/Feature
+        run: |
+          DB_CONNECTION=mysql \
+          DB_HOST=127.0.0.1 \
+          DB_PORT=3306 \
+          DB_DATABASE=blitzvideo \
+          DB_USERNAME=root \
+          DB_PASSWORD=root \
+          vendor/bin/phpunit --testdox tests/Feature
