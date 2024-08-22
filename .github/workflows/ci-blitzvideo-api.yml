@@ -77,9 +77,6 @@ jobs:
         run: |
           mysql -u root -proot -h 127.0.0.1 -e "CREATE DATABASE IF NOT EXISTS blitzvideo;"
 
-      - name: Ejecutar migraciones de la base de datos
-        run: php artisan migrate --force
-
       - name: Ejecutar sembradoras de la base de datos
         run: php artisan db:seed --force
 
