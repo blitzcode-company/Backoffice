@@ -20,7 +20,7 @@
             </div>
 
             <div class="list-column">
-                <h2>Lista de Etiquetas</h2>
+                <h2>Lista de Etiquetas (Total: {{ $etiquetas->count() }})</h2>
                 <ul>
                     @foreach ($etiquetas as $etiqueta)
                         <li class="etiqueta-item">
@@ -37,6 +37,7 @@
                             </div>
                         </li>
 
+                        <!-- Modals for editing and deleting -->
                         <div class="modal fade" id="editModal-{{ $etiqueta->id }}" tabindex="-1" role="dialog"
                             aria-labelledby="editModalLabel-{{ $etiqueta->id }}" aria-hidden="true">
                             <div class="modal-dialog" role="document">
