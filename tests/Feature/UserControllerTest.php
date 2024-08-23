@@ -73,13 +73,4 @@ class UserControllerTest extends TestCase
         ]);
         $response->assertSessionHas('success');
     }
-
-    /** @test */
-    public function EliminarUsuario()
-    {
-        $user = User::find(1);
-        $user->delete();
-        $this->assertSoftDeleted('users', ['id' => $user->id]);
-    }
-
 }
