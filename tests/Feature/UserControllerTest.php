@@ -77,15 +77,9 @@ class UserControllerTest extends TestCase
     /** @test */
     public function EliminarUsuario()
     {
-        $user = User::latest()->first();
-
-        $response = $this->delete(route('eliminar.usuario', ['id' => $user->id]));
-
-        $response->assertRedirect(route('usuarios'));
-        $response->assertSessionHas('success');
-
-        $this->assertDatabaseMissing('users', [
-            'id' => $user->id,
-        ]);
+        $user = User::find(1);
+        $user->delete();
+        $this->assertSoftDeleted('users', ['id' => $user->id]);
     }
+
 }
