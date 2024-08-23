@@ -77,7 +77,7 @@ class UserControllerTest extends TestCase
     /** @test */
     public function EliminarUsuario()
     {
-        $user = User::first();
+        $user = User::latest()->first();
 
         $response = $this->delete(route('eliminar.usuario', ['id' => $user->id]));
 
