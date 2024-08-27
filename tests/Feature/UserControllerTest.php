@@ -3,14 +3,14 @@
 namespace Tests\Feature;
 
 use App\Models\Blitzvideo\User;
-use Illuminate\Foundation\Testing\WithFaker;
+use Illuminate\Foundation\Testing\WithoutMiddleware;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Storage;
 use Tests\TestCase;
 
 class UserControllerTest extends TestCase
 {
-    use WithFaker;
+    use WithoutMiddleware;
 
     protected function setUp(): void
     {
