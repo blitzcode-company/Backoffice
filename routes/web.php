@@ -12,7 +12,7 @@ use Illuminate\Support\Facades\Route;
 Route::get('login', [LoginController::class, 'showLoginForm'])->name('login');
 Route::post('login', [LoginController::class, 'login']);
 
-//Route::middleware(['auth'])->group(function () {
+Route::middleware(['auth'])->group(function () {
     Route::get('/usuarios', [UserController::class, 'ListarTodosLosUsuarios'])->name('usuarios');
     Route::get('/usuario/{id}', [UserController::class, 'MostrarUsuarioPorId'])->name('usuario');
     Route::post('/usuarios', [UserController::class, 'ListarUsuariosPorNombre'])->name('usuarios-nombre');
@@ -58,4 +58,4 @@ Route::post('login', [LoginController::class, 'login']);
     Route::get('/perfil', function () {return view('perfil');})->name('perfil');
     Route::get('/ajustes', function () {return view('ajustes');})->name('ajustes');
     Route::get('logout', [LoginController::class, 'logout'])->name('logout');
-//});
+});

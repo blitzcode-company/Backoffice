@@ -54,5 +54,4 @@ class User extends Authenticatable
     {
         return $this->belongsToMany(Canal::class, 'suscribe')->withTimestamps()->withTrashed();
     }
-
 }
