@@ -10,7 +10,7 @@ use Tests\TestCase;
 
 class UserControllerTest extends TestCase
 {
-    use WithoutMiddleware;
+   // use WithoutMiddleware;
 
     protected function setUp(): void
     {

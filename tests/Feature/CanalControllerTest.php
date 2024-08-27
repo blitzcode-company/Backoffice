@@ -10,7 +10,7 @@ use Tests\TestCase;
 
 class CanalControllerTest extends TestCase
 {
-    use WithoutMiddleware;
+    // use WithoutMiddleware;
 
     protected $user;
 
