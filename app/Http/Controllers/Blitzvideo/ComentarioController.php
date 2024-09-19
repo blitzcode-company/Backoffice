@@ -94,7 +94,6 @@ class ComentarioController extends Controller
         if ($resultado instanceof \Illuminate\Http\RedirectResponse) {
             return $resultado;
         }
-
         return redirect()->route('comentarios.ver', ['comentario_id' => $request->input('respuesta_id')])
             ->with('success', 'Respuesta creada exitosamente.');
     }
