@@ -80,7 +80,7 @@ class VideoControllerTest extends TestCase
             'titulo' => 'Título del Video',
             'descripcion' => 'Descripción del Video',
             'canal_id' => $canalId,
-            'etiquetas' => [1, 2],
+            'etiquetas' => [4, 5],
         ];
         $formData['video'] = UploadedFile::fake()->create('video.mp4', 1024, 'video/mp4');
         $formData['miniatura'] = UploadedFile::fake()->create('miniatura.jpg', 1024, 'image/jpeg');
