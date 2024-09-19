@@ -1,70 +1,52 @@
 @extends('layouts.app')
 
 @section('content')
-
-    <div class="user-details-container">
+    <div class="user-details-container card">
         <div class="user-photo-large">
             <img src="{{ $user->foto ? asset($user->foto) : asset('img/default-user.png') }}" alt="{{ $user->name }}">
         </div>
         <div class="user-info-box">
             <div class="user-info">
-                <h2>{{ $user->name }}</h2>
-                <p>Email: {{ $user->email }}</p>
-                <p>Premium: {{ $user->premium ? 'Sí' : 'No' }}</p>
-                @if ($user->canal)
-                    <p>Canal: {{ $user->canal->nombre }}</p>
-                    <p>Descripción: {{ $user->canal->descripcion }}</p>
+                <h2>{{ $user->name }}(#{{ $user->id }})</h2>
+                <p><strong>Inició el:</strong> {{ $user->created_at->format('d/m/Y') }}</p>
+                <p><strong>Email:</strong> {{ $user->email }}</p>
+                <p><strong>Premium:</strong> {{ $user->premium ? 'Sí' : 'No' }}</p>
+
+                @if ($user->canales->isNotEmpty())
+                    @foreach ($user->canales as $canal)
+                        <p>
+                            <p><strong>Canal:</strong>
+                            <a href="{{ route('canal.detalle', ['id' => $canal->id]) }}">
+                                {{ $canal->nombre }}
+                                <i class="fas fa-link"></i>
+                            </a>
+                        </p>
+
+                        <div class="user-canal-info-box">
+                            <p class="text-justify">{!! nl2br(e($canal->descripcion)) !!}</p>
+                        </div>
+                    @endforeach
                 @else
                     <p>No tiene canal asociado.</p>
                 @endif
-            </div>
 
-            <div class="action-buttons">
-                <a href="#" class="btn-action" data-toggle="modal" data-target="#confirmDeleteModal">
+            </div>
+        </div>
+        <div class="modal-footer">
+            <div class="mx-auto">
+                <a href="" class="btn btn-success btn-sm w-40">
+                    <i class="fas fa-envelope"></i> Enviar Correo
+                </a>
+                <a href="" class="btn btn-danger btn-sm w-40" data-toggle="modal" data-target="#confirmDeleteModal">
                     <i class="fas fa-trash-alt"></i> Eliminar
                 </a>
-                <a href="{{ route('update.usuario', ['id' => $user->id]) }}" class="btn-action">
+                <a href="{{ route('usuario.editar.formulario', ['id' => $user->id]) }}"
+                    class="btn btn-warning btn-sm w-40">
                     <i class="fas fa-edit"></i> Editar
                 </a>
-                <a href="#" class="btn-action">
-                    <i class="fas fa-envelope"></i> Enviar correo
-                </a>
             </div>
         </div>
     </div>
 
-    <div class="back-button-container">
-        <a href="{{ route('usuarios') }}" class="btn-back">
-            <i class="fas fa-arrow-left"></i> Volver a Usuarios
-        </a>
-    </div>
-
-    <div class="modal fade" id="confirmDeleteModal" tabindex="-1" role="dialog" aria-labelledby="confirmDeleteModalLabel"
-        aria-hidden="true">
-        <div class="modal-dialog" role="document">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="confirmDeleteModalLabel">Confirmar Eliminación</h5>
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                        <span aria-hidden="true" class="modal-close">&times;</span>
-                    </button>
-                </div>
-                <div class="modal-body">
-                    <p>¿Estás seguro de que quieres eliminar este usuario?</p>
-                </div>
-                <div class="modal-footer">
-                    <form action="{{ route('eliminar.usuario', ['id' => $user->id]) }}" method="POST">
-                        @csrf
-                        @method('DELETE')
-                        <button type="submit" class="btn btn-danger">
-                            <i class="fas fa-trash-alt"></i> Eliminar
-                        </button>
-                    </form>
-                    <button type="button" class="btn btn-primary btn-no" data-dismiss="modal">No</button>
-                </div>
-            </div>
-        </div>
-    </div>
-
-
+    @include('modals.delete-user-modal', ['user' => $user])
 @endsection

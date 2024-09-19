@@ -50,18 +50,16 @@
     width: 200px;
     height: 200px;
     overflow: hidden;
-    margin: 0 auto; 
+    margin: 0 auto;
 }
 
 .canal-foto-perfil-list {
-    width: 200px;
-    height: 200px;
     overflow: hidden;
     margin: 0 auto;
     position: absolute;
     top: 120px;
-    left: 25%;
-    right: 25%;
+    left: 50%;
+    transform: translate(-50%, 0);
 }
 
 .canal-foto-perfil img,
@@ -90,7 +88,7 @@
 }
 
 .card {
-    width: 100%; 
+    width: 100%;
 }
 
 @media (min-width: 1200px) {
@@ -101,12 +99,27 @@
 
 @media (max-width: 1199px) and (min-width: 768px) {
     .canal-list-container {
-        grid-template-columns: repeat(2, 1fr); 
+        grid-template-columns: repeat(2, 1fr);
     }
 }
 
 @media (max-width: 767px) {
     .canal-list-container {
-        grid-template-columns: 1fr; 
+        grid-template-columns: 1fr;
     }
+}
+
+.canal-photo-large {
+    position: relative;
+    display: inline-block;
+}
+
+.camara-icon {
+    position: absolute;
+    top: 25%;
+    left: 50%;
+    transform: translate(-50%, 0);
+    width: 10% !important;
+    height: auto;
+    pointer-events: none;
 }

@@ -2,7 +2,7 @@
 
 @section('content')
     <div class="search-container">
-        <form action="{{ route('videos-nombre') }}" method="POST">
+        <form action="{{ route('video.nombre') }}" method="POST">
             @csrf
             <input type="search" name="nombre" placeholder="Buscar video por nombre" class="search-bar" required>
             <button type="submit" class="btn-info"><i class="fas fa-search"></i></button>
@@ -10,7 +10,7 @@
     </div>
 
     <div class="text-center my-4">
-        <a href="{{ route('videos.subir') }}" class="btn btn-primary">
+        <a href="{{ route('video.crear.formulario') }}" class="btn btn-primary">
             <i class="fas fa-plus"></i> Nuevo Video
         </a>
     </div>
@@ -38,9 +38,11 @@
                         <h2 class="video-title">{{ $video->titulo }}</h2>
                     </div>
                     <div class="card-footer">
-                        <a href="{{ route('video', ['id' => $video->id]) }}" class="btn btn-info">
-                            <i class="fas fa-info-circle"></i> Ver Detalles
-                        </a>
+                        <form action="{{ route('video.detalle', ['id' => $video->id]) }}" method="get">
+                            <button type="submit" class="btn btn-primary btn-sm w-40">
+                                <i class="fas fa-info-circle"></i> Ver Detalles
+                            </button>
+                        </form>
                     </div>
                 </div>
             @endforeach

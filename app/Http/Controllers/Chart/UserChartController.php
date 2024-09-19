@@ -45,12 +45,12 @@ class UserChartController extends Controller
     public function UsuarioConCanal(UserChannelChart $chart)
     {
         $totalUsers = User::where('name', '!=', 'Invitado')->count();
-        $contentCreators = User::where('name', '!=', 'Invitado')->whereHas('canal')->count();
-        $usersWithoutCanal = User::where('name', '!=', 'Invitado')->doesntHave('canal')->count();
-        $premiumCreators = User::where('name', '!=', 'Invitado')->where('premium', true)->whereHas('canal')->count();
-        $nonPremiumCreators = User::where('name', '!=', 'Invitado')->where('premium', false)->whereHas('canal')->count();
-        $premiumWithoutCanal = User::where('name', '!=', 'Invitado')->where('premium', true)->doesntHave('canal')->count();
-        $nonPremiumWithoutCanal = User::where('name', '!=', 'Invitado')->where('premium', false)->doesntHave('canal')->count();
+        $contentCreators = User::where('name', '!=', 'Invitado')->whereHas('canales')->count();
+        $usersWithoutCanal = User::where('name', '!=', 'Invitado')->doesntHave('canales')->count();
+        $premiumCreators = User::where('name', '!=', 'Invitado')->where('premium', true)->whereHas('canales')->count();
+        $nonPremiumCreators = User::where('name', '!=', 'Invitado')->where('premium', false)->whereHas('canales')->count();
+        $premiumWithoutCanal = User::where('name', '!=', 'Invitado')->where('premium', true)->doesntHave('canales')->count();
+        $nonPremiumWithoutCanal = User::where('name', '!=', 'Invitado')->where('premium', false)->doesntHave('canales')->count();
 
         $chart = $chart->build($totalUsers, $contentCreators, $usersWithoutCanal, $premiumCreators, $nonPremiumCreators, $premiumWithoutCanal, $nonPremiumWithoutCanal);
 

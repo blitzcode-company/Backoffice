@@ -32,6 +32,16 @@ textarea {
   height: auto;
 }
 
+input[type=number]::-webkit-outer-spin-button,
+input[type=number]::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+input[type=number] {
+  -moz-appearance: textfield;
+}
+
 .btn-primary {
   background-color: #0baafe;
   color: #ffffff;
@@ -44,8 +54,23 @@ textarea {
   max-width: 200px;
 }
 
+.comment {
+  max-width: 80px;
+}
+
 .btn-primary:hover {
   background-color: #0077cc;
+}
+
+button.close {
+  color: #fff;
+  opacity: 1;
+  text-transform: uppercase;
+}
+
+button.close:focus {
+  outline: none;
+  box-shadow: none;
 }
 
 .alert {
@@ -180,11 +205,10 @@ label {
 }
 
 .user-details-container {
-  max-width: 600px;
+  max-width: 800px;
   margin: 0 auto;
   text-align: center;
   background-color: #f0f0f0;
-  padding: 20px;
   border-radius: 8px;
   margin-top: 50px;
 }
@@ -195,22 +219,23 @@ label {
   border-radius: 50%;
   -o-object-fit: cover;
      object-fit: cover;
-  margin: 0 auto;
+  margin: 50px auto;
   display: block;
   box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
-  margin-bottom: 20px;
 }
 
 .user-info-box {
   text-align: left;
-  margin-bottom: 20px;
+  margin: 0px 20px;
   color: #042234;
 }
 
-.action-buttons {
-  margin-top: 20px;
-  display: flex;
-  justify-content: center;
+.user-canal-info-box {
+  padding: 15px;
+  border-radius: 5px;
+  background-color: #f8f8f8;
+  max-height: 300px;
+  overflow-y: auto;
 }
 
 .btn-action {
@@ -315,14 +340,12 @@ label {
 }
 
 .canal-foto-perfil-list {
-  width: 200px;
-  height: 200px;
   overflow: hidden;
   margin: 0 auto;
   position: absolute;
   top: 120px;
-  left: 25%;
-  right: 25%;
+  left: 50%;
+  transform: translate(-50%, 0);
 }
 
 .canal-foto-perfil img,
@@ -370,6 +393,21 @@ label {
     grid-template-columns: 1fr;
   }
 }
+.canal-photo-large {
+  position: relative;
+  display: inline-block;
+}
+
+.camara-icon {
+  position: absolute;
+  top: 25%;
+  left: 50%;
+  transform: translate(-50%, 0);
+  width: 10% !important;
+  height: auto;
+  pointer-events: none;
+}
+
 .modal-content {
   background-color: #ffffff;
   border: 1px solid #ccc;
@@ -763,6 +801,101 @@ body, h1, h2, h3, h4, p {
     gap: 10px;
   }
 }
+.comments-page-container {
+  width: 80%;
+  max-width: 1200px;
+  padding: 20px;
+  background-color: #f9f9f9;
+  box-sizing: border-box;
+}
+
+.comments-page-container form {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 100%;
+}
+
+.comments-page-container .form-group {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 100%;
+  max-width: 600px;
+  margin-bottom: 15px;
+}
+
+.comments-page-container .form-group label {
+  display: block;
+  text-align: center;
+  margin-bottom: 5px;
+  margin: 0;
+}
+
+.comments-page-container .form-control {
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.comments-page-container .form-control[type=number] {
+  -moz-appearance: textfield;
+}
+
+.comments-page-container .form-control[type=number]::-webkit-inner-spin-button,
+.comments-page-container .form-control[type=number]::-webkit-outer-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+@media (max-width: 768px) {
+  .comments-page-container {
+    padding: 15px;
+  }
+  .comments-page-container .form-group {
+    max-width: 100%;
+  }
+}
+@media (max-width: 576px) {
+  .comments-page-container {
+    padding: 10px;
+  }
+}
+.navigation-buttons {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.navigation-buttons .btn {
+  margin: 0 5px;
+}
+
+.respuesta-box {
+  border: 0 !important;
+  border-radius: 0 !important;
+  border-left: 1px solid #dddddd !important;
+}
+
+.comment-box {
+  margin: 5px;
+  padding: 3.5px 10px;
+  border-radius: 5px;
+  max-width: 600px;
+  min-height: 100px;
+  background-color: #f8f8f8;
+}
+
+.custom-edit-btn {
+  background-color: #6f42c1 !important;
+  color: #fff !important;
+  border: 0 !important;
+}
+
+.custom-edit-btn:hover {
+  background-color: #5a2a91 !important;
+  border: 0 !important;
+}
+
 .container {
   width: 100%;
   max-width: 350px;

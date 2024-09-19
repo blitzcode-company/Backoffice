@@ -12,6 +12,21 @@
     max-width: 200px;
 }
 
+.comment {
+    max-width: 80px;
+}
+
 .btn-primary:hover {
     background-color: v.$color-primary-hover;
+}
+
+button.close {
+    color: #fff;
+    opacity: 1;
+    text-transform: uppercase;
+}
+
+button.close:focus {
+    outline: none;
+    box-shadow: none;
 }

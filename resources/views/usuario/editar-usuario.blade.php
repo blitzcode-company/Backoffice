@@ -3,13 +3,13 @@
 @section('content')
     <div class="container container-card">
         <div class="row justify-content-center">
-            <div class="col-md-8">
+            <div class="col-md-10">
                 <div class="card">
-                    <div class="card-header">Editar Usuario</div>
+                    <div class="card-header">Para cambiar la foto de perfil, haz clic sobre la imagen.</div>
 
                     <div class="card-body">
 
-                        <form action="{{ route('update.usuario', ['id' => $user->id]) }}" method="POST"
+                        <form action="{{ route('usuario.editar', ['id' => $user->id]) }}" method="POST"
                             enctype="multipart/form-data">
                             @csrf
                             @method('PUT')

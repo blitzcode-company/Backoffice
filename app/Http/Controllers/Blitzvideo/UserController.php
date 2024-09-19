@@ -12,7 +12,6 @@ class UserController extends Controller
 
     public function MostrarFormularioCrearUsuario()
     {
-
         return view('usuario.crear-usuario');
     }
 
@@ -39,7 +38,7 @@ class UserController extends Controller
             $usuario->name = $request->input('name');
             $usuario->email = $request->input('email');
             $usuario->password = bcrypt($request->input('password'));
-            $usuario->premium = $request->has('premium'); 
+            $usuario->premium = $request->has('premium');
             $usuario->save();
             $folderPath = 'perfil/' . $usuario->id;
 
@@ -51,7 +50,7 @@ class UserController extends Controller
                 $usuario->save();
             }
 
-            return redirect()->route('crear.usuario')->with('success', 'Usuario creado correctamente');
+            return redirect()->route('usuario.crear.formulario')->with('success', 'Usuario creado correctamente');
         } catch (\Exception $exception) {
             return back()->withInput()->withErrors(['error' => 'Error al crear el usuario']);
         }
@@ -61,15 +60,16 @@ class UserController extends Controller
     {
         $users = User::with('canales')
             ->where('name', '!=', 'Invitado')
+            ->orderBy('id', 'desc')
             ->take(10)
             ->get();
+
         return view('usuario.usuarios', compact('users'));
     }
 
     public function MostrarUsuarioPorId($id)
     {
         $user = User::with('canales')->find($id);
-
         if (!$user) {
             abort(404, 'Usuario no encontrado');
         }
@@ -79,12 +79,15 @@ class UserController extends Controller
 
     public function ListarUsuariosPorNombre(Request $request)
     {
-        $nombre = $request->input('nombre');
+        $nombre = $request->query('nombre');
         $query = User::with('canales')->where('name', '!=', 'Invitado');
+
         if ($nombre) {
             $query->where('name', 'like', '%' . $nombre . '%');
         }
+
         $users = $query->take(10)->get();
+
         return view('usuario.usuarios', compact('users'));
     }
 
@@ -105,7 +108,7 @@ class UserController extends Controller
             }
             $usuario->delete();
 
-            return redirect()->route('usuarios')->with('success', 'Usuario eliminado correctamente');
+            return redirect()->route('usuario.listar')->with('success', 'Usuario eliminado correctamente');
         } catch (\Exception $exception) {
             return back()->withErrors(['error' => 'Error al eliminar el usuario']);
         }
@@ -157,7 +160,7 @@ class UserController extends Controller
 
             $usuario->save();
 
-            return redirect()->route('update.usuario', ['id' => $usuario->id])->with('success', 'Usuario actualizado correctamente');
+            return redirect()->route('usuario.editar.formulario', ['id' => $usuario->id])->with('success', 'Usuario actualizado correctamente');
         } catch (\Exception $exception) {
             return back()->withInput()->withErrors(['error' => 'Error al actualizar el usuario']);
         }

@@ -44,10 +44,10 @@
             <div class="sidebar-heading">Menú</div>
             <div class="list-group list-group-flush">
                 <a href="{{ route('inicio') }}" class="list-group-item list-group-item-action">Dashboard</a>
-                <a href="{{ route('usuarios') }}" class="list-group-item list-group-item-action">Usuarios</a>
-                <a href="{{ route('listar.canales') }}" class="list-group-item list-group-item-action">Canales</a>
-                <a href="{{ route('listar.videos') }}" class="list-group-item list-group-item-action">Videos</a>
-                <a href="{{ route('etiquetas') }}" class="list-group-item list-group-item-action">Etiquetas</a>
+                <a href="{{ route('usuario.listar') }}" class="list-group-item list-group-item-action">Usuarios</a>
+                <a href="{{ route('canal.listar') }}" class="list-group-item list-group-item-action">Canales</a>
+                <a href="{{ route('video.listar') }}" class="list-group-item list-group-item-action">Videos</a>
+                <a href="{{ route('etiquetas.listar') }}" class="list-group-item list-group-item-action">Etiquetas</a>
                 <a href="{{ route('estadisticas') }}" class="list-group-item list-group-item-action">Estadísticas</a>
                 <a href="{{ route('anuncios') }}" class="list-group-item list-group-item-action">Anuncios</a>
                 <a href="{{ route('ajustes') }}" class="list-group-item list-group-item-action">Ajustes</a>

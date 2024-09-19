@@ -9,19 +9,23 @@ class Comentario extends Model
 {
     use SoftDeletes;
 
-    protected $connection = 'blitzvideo';
+    use SoftDeletes;
 
+    protected $connection = 'blitzvideo';
+    
     protected $fillable = [
         'usuario_id',
         'video_id',
         'respuesta_id',
         'mensaje',
-        'estado',
+        'bloqueado',
     ];
-
+    
     protected $casts = [
         'created_at' => 'datetime',
         'updated_at' => 'datetime',
+        'deleted_at' => 'datetime',
+        'bloqueado' => 'boolean',
     ];
 
     public function user()
@@ -39,6 +43,11 @@ class Comentario extends Model
         return $this->belongsTo(Comentario::class, 'respuesta_id');
     }
 
+    public function respuestas()
+    {
+        return $this->hasMany(Comentario::class, 'respuesta_id');
+    }
+
     public function likes()
     {
         return $this->hasMany(MeGusta::class);
@@ -53,5 +62,4 @@ class Comentario extends Model
     {
         return $this->hasMany(ReportaComentario::class);
     }
-
 }

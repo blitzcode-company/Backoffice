@@ -1,20 +1,23 @@
 @extends('layouts.app')
 
 @section('content')
-    <div class="container container-card">
-        <div class="row justify-content-center">
 
+    <div class="container container-card">
+    
+        <div class="row justify-content-center">
             <div class="card">
-                <div class="card-header">Editar Canal</div>
+                <div class="card-header">Haz clic en la portada para cambiarla.</div>
 
                 <div class="card-body" style="padding: 0;">
-                    <form action="{{ route('update.canal', $canal->id) }}" method="POST" enctype="multipart/form-data">
+                    <form action="{{ route('canal.editar', $canal->id) }}" method="POST" enctype="multipart/form-data">
                         @csrf
                         @method('PUT')
                         <label for="portada">
-                            <div class="canal-photo-large text-center mb-3">
+                            <div class="canal-photo-large text-center mb-3 position-relative">
                                 <img id="previewPortada"
-                                    src="{{ $canal->portada ? asset($canal->portada) : asset('img/cover-default.png') }}">
+                                    src="{{ $canal->portada ? asset($canal->portada) : asset('img/cover-default.png') }}"
+                                    class="img-fluid">
+                                <img src="{{ asset('img/camara.png') }}" alt="Camara" class="position-absolute camara-icon">
                             </div>
                             <input type="file" name="portada" id="portada" class="form-control-file d-none"
                                 onchange="previewImage(this)">
@@ -35,7 +38,7 @@
                         <button type="submit" class="btn btn-primary my-5">Actualizar Canal</button>
 
                         @if ($errors->any())
-                            <div class="alert alert-danger">
+                            <div class="alert alert-danger w-50 mx-auto mb-10 mt-0">
                                 @foreach ($errors->all() as $error)
                                     {{ $error }}
                                 @endforeach
@@ -43,14 +46,13 @@
                         @endif
 
                         @if (session('success'))
-                            <div class="alert alert-success">
+                            <div class="alert alert-success w-50 mx-auto mb-10 mt-0">
                                 {{ session('success') }}
                             </div>
                         @endif
                     </form>
                 </div>
             </div>
-
         </div>
     </div>
 

@@ -22,7 +22,7 @@ class UserControllerTest extends TestCase
     /** @test */
     public function listar_todos_los_usuarios()
     {
-        $response = $this->get(route('usuarios'));
+        $response = $this->get(route('usuario.listar'));
         $response->assertStatus(Response::HTTP_OK);
         $response->assertViewHas('users');
     }
@@ -31,23 +31,28 @@ class UserControllerTest extends TestCase
     public function mostrar_usuario_por_id()
     {
         $user = User::first();
-        $response = $this->get(route('usuario', ['id' => $user->id]));
+        $response = $this->get(route('usuario.detalle', ['id' => $user->id]));
         $response->assertStatus(Response::HTTP_OK);
         $response->assertViewHas('user');
     }
 
-    /** @test */
+/** @test */
     public function listar_usuarios_por_nombre()
     {
-        $response = $this->post(route('usuarios-nombre'), ['nombre' => 'Diego']);
+        $response = $this->get(route('usuario.nombre', ['nombre' => 'Diego']));
         $response->assertStatus(Response::HTTP_OK);
-        $response->assertViewHas('users');
+        $response->assertViewIs('usuario.usuarios');
+        $response->assertViewHas('users', function ($viewUsers) {
+            return $viewUsers->contains(function ($user) {
+                return $user->name === 'Diego';
+            });
+        });
     }
 
     /** @test */
     public function mostrar_formulario_crear_usuario()
     {
-        $response = $this->get(route('crear.usuario'));
+        $response = $this->get(route('usuario.crear.formulario'));
         $response->assertStatus(Response::HTTP_OK);
     }
 
@@ -55,7 +60,7 @@ class UserControllerTest extends TestCase
     public function mostrar_formulario_actualizar_usuario()
     {
         $user = User::first();
-        $response = $this->get(route('update.usuario', ['id' => $user->id]));
+        $response = $this->get(route('usuario.editar.formulario', ['id' => $user->id]));
         $response->assertStatus(Response::HTTP_OK);
         $response->assertViewHas('user');
     }
@@ -66,7 +71,7 @@ class UserControllerTest extends TestCase
         $user = User::latest()->first();
         $this->assertNotNull($user, 'No hay usuarios en la base de datos.');
 
-        $response = $this->put(route('update.usuario', ['id' => $user->id]), [
+        $response = $this->put(route('usuario.editar', ['id' => $user->id]), [
             'name' => 'Usuario Actualizado',
             'email' => 'usuarioactualizado@gmail.com',
             'password' => 'nuevacontraseña',
@@ -78,13 +83,13 @@ class UserControllerTest extends TestCase
     /** @test */
     public function crear_usuario()
     {
-        $response = $this->post(route('usuarios.store'), [
+        $response = $this->post(route('usuario.crear'), [
             'name' => 'Nuevo Usuario',
             'email' => 'nuevo.usuario@gmail.com',
             'password' => 'contraseña123',
         ]);
         $response->assertStatus(302);
-        $response->assertRedirect(route('crear.usuario'));
+        $response->assertRedirect(route('usuario.crear.formulario'));
         $this->assertDatabaseHas('users', [
             'name' => 'Nuevo Usuario',
             'email' => 'nuevo.usuario@gmail.com',
@@ -97,8 +102,8 @@ class UserControllerTest extends TestCase
         $user = User::latest()->first();
         $this->assertNotNull($user, 'No hay usuarios en la base de datos.');
         $user->foto = 'foto.jpg';
-        $response = $this->delete(route('eliminar.usuario', ['id' => $user->id]));
-        $response->assertRedirect(route('usuarios'));
+        $response = $this->delete(route('usuario.eliminar', ['id' => $user->id]));
+        $response->assertRedirect(route('usuario.listar'));
         $this->assertSoftDeleted('users', ['id' => $user->id]);
         Storage::disk('s3')->assertMissing('foto.jpg');
     }

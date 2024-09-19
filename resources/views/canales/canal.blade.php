@@ -1,7 +1,12 @@
 @extends('layouts.app')
 
 @section('content')
-    <div class="container container-card" >
+    <div class="container container-card">
+        <div class="navigation-buttons mb-4">
+            <a href="{{ route('canal.listar') }}" class="btn btn-secondary btn-sm">
+                <i class="fas fa-arrow-left"></i> Ir a canales
+            </a>
+        </div>
         <div class="card">
             <div class="canal-photo-large">
                 @if ($canal->portada)
@@ -30,7 +35,13 @@
                                 <p><strong>ID Canal:</strong> {{ $canal->id }}</p>
                                 <p><strong>Videos:</strong> {{ $canal->videos_count }}</p>
                                 @if ($canal->user)
-                                    <p><strong>Propietario:</strong> {{ $canal->user->name }}</p>
+                                    <p>
+                                        <strong>Propietario:</strong>
+                                        <a href="{{ route('usuario.detalle', ['id' => $canal->user->id]) }}">
+                                            {{ $canal->user->name }}
+                                            <i class="fas fa-link"></i>
+                                        </a>
+                                    </p>
                                     <p><strong>ID Usuario:</strong> {{ $canal->user->id }}</p>
                                 @else
                                     <p>No tiene propietario asignado.</p>
@@ -42,44 +53,28 @@
             </div>
             <hr>
             <div class="card-body">
-                <h3>Descripción del Canal</h3>
-                <p>{{ $canal->descripcion }}</p>
+                <h3>Descripción</h3>
+                <br>
+                <p class="text-justify">{!! nl2br(e($canal->descripcion)) !!}</p>
+
             </div>
             <div class="card-footer text-center">
-                <a href="#" class="btn-action" data-toggle="modal" data-target="#confirmDeleteModal">
-                    <i class="fas fa-trash-alt"></i> Eliminar
+                <a href="{{ route('usuario.detalle', ['id' => $canal->user->id]) }}" class="btn btn-primary btn-sm w-40">
+                    <i class="fas fa-user"></i> Ir a perfil
                 </a>
-                <a href="{{ route('update.canal', ['id' => $canal->id]) }}" class="btn-action">
+
+                <a href="#" class="btn custom-edit-btn btn-sm w-40">
+                    <i class="fas fa-video"></i> Videos
+                </a>
+                <a href="{{ route('canal.editar.formulario', ['id' => $canal->id]) }}" class="btn btn-warning btn-sm w-40">
                     <i class="fas fa-edit"></i> Editar
                 </a>
-            </div>
-        </div>
+                <a href="" class="btn btn-danger btn-sm w-40" data-toggle="modal"
+                    data-target="#confirmDeleteModal-{{ $canal->id }}">
+                    <i class="fas fa-trash-alt"></i> Eliminar
+                </a>
 
-        <div class="modal fade" id="confirmDeleteModal" tabindex="-1" role="dialog"
-            aria-labelledby="confirmDeleteModalLabel" aria-hidden="true">
-            <div class="modal-dialog" role="document">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <h5 class="modal-title" id="confirmDeleteModalLabel">Confirmar Eliminación</h5>
-                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                            <span aria-hidden="true" class="modal-close">&times;</span>
-                        </button>
-                    </div>
-                    <div class="modal-body">
-                        <p>¿Estás seguro de que quieres eliminar este canal?</p>
-                    </div>
-                    <div class="modal-footer">
-                        <form action="{{ route('eliminar.canal', ['id' => $canal->id]) }}" method="POST">
-                            @csrf
-                            @method('DELETE')
-                            <button type="submit" class="btn btn-danger">
-                                <i class="fas fa-trash-alt"></i> Eliminar
-                            </button>
-                        </form>
-                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
-                    </div>
-                </div>
             </div>
         </div>
-    </div>
-@endsection
+        @include('modals.deleteChannelModal', ['canal' => $canal])
+    @endsection

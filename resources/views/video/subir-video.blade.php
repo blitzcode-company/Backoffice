@@ -8,7 +8,7 @@
                     <div class="card-header">Subir Nuevo Video</div>
 
                     <div class="card-body">
-                        <form action="{{ route('videos.subir') }}" method="POST" enctype="multipart/form-data">
+                        <form action="{{ route('video.crear') }}" method="POST" enctype="multipart/form-data">
                             @csrf
 
                             <div class="row">

@@ -2,12 +2,14 @@
 
 @section('content')
     <div class="video-page-container">
-
+        <div class="navigation-buttons mb-4">
+            <a href="{{ route('video.listar') }}" class="btn btn-secondary btn-sm">
+                <i class="fas fa-arrow-left"></i> Ir a videos
+            </a>
+        </div>
         <header class="video-title">
             <h1>{{ $video->titulo }}</h1>
         </header>
-
-
         <div class="video-player-container">
             <video controls autoplay class="video-player">
                 <source src="{{ $video->link }}" type="video/mp4">
@@ -79,7 +81,10 @@
         </div>
 
         <div class="video-actions text-center">
-            <a href="{{ route('videos.editar', ['id' => $video->id]) }}" class="btn btn-primary">
+            <a href="{{ route('comentarios.listado', ['id' => $video->id]) }}" class="btn btn-primary">
+                <i class="fas fa-comments"></i> Comentarios
+            </a>
+            <a href="{{ route('video.editar.formulario', ['id' => $video->id]) }}" class="btn btn-primary">
                 <i class="fas fa-edit"></i> Editar
             </a>
             <a href="#" class="btn btn-danger" data-toggle="modal" data-target="#confirmDeleteModal">
@@ -101,7 +106,7 @@
                         <p>¿Estás seguro de que quieres eliminar este video?</p>
                     </div>
                     <div class="modal-footer">
-                        <form action="{{ route('eliminar.video', ['id' => $video->id]) }}" method="POST">
+                        <form action="{{ route('video.eliminar', ['id' => $video->id]) }}" method="POST">
                             @csrf
                             @method('DELETE')
                             <button type="submit" class="btn btn-danger">

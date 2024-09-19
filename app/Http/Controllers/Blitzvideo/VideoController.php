@@ -166,7 +166,7 @@ class VideoController extends Controller
             $this->AsignarEtiquetas($request, $video->id);
         }
 
-        return redirect()->route('videos.editar', ['id' => $idVideo])->with('success', 'Video editado exitosamente');
+        return redirect()->route('video.editar.formulario', ['id' => $idVideo])->with('success', 'Video editado exitosamente');
     }
 
     private function ValidarEdicionDeVideo($request)
@@ -199,7 +199,7 @@ class VideoController extends Controller
             $this->AsignarEtiquetas($request, $video->id);
         }
 
-        return redirect()->route('videos.subir')->with('success', 'Video subido exitosamente');
+        return redirect()->route('video.crear.formulario')->with('success', 'Video subido exitosamente');
     }
 
     private function ValidarSubidaDeVideo($request)
@@ -262,7 +262,7 @@ class VideoController extends Controller
         try {
             $video = Video::findOrFail($idVideo);
             $video->delete();
-            return redirect()->route('listar.videos')->with('success', 'Video dado de baja correctamente');
+            return redirect()->route('video.listar')->with('success', 'Video dado de baja correctamente');
         } catch (ModelNotFoundException $exception) {
             return redirect()->back()->with('error', 'El video no existe');
         }

@@ -8,7 +8,7 @@ use Tests\TestCase;
 
 class EtiquetaControllerTest extends TestCase
 {
-    use WithoutMiddleware;
+    //use WithoutMiddleware;
 
     protected function setUp(): void
     {
@@ -16,14 +16,21 @@ class EtiquetaControllerTest extends TestCase
         config(['database.default' => 'blitzvideo']);
     }
 
-    /** @test */
+/** @test */
     public function puede_mostrar_vista_de_etiquetas()
     {
-        $response = $this->get(route('etiquetas'));
-
+        $etiquetas = Etiqueta::on('blitzvideo')->orderBy('id', 'desc')->get();
+        $response = $this->get(route('etiquetas.listar'));
         $response->assertStatus(200);
         $response->assertViewIs('etiquetas');
-        $response->assertViewHas('etiquetas', Etiqueta::all());
+        $response->assertViewHas('etiquetas', function ($viewEtiquetas) use ($etiquetas) {
+            foreach ($etiquetas as $etiqueta) {
+                if (!$viewEtiquetas->contains('id', $etiqueta->id)) {
+                    return false;
+                }
+            }
+            return true;
+        });
     }
 
     /** @test */
@@ -33,7 +40,7 @@ class EtiquetaControllerTest extends TestCase
 
         $response = $this->post(route('etiquetas.crear'), $nuevaEtiquetaData);
 
-        $response->assertRedirect(route('etiquetas'));
+        $response->assertRedirect(route('etiquetas.listar'));
         $this->assertDatabaseHas('etiquetas', ['nombre' => 'Nueva Etiqueta']);
     }
 
@@ -43,9 +50,9 @@ class EtiquetaControllerTest extends TestCase
         $etiqueta = Etiqueta::first();
         $nuevaData = ['nombre' => 'Etiqueta Actualizada'];
 
-        $response = $this->put(route('etiquetas.actualizar', $etiqueta->id), $nuevaData);
+        $response = $this->put(route('etiquetas.editar', $etiqueta->id), $nuevaData);
 
-        $response->assertRedirect(route('etiquetas'));
+        $response->assertRedirect(route('etiquetas.listar'));
         $this->assertDatabaseHas('etiquetas', ['id' => $etiqueta->id, 'nombre' => 'Etiqueta Actualizada']);
     }
 
@@ -56,7 +63,7 @@ class EtiquetaControllerTest extends TestCase
 
         $response = $this->delete(route('etiquetas.eliminar', $etiqueta->id));
 
-        $response->assertRedirect(route('etiquetas'));
+        $response->assertRedirect(route('etiquetas.listar'));
         $this->assertDatabaseMissing('etiquetas', ['id' => $etiqueta->id]);
     }
 }

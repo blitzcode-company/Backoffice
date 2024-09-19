@@ -9,7 +9,7 @@
 
                     <div class="card-body">
 
-                        <form action="{{ route('usuarios.store') }}" method="POST" enctype="multipart/form-data">
+                        <form action="{{ route('usuario.crear') }}" method="POST" enctype="multipart/form-data">
                             @csrf
 
                             <div class="row">

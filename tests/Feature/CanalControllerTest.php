@@ -10,7 +10,7 @@ use Tests\TestCase;
 
 class CanalControllerTest extends TestCase
 {
-    // use WithoutMiddleware;
+    //use WithoutMiddleware;
 
     protected $user;
 
@@ -23,7 +23,7 @@ class CanalControllerTest extends TestCase
     /** @test */
     public function listar_todos_los_canales()
     {
-        $response = $this->get(route('listar.canales'));
+        $response = $this->get(route('canal.listar'));
         $response->assertStatus(Response::HTTP_OK);
         $response->assertViewHas('canales');
     }
@@ -39,22 +39,27 @@ class CanalControllerTest extends TestCase
     /** @test */
     public function listar_canales_por_nombre()
     {
-        $response = $this->post(route('canales-nombre'), ['nombre' => 'Canal']);
+        $response = $this->get(route('canal.nombre', ['nombre' => 'Canal']));
         $response->assertStatus(Response::HTTP_OK);
         $response->assertViewHas('canales');
+        $canales = $response->viewData('canales');
+        $this->assertNotEmpty($canales);
+        $this->assertTrue($canales->contains(function ($canal) {
+            return stripos($canal->nombre, 'Canal') !== false;
+        }));
     }
 
     /** @test */
     public function mostrar_formulario_crear_canal()
     {
-        $response = $this->get(route('crear-canal'));
+        $response = $this->get(route('canal.crear.formulario'));
         $response->assertStatus(Response::HTTP_OK);
     }
 
     /** @test */
     public function mostrar_formulario_editar_canal()
     {
-        $response = $this->get(route('update.canal', ['id' => 3]));
+        $response = $this->get(route('canal.editar.formulario', ['id' => 3]));
         $response->assertStatus(Response::HTTP_OK);
         $response->assertViewHas('canal');
     }
@@ -65,7 +70,7 @@ class CanalControllerTest extends TestCase
         $canal = Canal::latest()->first();
         $this->assertNotNull($canal, 'No hay canales en la base de datos.');
 
-        $response = $this->put(route('update.canal', ['id' => $canal->id]), [
+        $response = $this->put(route('canal.editar', ['id' => $canal->id]), [
             'nombre' => 'Canal Actualizado',
             'descripcion' => 'Descripción actualizada',
             'portada' => null,
@@ -82,14 +87,14 @@ class CanalControllerTest extends TestCase
             'password' => bcrypt('contraseña123'),
         ]);
 
-        $response = $this->post(route('canales.store'), [
+        $response = $this->post(route('canal.crear'), [
             'userId' => $this->user->id,
             'nombre' => 'Nuevo Canal',
             'descripcion' => 'Descripción del nuevo canal',
             'portada' => null,
         ]);
         $response->assertStatus(302);
-        $response->assertRedirect(route('crear-canal'));
+        $response->assertRedirect(route('canal.crear.formulario'));
         $this->assertDatabaseHas('canals', [
             'nombre' => 'Nuevo Canal',
             'user_id' => $this->user->id,
@@ -99,8 +104,8 @@ class CanalControllerTest extends TestCase
     /** @test */
     public function eliminar_canal()
     {
-        $response = $this->delete(route('eliminar.canal', ['id' => 12]));
-        $response->assertRedirect(route('listar.canales'));
+        $response = $this->delete(route('canal.eliminar', ['id' => 12]));
+        $response->assertRedirect(route('canal.listar'));
         $this->assertSoftDeleted('canals', ['id' => 12]);
     }
 }

@@ -8,7 +8,7 @@
                     <div class="card-header">Editar Video</div>
 
                     <div class="card-body">
-                        <form action="{{ route('videos.actualizar', ['id' => $video->id]) }}" method="POST" enctype="multipart/form-data">
+                        <form action="{{ route('video.editar', ['id' => $video->id]) }}" method="POST" enctype="multipart/form-data">
                             @csrf
                             @method('PUT')
 

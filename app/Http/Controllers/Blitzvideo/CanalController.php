@@ -13,11 +13,10 @@ use Illuminate\Support\Facades\Storage;
 
 class CanalController extends Controller
 {
-    private const ROUTE_LISTAR_CANALES = 'listar.canales';
-    private const ROUTE_CREAR_CANAL = 'crear-canal';
-    private const ROUTE_UPDATE_CANAL = 'update.canal';
+    private const ROUTE_LISTAR_CANALES = 'canal.listar';
+    private const ROUTE_CREAR_CANAL = 'canal.crear.formulario';
+    private const ROUTE_UPDATE_CANAL = 'canal.editar.formulario';
     private const USUARIO_EXCLUIDO = 'Invitado';
-
     public function ListarCanales()
     {
         $canales = Canal::with(['user:id,name,foto'])
@@ -25,6 +24,7 @@ class CanalController extends Controller
                 $query->where('name', '!=', self::USUARIO_EXCLUIDO);
             })
             ->withCount('videos')
+            ->orderBy('id', 'desc')
             ->get();
 
         return view('canales.listar-canales', compact('canales'));
@@ -45,7 +45,11 @@ class CanalController extends Controller
 
     public function ListarCanalesPorNombre(Request $request)
     {
-        $nombre = $request->input('nombre');
+        $validated = $request->validate([
+            'nombre' => 'nullable|string|max:100',
+        ]);
+        $nombre = $request->query('nombre');
+
         $query = Canal::with('user:id,name,foto')
             ->whereHas('user', function ($query) {
                 $query->where('name', '!=', self::USUARIO_EXCLUIDO);

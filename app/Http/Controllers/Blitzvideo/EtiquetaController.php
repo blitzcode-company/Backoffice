@@ -18,9 +18,10 @@ class EtiquetaController extends Controller
 
     public function MostrarEtiquetas()
     {
-        $etiquetas = Etiqueta::on('blitzvideo')->get();
+        $etiquetas = Etiqueta::on('blitzvideo')->orderBy('id', 'desc')->get();
         return view('etiquetas', compact('etiquetas'));
     }
+    
 
     public function CrearEtiqueta(Request $request)
     {
@@ -37,7 +38,7 @@ class EtiquetaController extends Controller
             'nombre' => $request->nombre,
         ]);
 
-        return redirect()->route('etiquetas')->with('success', "Etiqueta '{$etiqueta->nombre}' creada correctamente.");
+        return redirect()->route('etiquetas.listar')->with('success', "Etiqueta '{$etiqueta->nombre}' creada correctamente.");
     }
 
     public function AsignarEtiquetas(Request $request, $idVideo)
@@ -59,9 +60,9 @@ class EtiquetaController extends Controller
             $nombreEtiqueta = $etiqueta->nombre;
             $etiqueta->videos()->detach();
             $etiqueta->delete();
-            return redirect()->route('etiquetas')->with('success', "Etiqueta '{$nombreEtiqueta}' y sus asignaciones eliminadas correctamente.");
+            return redirect()->route('etiquetas.listar')->with('success', "Etiqueta '{$nombreEtiqueta}' y sus asignaciones eliminadas correctamente.");
         } catch (ModelNotFoundException $exception) {
-            return redirect()->route('etiquetas')->with('error', 'La etiqueta no existe.');
+            return redirect()->route('etiquetas.listar')->with('error', 'La etiqueta no existe.');
         }
     }
     public function ActualizarEtiqueta(Request $request, $id)
@@ -80,9 +81,9 @@ class EtiquetaController extends Controller
             $etiqueta->nombre = $request->nombre;
             $etiqueta->save();
 
-            return redirect()->route('etiquetas')->with('success', "Etiqueta '{$etiqueta->nombre}' actualizada correctamente.");
+            return redirect()->route('etiquetas.listar')->with('success', "Etiqueta '{$etiqueta->nombre}' actualizada correctamente.");
         } catch (ModelNotFoundException $exception) {
-            return redirect()->route('etiquetas')->with('error', 'La etiqueta no existe.');
+            return redirect()->route('etiquetas.listar')->with('error', 'La etiqueta no existe.');
         }
     }
 }
