@@ -1,6 +1,6 @@
 <?php
 
-namespace Database\Seeders;
+namespace Database\Seeders\BlitzvideoSeeder;
 
 use Illuminate\Database\Seeder;
 use App\Models\Blitzvideo\Etiqueta;
