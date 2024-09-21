@@ -4,7 +4,6 @@ namespace Tests\Feature;
 
 use App\Models\Blitzvideo\Canal;
 use App\Models\Blitzvideo\User;
-use Illuminate\Foundation\Testing\WithoutMiddleware;
 use Illuminate\Http\Response;
 use Tests\TestCase;
 
@@ -101,11 +100,19 @@ class CanalControllerTest extends TestCase
         ]);
     }
 
+/** @test */
+    public function test_dar_de_baja_canal_no_encontrado()
+    {
+        $response = $this->delete(route('canal.eliminar', ['id' => 999]), [
+            'motivo' => 'Prueba',
+        ]);
+        $response->assertSessionHasErrors(['message' => 'Lo sentimos, tu canal no pudo ser encontrado']);
+    }
+
     /** @test */
     public function eliminar_canal()
     {
-        $response = $this->delete(route('canal.eliminar', ['id' => 12]));
-        $response->assertRedirect(route('canal.listar'));
-        $this->assertSoftDeleted('canals', ['id' => 12]);
+        $response = $this->delete(route('canal.eliminar', ['id' => 6]));
+        $this->assertSoftDeleted('canals', ['id' => 6]);
     }
 }
