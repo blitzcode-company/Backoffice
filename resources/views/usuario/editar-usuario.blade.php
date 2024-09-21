@@ -20,7 +20,7 @@
                                         <div class="user-photo text-center mb-3">
                                             <img id="previewFoto"
                                                 src="{{ $user->foto ? $user->foto : asset('img/default-user.png') }}"
-                                                class="img-thumbnail" style="width: 150px; height: 150px;">
+                                                class="img-thumbnail" style="width: 250px; height: 250px;">
                                         </div>
                                         <input type="file" name="foto" id="foto" class="form-control-file d-none"
                                             onchange="previewImage(this)">

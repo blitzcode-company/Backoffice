@@ -14,7 +14,7 @@
         </a>
     </div>
     @if (session('success'))
-        <div class="alert alert-success" style="max-width: 500px; margin-top: 0 !important;">
+        <div class="alert alert-success text-center mx-auto mt-0" style="max-width: 800px; margin-top: 0 !important;">
             {{ session('success') }}
         </div>
     @endif

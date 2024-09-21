@@ -17,6 +17,7 @@ class CanalController extends Controller
     private const ROUTE_CREAR_CANAL = 'canal.crear.formulario';
     private const ROUTE_UPDATE_CANAL = 'canal.editar.formulario';
     private const USUARIO_EXCLUIDO = 'Invitado';
+
     public function ListarCanales()
     {
         $canales = Canal::with(['user:id,name,foto'])
@@ -145,17 +146,20 @@ class CanalController extends Controller
         return $canal->save();
     }
 
-    public function DarDeBajaCanal($canalId)
+    public function darDeBajaCanal($canalId, Request $request)
     {
+        $motivo = $request->input('motivo');
         try {
             $canal = Canal::findOrFail($canalId);
+            $usuario = $canal->user;
             $videos = Video::where('canal_id', $canalId)->get();
             foreach ($videos as $video) {
                 $video->delete();
             }
             $canal->delete();
-
-            return redirect()->route(self::ROUTE_LISTAR_CANALES)->with('success', 'Tu canal y todos tus videos se han dado de baja correctamente');
+            $mailController = new MailController();
+            $mailController->correoBajaDeCanal($usuario->email, $usuario->name, $canal->nombre, $motivo);
+            return redirect()->route(self::ROUTE_LISTAR_CANALES)->with('success', 'Tu canal y todos tus videos se han dado de baja correctamente. Se ha enviado un correo de notificación.');
         } catch (ModelNotFoundException $exception) {
             return redirect()->back()->withErrors(['message' => 'Lo sentimos, tu canal no pudo ser encontrado']);
         } catch (QueryException $exception) {

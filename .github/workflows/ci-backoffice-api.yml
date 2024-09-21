@@ -85,7 +85,7 @@ jobs:
           DB_DATABASE=blitzvideo \
           DB_USERNAME=root \
           DB_PASSWORD=root \
-          php artisan db:seed --force
+          php artisan db:seed --class=Database\\Seeders\\BlitzvideoSeeder\\DatabaseSeeder --force
 
       - name: Ejecutar pruebas de características
         run: |

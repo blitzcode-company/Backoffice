@@ -1,0 +1,2 @@
+clave_plantilla,asunto,cuerpo
+canal_baja,"Notificación de Baja de Canal","Estimado/a {{ nombre_usuario }}, Le informamos que su canal {{ nombre_canal }} ha sido dado de baja debido a {{ motivo_baja }}.\n\nSi considera que esto es un error o desea más información, no dude en ponerse en contacto con el equipo de soporte de BlitzVideo. \n\nAtentamente,\nEl equipo de BlitzVideo."
