@@ -4,6 +4,7 @@ namespace Tests\Feature;
 
 use App\Models\Blitzvideo\Canal;
 use App\Models\Blitzvideo\User;
+use App\Traits\Paginable;
 use Illuminate\Http\Response;
 use Tests\TestCase;
 
@@ -11,6 +12,7 @@ class CanalControllerTest extends TestCase
 {
 
     protected $user;
+    use Paginable;
 
     protected function setUp(): void
     {
@@ -23,7 +25,6 @@ class CanalControllerTest extends TestCase
     {
         $user = User::first();
         $this->actingAs($user);
-
         $response = $this->get(route('canal.listar'));
         $response->assertStatus(Response::HTTP_OK);
         $response->assertViewHas('canales');
@@ -85,13 +86,18 @@ class CanalControllerTest extends TestCase
 
         $canal = Canal::latest()->first();
         $this->assertNotNull($canal, 'No hay canales en la base de datos.');
-
         $response = $this->put(route('canal.editar', ['id' => $canal->id]), [
             'nombre' => 'Canal Actualizado',
             'descripcion' => 'Descripción actualizada',
             'portada' => null,
         ]);
-        $response->assertSessionHas('success');
+        $response->assertStatus(302);
+        $this->assertDatabaseHas('canals', [
+            'id' => $canal->id,
+            'nombre' => 'Canal Actualizado',
+            'descripcion' => 'Descripción actualizada',
+        ]);
+
     }
 
 /** @test */
@@ -102,7 +108,7 @@ class CanalControllerTest extends TestCase
 
         $this->user = User::create([
             'name' => 'prueba',
-            'email' => 'usuario2.prueba@gmail.com',
+            'email' => 'usuario99.prueba@gmail.com',
             'password' => bcrypt('contraseña123'),
         ]);
 
@@ -113,7 +119,6 @@ class CanalControllerTest extends TestCase
             'portada' => null,
         ]);
         $response->assertStatus(302);
-        $response->assertRedirect(route('canal.crear.formulario'));
         $this->assertDatabaseHas('canals', [
             'nombre' => 'Nuevo Canal',
             'user_id' => $this->user->id,

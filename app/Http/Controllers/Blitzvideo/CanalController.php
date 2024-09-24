@@ -246,7 +246,7 @@ class CanalController extends Controller
         return $cambios;
     }
 
-    private function registrarActividadActualizarCanal(array $cambios, $canalId)
+    protected function registrarActividadActualizarCanal(array $cambios, $canalId)
     {
         $detalles = '';
         foreach ($cambios as $campo => $valor) {

@@ -63,7 +63,7 @@ class ComentarioControllerTest extends TestCase
             'mensaje' => 'Este es un nuevo comentario',
             'video_id' => 3,
         ];
-        $response = $this->post(route('comentarios.crear'), $data);
+        $response = $this->post(route('comentarios.crear', $data));
         $response->assertRedirect(route('comentarios.listado', ['id' => 3]));
         $this->assertDatabaseHas('comentarios', [
             'mensaje' => 'Este es un nuevo comentario',
