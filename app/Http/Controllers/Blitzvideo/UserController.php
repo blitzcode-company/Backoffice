@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Blitzvideo;
 
+use App\Events\ActividadRegistrada;
 use App\Http\Controllers\Controller;
 use App\Models\Blitzvideo\User;
 use Illuminate\Http\Request;
@@ -9,7 +10,6 @@ use Illuminate\Support\Facades\Storage;
 
 class UserController extends Controller
 {
-
     public function MostrarFormularioCrearUsuario()
     {
         return view('usuario.crear-usuario');
@@ -34,26 +34,194 @@ class UserController extends Controller
         ]);
 
         try {
-            $usuario = new User();
-            $usuario->name = $request->input('name');
-            $usuario->email = $request->input('email');
-            $usuario->password = bcrypt($request->input('password'));
-            $usuario->premium = $request->has('premium');
-            $usuario->save();
-            $folderPath = 'perfil/' . $usuario->id;
+            $usuario = $this->crearNuevoUsuario($request);
 
-            if ($request->hasFile('foto')) {
-                $foto = $request->file('foto');
-                $rutaFoto = $foto->store($folderPath, 's3');
-                $urlFoto = str_replace('minio', env('BLITZVIDEO_HOST'), Storage::disk('s3')->url($rutaFoto));
-                $usuario->foto = $urlFoto;
-                $usuario->save();
+            if ($usuario) {
+                $this->subirFoto($request, $usuario);
+                $this->registrarActividadCrearUsuario($usuario);
+                return redirect()->route('usuario.crear.formulario')->with('success', 'Usuario creado correctamente');
+            } else {
+                return back()->withInput()->withErrors(['error' => 'No se pudo guardar el usuario']);
             }
-
-            return redirect()->route('usuario.crear.formulario')->with('success', 'Usuario creado correctamente');
         } catch (\Exception $exception) {
             return back()->withInput()->withErrors(['error' => 'Error al crear el usuario']);
         }
+    }
+
+    private function crearNuevoUsuario(Request $request)
+    {
+        $usuario = new User();
+        $usuario->name = $request->input('name');
+        $usuario->email = $request->input('email');
+        $usuario->password = bcrypt($request->input('password'));
+        $usuario->premium = $request->has('premium');
+        $usuario->save();
+
+        return $usuario;
+    }
+
+    private function subirFoto(Request $request, User $usuario)
+    {
+        if ($request->hasFile('foto')) {
+            $folderPath = 'perfil/' . $usuario->id;
+            $foto = $request->file('foto');
+            $rutaFoto = $foto->store($folderPath, 's3');
+            $urlFoto = str_replace('minio', env('BLITZVIDEO_HOST'), Storage::disk('s3')->url($rutaFoto));
+            $usuario->foto = $urlFoto;
+            $usuario->save();
+        }
+    }
+
+    private function registrarActividadCrearUsuario(User $usuario)
+    {
+        $detallesActividad = sprintf(
+            "name: %s; id: %d; email: %s; premium: %s;",
+            $usuario->name,
+            $usuario->id,
+            $usuario->email,
+            $usuario->premium ? 'Sí' : 'No'
+        );
+
+        event(new ActividadRegistrada('Creación de usuario', $detallesActividad));
+    }
+
+    public function EliminarUsuario($id)
+    {
+        try {
+            $usuario = User::find($id);
+
+            if (!$usuario) {
+                abort(404, 'Usuario no encontrado');
+            }
+            if ($usuario->foto) {
+                $folderName = 'perfil/' . $usuario->id;
+                Storage::disk('s3')->delete($usuario->foto);
+                if (Storage::disk('s3')->exists($folderName)) {
+                    Storage::disk('s3')->deleteDirectory($folderName);
+                }
+            }
+            $usuario->delete();
+            event(new ActividadRegistrada('Eliminación de usuario', 'Se eliminó el usuario con ID: ' . $usuario->id));
+            return redirect()->route('usuario.listar')->with('success', 'Usuario eliminado correctamente');
+        } catch (\Exception $exception) {
+            return back()->withErrors(['error' => 'Error al eliminar el usuario']);
+        }
+    }
+
+    public function ActualizarUsuario(Request $request, $id)
+    {
+        $usuario = User::find($id);
+
+        if (!$usuario) {
+            abort(404, 'Usuario no encontrado');
+        }
+
+        $request->validate($this->validarDatos($id));
+
+        $cambios = [];
+
+        try {
+            $cambios = array_merge($cambios, $this->actualizarNombre($request, $usuario));
+            $cambios = array_merge($cambios, $this->actualizarEmail($request, $usuario));
+            $cambios = array_merge($cambios, $this->actualizarPassword($request, $usuario));
+            $cambios = array_merge($cambios, $this->actualizarFoto($request, $usuario));
+
+            $usuario->save();
+
+            $this->registrarActividadActualizarUsuario($cambios, $usuario->id);
+
+            return redirect()->route('usuario.editar.formulario', ['id' => $usuario->id])->with('success', 'Usuario actualizado correctamente');
+        } catch (\Exception $exception) {
+            return back()->withInput()->withErrors(['error' => $exception->getMessage()]);
+        }
+    }
+
+    private function validarDatos($id)
+    {
+        return [
+            'name' => 'sometimes|required|string',
+            'email' => 'sometimes|required|email|unique:users,email,' . $id,
+            'password' => 'nullable|min:6',
+            'foto' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
+        ];
+    }
+
+    private function actualizarNombre(Request $request, User $usuario)
+    {
+        $cambios = [];
+
+        if ($request->has('name') && $request->input('name') != $usuario->name) {
+            $cambios['name'] = [
+                'anterior' => $usuario->name,
+                'nuevo' => $request->input('name'),
+            ];
+            $usuario->name = $request->input('name');
+        }
+
+        return $cambios;
+    }
+
+    private function actualizarEmail(Request $request, User $usuario)
+    {
+        $cambios = [];
+
+        if ($request->has('email') && $request->input('email') != $usuario->email) {
+            $cambios['email'] = [
+                'anterior' => $usuario->email,
+                'nuevo' => $request->input('email'),
+            ];
+            $usuario->email = $request->input('email');
+        }
+
+        return $cambios;
+    }
+
+    private function actualizarPassword(Request $request, User $usuario)
+    {
+        $cambios = [];
+
+        if ($request->filled('password')) {
+            $cambios['password'] = 'cambiado';
+            $usuario->password = bcrypt($request->input('password'));
+        }
+
+        return $cambios;
+    }
+
+    private function actualizarFoto(Request $request, User $usuario)
+    {
+        $cambios = [];
+
+        if ($request->hasFile('foto')) {
+            if ($usuario->foto) {
+                $folderName = 'perfil/' . $usuario->id;
+                Storage::disk('s3')->delete($usuario->foto);
+                if (Storage::disk('s3')->exists($folderName)) {
+                    Storage::disk('s3')->deleteDirectory($folderName);
+                }
+            }
+
+            $folderPath = 'perfil/' . $usuario->id;
+            $foto = $request->file('foto');
+            $rutaFoto = $foto->store($folderPath, 's3');
+            $urlFoto = str_replace('minio', env('BLITZVIDEO_HOST'), Storage::disk('s3')->url($rutaFoto));
+            $cambios['foto'] = [
+                'anterior' => $usuario->foto,
+                'nuevo' => $urlFoto,
+            ];
+            $usuario->foto = $urlFoto;
+        }
+
+        return $cambios;
+    }
+
+    private function registrarActividadActualizarUsuario(array $cambios, $usuarioId)
+    {
+        $detalles = '';
+        foreach ($cambios as $campo => $valor) {
+            $detalles .= ucfirst($campo) . ': ' . ($valor['anterior'] ?? 'N/A') . ' -> ' . ($valor['nuevo'] ?? 'N/A') . '; ';
+        }
+        event(new ActividadRegistrada('Actualización de usuario', $detalles));
     }
 
     public function ListarTodosLosUsuarios()
@@ -90,80 +258,4 @@ class UserController extends Controller
 
         return view('usuario.usuarios', compact('users'));
     }
-
-    public function EliminarUsuario($id)
-    {
-        try {
-            $usuario = User::find($id);
-
-            if (!$usuario) {
-                abort(404, 'Usuario no encontrado');
-            }
-            if ($usuario->foto) {
-                $folderName = 'perfil/' . $usuario->id;
-                Storage::disk('s3')->delete($usuario->foto);
-                if (Storage::disk('s3')->exists($folderName)) {
-                    Storage::disk('s3')->deleteDirectory($folderName);
-                }
-            }
-            $usuario->delete();
-
-            return redirect()->route('usuario.listar')->with('success', 'Usuario eliminado correctamente');
-        } catch (\Exception $exception) {
-            return back()->withErrors(['error' => 'Error al eliminar el usuario']);
-        }
-    }
-
-    public function ActualizarUsuario(Request $request, $id)
-    {
-        $usuario = User::find($id);
-
-        if (!$usuario) {
-            abort(404, 'Usuario no encontrado');
-        }
-
-        $request->validate([
-            'name' => 'sometimes|required|string',
-            'email' => 'sometimes|required|email|unique:users,email,' . $id,
-            'password' => 'nullable|min:6',
-            'foto' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
-        ]);
-
-        try {
-            if ($request->has('name') && $request->input('name') != $usuario->name) {
-                $usuario->name = $request->input('name');
-            }
-
-            if ($request->has('email') && $request->input('email') != $usuario->email) {
-                $usuario->email = $request->input('email');
-            }
-
-            if ($request->filled('password')) {
-                $usuario->password = bcrypt($request->input('password'));
-            }
-
-            if ($request->hasFile('foto')) {
-                if ($usuario->foto) {
-                    $folderName = 'perfil/' . $usuario->id;
-                    Storage::disk('s3')->delete($usuario->foto);
-                    if (Storage::disk('s3')->exists($folderName)) {
-                        Storage::disk('s3')->deleteDirectory($folderName);
-                    }
-                }
-
-                $folderPath = 'perfil/' . $usuario->id;
-                $foto = $request->file('foto');
-                $rutaFoto = $foto->store($folderPath, 's3');
-                $urlFoto = str_replace('minio', env('BLITZVIDEO_HOST'), Storage::disk('s3')->url($rutaFoto));
-                $usuario->foto = $urlFoto;
-            }
-
-            $usuario->save();
-
-            return redirect()->route('usuario.editar.formulario', ['id' => $usuario->id])->with('success', 'Usuario actualizado correctamente');
-        } catch (\Exception $exception) {
-            return back()->withInput()->withErrors(['error' => 'Error al actualizar el usuario']);
-        }
-    }
-
 }

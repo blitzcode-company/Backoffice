@@ -9,7 +9,6 @@ use Tests\TestCase;
 
 class CanalControllerTest extends TestCase
 {
-    //use WithoutMiddleware;
 
     protected $user;
 
@@ -22,6 +21,9 @@ class CanalControllerTest extends TestCase
     /** @test */
     public function listar_todos_los_canales()
     {
+        $user = User::first();
+        $this->actingAs($user);
+
         $response = $this->get(route('canal.listar'));
         $response->assertStatus(Response::HTTP_OK);
         $response->assertViewHas('canales');
@@ -30,6 +32,9 @@ class CanalControllerTest extends TestCase
     /** @test */
     public function mostrar_canal_por_id()
     {
+        $user = User::first();
+        $this->actingAs($user);
+
         $response = $this->get(route('canal.detalle', ['id' => 3]));
         $response->assertStatus(Response::HTTP_OK);
         $response->assertViewHas('canal');
@@ -38,6 +43,9 @@ class CanalControllerTest extends TestCase
     /** @test */
     public function listar_canales_por_nombre()
     {
+        $user = User::first();
+        $this->actingAs($user);
+
         $response = $this->get(route('canal.nombre', ['nombre' => 'Canal']));
         $response->assertStatus(Response::HTTP_OK);
         $response->assertViewHas('canales');
@@ -51,6 +59,9 @@ class CanalControllerTest extends TestCase
     /** @test */
     public function mostrar_formulario_crear_canal()
     {
+        $user = User::first();
+        $this->actingAs($user);
+
         $response = $this->get(route('canal.crear.formulario'));
         $response->assertStatus(Response::HTTP_OK);
     }
@@ -58,6 +69,9 @@ class CanalControllerTest extends TestCase
     /** @test */
     public function mostrar_formulario_editar_canal()
     {
+        $user = User::first();
+        $this->actingAs($user);
+
         $response = $this->get(route('canal.editar.formulario', ['id' => 3]));
         $response->assertStatus(Response::HTTP_OK);
         $response->assertViewHas('canal');
@@ -66,6 +80,9 @@ class CanalControllerTest extends TestCase
     /** @test */
     public function actualizar_canal()
     {
+        $user = User::first();
+        $this->actingAs($user);
+
         $canal = Canal::latest()->first();
         $this->assertNotNull($canal, 'No hay canales en la base de datos.');
 
@@ -80,6 +97,9 @@ class CanalControllerTest extends TestCase
 /** @test */
     public function crear_canal()
     {
+        $user = User::first();
+        $this->actingAs($user);
+
         $this->user = User::create([
             'name' => 'prueba',
             'email' => 'usuario2.prueba@gmail.com',
@@ -103,6 +123,9 @@ class CanalControllerTest extends TestCase
 /** @test */
     public function test_dar_de_baja_canal_no_encontrado()
     {
+        $user = User::first();
+        $this->actingAs($user);
+
         $response = $this->delete(route('canal.eliminar', ['id' => 999]), [
             'motivo' => 'Prueba',
         ]);
@@ -112,6 +135,9 @@ class CanalControllerTest extends TestCase
     /** @test */
     public function eliminar_canal()
     {
+        $user = User::first();
+        $this->actingAs($user);
+
         $response = $this->delete(route('canal.eliminar', ['id' => 6]));
         $this->assertSoftDeleted('canals', ['id' => 6]);
     }

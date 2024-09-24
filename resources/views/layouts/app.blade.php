@@ -23,24 +23,40 @@
         </button>
         <div class="collapse navbar-collapse" id="navbarNav">
             <ul class="navbar-nav ml-auto">
-                <li class="nav-item active">
-                    <a class="nav-link" href="{{ route('inicio') }}">Inicio</a>
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle" href="#" id="navbarMenu" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        <i class="fas fa-bars"></i> Menú
+                    </a>
+                    <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarMenu">
+                        <a href="{{ route('inicio') }}" class="dropdown-item">Dashboard</a>
+                        <a href="{{ route('usuario.listar') }}" class="dropdown-item">Usuarios</a>
+                        <a href="{{ route('canal.listar') }}" class="dropdown-item">Canales</a>
+                        <a href="{{ route('video.listar') }}" class="dropdown-item">Videos</a>
+                        <a href="{{ route('etiquetas.listar') }}" class="dropdown-item">Etiquetas</a>
+                        <a href="{{ route('estadisticas') }}" class="dropdown-item">Estadísticas</a>
+                        <a href="{{ route('anuncios') }}" class="dropdown-item">Anuncios</a>
+                        <a href="{{ route('ajustes') }}" class="dropdown-item">Ajustes</a>
+                    </div>
                 </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="{{ route('perfil') }}">Perfil</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="{{ route('ajustes') }}">Configuración</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="{{ route('logout') }}">Cerrar Sesión</a>
-                </li>
+                @if (Auth::check())
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button"
+                            data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            <i class="fas fa-user-circle"></i> {{ Auth::user()->username }}
+                        </a>
+                        <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdown">
+                            <a class="dropdown-item" href="{{ route('perfil') }}">Mi Perfil</a>
+                            <div class="dropdown-divider"></div>
+                            <a class="dropdown-item" href="{{ route('logout') }}">Cerrar Sesión</a>
+                        </div>
+                    </li>
+                @endif
             </ul>
         </div>
     </nav>
 
     <div class="d-flex">
-        <div id="sidebar-wrapper">
+        <div id="sidebar-wrapper" class="d-none d-md-block">
             <div class="sidebar-heading">Menú</div>
             <div class="list-group list-group-flush">
                 <a href="{{ route('inicio') }}" class="list-group-item list-group-item-action">Dashboard</a>
@@ -58,6 +74,7 @@
             @yield('content')
         </div>
     </div>
+
     <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>

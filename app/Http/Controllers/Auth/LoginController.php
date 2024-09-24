@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
+use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\RateLimiter;
@@ -18,6 +19,10 @@ class LoginController extends Controller
 
     public function login(Request $request)
     {
+        if (app()->environment('local') && env('SIMULATE_LDAP_LOGIN', false)) {
+            return $this->loginTestLDAP($request);
+        }
+
         $validator = Validator::make($request->all(), [
             'username' => 'required|string',
             'password' => 'required|string',
@@ -26,6 +31,7 @@ class LoginController extends Controller
         if ($validator->fails()) {
             return back()->withErrors($validator)->withInput();
         }
+
         $this->ensureIsNotRateLimited($request);
         $credentials = [
             'samaccountname' => $request->username,
@@ -33,13 +39,25 @@ class LoginController extends Controller
         ];
 
         if (!Auth::attempt($credentials)) {
-            $this->handleFailedLogin($request);
+            return $this->handleFailedLogin($request);
         }
 
         RateLimiter::clear($this->throttleKey($request));
         $request->session()->regenerate();
 
         return redirect()->intended('/');
+    }
+
+    private function loginTestLDAP(Request $request)
+    {
+        $user = User::where('username', $request->username)->first();
+
+        if ($user) {
+            Auth::login($user);
+            return redirect()->intended('/');
+        }
+
+        return back()->withErrors(['username' => 'Usuario no encontrado en el entorno de desarrollo.']);
     }
 
     public function logout()

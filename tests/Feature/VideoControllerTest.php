@@ -1,9 +1,9 @@
 <?php
 
-namespace Tests\Unit;
+namespace Tests\Feature;
 
+use App\Models\Blitzvideo\User;
 use App\Models\Blitzvideo\Video;
-use Illuminate\Foundation\Testing\WithoutMiddleware;
 use Illuminate\Http\Response;
 use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\Storage;
@@ -11,7 +11,6 @@ use Tests\TestCase;
 
 class VideoControllerTest extends TestCase
 {
-   // use WithoutMiddleware;
 
     protected function setUp(): void
     {
@@ -22,6 +21,9 @@ class VideoControllerTest extends TestCase
     /** @test */
     public function mostrar_todos_los_videos()
     {
+        $user = User::first();
+        $this->actingAs($user);
+
         $response = $this->get(route('video.listar'));
         $response->assertStatus(Response::HTTP_OK);
         $response->assertViewHas('videos');
@@ -30,6 +32,9 @@ class VideoControllerTest extends TestCase
     /** @test */
     public function listar_videos_por_nombre()
     {
+        $user = User::first();
+        $this->actingAs($user);
+
         $response = $this->post(route('video.nombre'), ['nombre' => 'Título del video 1 para Canal de Diego']);
         $response->assertStatus(Response::HTTP_OK);
         $response->assertViewHas('videos');
@@ -38,6 +43,9 @@ class VideoControllerTest extends TestCase
     /** @test */
     public function mostrar_informacion_video()
     {
+        $user = User::first();
+        $this->actingAs($user);
+
         $response = $this->get(route('video.detalle', ['id' => 4]));
         $response->assertStatus(Response::HTTP_OK);
         $response->assertViewHas('video');
@@ -50,6 +58,9 @@ class VideoControllerTest extends TestCase
     /** @test */
     public function mostrar_formulario_subida()
     {
+        $user = User::first();
+        $this->actingAs($user);
+
         $response = $this->get(route('video.crear.formulario'));
         $response->assertStatus(Response::HTTP_OK);
         $response->assertViewHas('etiquetas');
@@ -60,6 +71,9 @@ class VideoControllerTest extends TestCase
     /** @test */
     public function mostrar_formulario_editar()
     {
+        $user = User::first();
+        $this->actingAs($user);
+
         $idVideo = 4;
         $response = $this->get(route('video.editar.formulario', ['id' => $idVideo]));
         $response->assertStatus(Response::HTTP_OK);
@@ -74,6 +88,9 @@ class VideoControllerTest extends TestCase
     /** @test */
     public function subir_video()
     {
+        $user = User::first();
+        $this->actingAs($user);
+
         Storage::fake('s3');
         $canalId = 3;
         $formData = [
@@ -100,12 +117,15 @@ class VideoControllerTest extends TestCase
     /** @test */
     public function editar_video()
     {
+        $user = User::first();
+        $this->actingAs($user);
+
         Storage::fake('s3');
         $video = Video::findOrFail(4);
         $formData = [
             'titulo' => 'Nuevo Título',
             'descripcion' => 'Nueva Descripción',
-            'etiquetas' => [1, 2],
+            'etiquetas' => [2, 3],
         ];
         $formData['video'] = UploadedFile::fake()->create('video.mp4', 1024, 'video/mp4');
         $formData['miniatura'] = UploadedFile::fake()->create('miniatura.jpg', 1024, 'image/jpeg');
@@ -123,6 +143,9 @@ class VideoControllerTest extends TestCase
     /** @test */
     public function baja_video()
     {
+        $user = User::first();
+        $this->actingAs($user);
+
         $canalId = 3;
         $video = Video::where('canal_id', $canalId)->latest()->first();
         $this->assertNotNull($video);
