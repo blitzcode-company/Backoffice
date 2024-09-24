@@ -2,10 +2,12 @@
 
 namespace App\Http\Controllers\Blitzvideo;
 
+use App\Events\ActividadRegistrada;
 use App\Http\Controllers\Controller;
 use App\Models\Blitzvideo\Canal;
 use App\Models\Blitzvideo\User;
 use App\Models\Blitzvideo\Video;
+use App\Traits\Paginable;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Database\QueryException;
 use Illuminate\Http\Request;
@@ -18,16 +20,17 @@ class CanalController extends Controller
     private const ROUTE_UPDATE_CANAL = 'canal.editar.formulario';
     private const USUARIO_EXCLUIDO = 'Invitado';
 
-    public function ListarCanales()
+    use Paginable;
+
+    public function ListarCanales(Request $request)
     {
-        $canales = Canal::with(['user:id,name,foto'])
+        $canalesQuery = Canal::with(['user:id,name,foto'])
             ->whereHas('user', function ($query) {
                 $query->where('name', '!=', self::USUARIO_EXCLUIDO);
             })
             ->withCount('videos')
-            ->orderBy('id', 'desc')
-            ->get();
-
+            ->orderBy('id', 'desc');
+        $canales = $this->paginateBuilder($canalesQuery, 6, $request->input('page', 1));
         return view('canales.listar-canales', compact('canales'));
     }
 
@@ -49,6 +52,7 @@ class CanalController extends Controller
         $validated = $request->validate([
             'nombre' => 'nullable|string|max:100',
         ]);
+
         $nombre = $request->query('nombre');
 
         $query = Canal::with('user:id,name,foto')
@@ -60,8 +64,7 @@ class CanalController extends Controller
         if ($nombre) {
             $query->where('nombre', 'like', '%' . $nombre . '%');
         }
-
-        $canales = $query->take(10)->get();
+        $canales = $this->paginateBuilder($query, 10, $request->input('page', 1));
 
         return view('canales.listar-canales', compact('canales'));
     }
@@ -104,6 +107,7 @@ class CanalController extends Controller
             $this->GuardarCanal($canal);
             $this->GuardarPortada($request, $canal);
             $canal->save();
+            $this->registrarActividadCrearCanal($canal, $usuario);
             return redirect()->route(self::ROUTE_CREAR_CANAL)->with('success', 'Canal creado correctamente');
         } catch (ModelNotFoundException $e) {
             return redirect()->back()->withErrors(['message' => 'Usuario no encontrado']);
@@ -146,6 +150,18 @@ class CanalController extends Controller
         return $canal->save();
     }
 
+    private function registrarActividadCrearCanal(Canal $canal, User $usuario)
+    {
+        $detallesActividad = sprintf(
+            "Nombre del canal: %s; ID del canal: %d; ID del usuario: %d; Nombre del usuario: %s;",
+            $canal->nombre,
+            $canal->id,
+            $usuario->id,
+            $usuario->name
+        );
+        event(new ActividadRegistrada('Creación de canal', $detallesActividad));
+    }
+
     public function darDeBajaCanal($canalId, Request $request)
     {
         $motivo = $request->input('motivo');
@@ -157,6 +173,7 @@ class CanalController extends Controller
                 $video->delete();
             }
             $canal->delete();
+            $this->registrarActividadDarDeBajaCanal($canal, $usuario, $motivo);
             $mailController = new MailController();
             $mailController->correoBajaDeCanal($usuario->email, $usuario->name, $canal->nombre, $motivo);
             return redirect()->route(self::ROUTE_LISTAR_CANALES)->with('success', 'Tu canal y todos tus videos se han dado de baja correctamente. Se ha enviado un correo de notificación.');
@@ -167,19 +184,37 @@ class CanalController extends Controller
         }
     }
 
+    private function registrarActividadDarDeBajaCanal(Canal $canal, User $usuario, $motivo)
+    {
+        $detallesActividad = sprintf(
+            "Nombre del canal: %s; ID del canal: %d; ID del usuario: %d; Nombre del usuario: %s; Motivo de baja: %s;",
+            $canal->nombre,
+            $canal->id,
+            $usuario->id,
+            $usuario->name,
+            $motivo
+        );
+
+        event(new ActividadRegistrada('Baja de canal', $detallesActividad));
+    }
+
     public function EditarCanal(Request $request, $id)
     {
         try {
             $canal = Canal::findOrFail($id);
-
             $datosValidados = $this->ValidarDatos($request);
-            $canal->nombre = $datosValidados['nombre'];
-            $canal->descripcion = $datosValidados['descripcion'] ?? $canal->descripcion;
-
-            $this->GuardarPortada($request, $canal);
-
+            $cambios = [];
+            $portadaAnterior = $canal->portada;
+            $cambios = array_merge($cambios, $this->actualizarNombre($request, $canal));
+            $cambios = array_merge($cambios, $this->actualizarDescripcion($request, $canal));
+            if ($request->hasFile('portada')) {
+                $this->GuardarPortada($request, $canal);
+                if ($portadaAnterior !== $canal->portada) {
+                    $cambios['portada'] = 'cambiada';
+                }
+            }
             $canal->save();
-
+            $this->registrarActividadActualizarCanal($cambios, $canal->id);
             return redirect()->route(self::ROUTE_UPDATE_CANAL, $canal->id)->with('success', 'Canal actualizado correctamente');
         } catch (ModelNotFoundException $e) {
             return redirect()->back()->withErrors(['message' => 'Canal no encontrado']);
@@ -187,4 +222,41 @@ class CanalController extends Controller
             return redirect()->back()->withErrors(['message' => 'Ocurrió un error al actualizar el canal, por favor inténtalo de nuevo más tarde']);
         }
     }
+
+    private function actualizarNombre(Request $request, Canal $canal)
+    {
+        $cambios = [];
+        if ($request->has('nombre') && $request->input('nombre') != $canal->nombre) {
+            $cambios['nombre'] = [
+                'anterior' => $canal->nombre,
+                'nuevo' => $request->input('nombre'),
+            ];
+            $canal->nombre = $request->input('nombre');
+        }
+        return $cambios;
+    }
+
+    private function actualizarDescripcion(Request $request, Canal $canal)
+    {
+        $cambios = [];
+        if ($request->has('descripcion') && $request->input('descripcion') != $canal->descripcion) {
+            $cambios['descripcion'] = 'cambiada';
+            $canal->descripcion = $request->input('descripcion');
+        }
+        return $cambios;
+    }
+
+    private function registrarActividadActualizarCanal(array $cambios, $canalId)
+    {
+        $detalles = '';
+        foreach ($cambios as $campo => $valor) {
+            if ($campo === 'descripcion' || $campo === 'portada') {
+                $detalles .= ucfirst($campo) . ': ' . $valor . '; ';
+            } else {
+                $detalles .= ucfirst($campo) . ': ' . ($valor['anterior'] ?? 'N/A') . ' -> ' . ($valor['nuevo'] ?? 'N/A') . '; ';
+            }
+        }
+        event(new ActividadRegistrada('Actualización de canal', $detalles));
+    }
+
 }

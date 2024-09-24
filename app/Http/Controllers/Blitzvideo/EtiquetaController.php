@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Blitzvideo;
 
+use App\Events\ActividadRegistrada;
 use App\Http\Controllers\Controller;
 use App\Models\Blitzvideo\Etiqueta;
 use App\Models\Blitzvideo\Video;
@@ -21,7 +22,6 @@ class EtiquetaController extends Controller
         $etiquetas = Etiqueta::on('blitzvideo')->orderBy('id', 'desc')->get();
         return view('etiquetas', compact('etiquetas'));
     }
-    
 
     public function CrearEtiqueta(Request $request)
     {
@@ -33,12 +33,21 @@ class EtiquetaController extends Controller
                 Rule::unique('blitzvideo.etiquetas', 'nombre'),
             ],
         ]);
-
         $etiqueta = Etiqueta::create([
             'nombre' => $request->nombre,
         ]);
-
+        $this->registrarActividadCrearEtiqueta($etiqueta);
         return redirect()->route('etiquetas.listar')->with('success', "Etiqueta '{$etiqueta->nombre}' creada correctamente.");
+    }
+
+    private function registrarActividadCrearEtiqueta(Etiqueta $etiqueta)
+    {
+        $detalles = sprintf(
+            'ID etiqueta: %d; Nombre etiqueta: %s;',
+            $etiqueta->id,
+            $etiqueta->nombre
+        );
+        event(new ActividadRegistrada('Etiqueta creada', $detalles));
     }
 
     public function AsignarEtiquetas(Request $request, $idVideo)
@@ -59,12 +68,24 @@ class EtiquetaController extends Controller
             $etiqueta = Etiqueta::on('blitzvideo')->findOrFail($id);
             $nombreEtiqueta = $etiqueta->nombre;
             $etiqueta->videos()->detach();
+            $this->registrarActividadEliminarEtiqueta($etiqueta);
             $etiqueta->delete();
             return redirect()->route('etiquetas.listar')->with('success', "Etiqueta '{$nombreEtiqueta}' y sus asignaciones eliminadas correctamente.");
         } catch (ModelNotFoundException $exception) {
             return redirect()->route('etiquetas.listar')->with('error', 'La etiqueta no existe.');
         }
     }
+
+    private function registrarActividadEliminarEtiqueta(Etiqueta $etiqueta)
+    {
+        $detalles = sprintf(
+            'ID etiqueta: %d; Nombre: %s;',
+            $etiqueta->id,
+            $etiqueta->nombre
+        );
+        event(new ActividadRegistrada('Etiqueta eliminada', $detalles));
+    }
+
     public function ActualizarEtiqueta(Request $request, $id)
     {
         $request->validate([
@@ -78,12 +99,26 @@ class EtiquetaController extends Controller
 
         try {
             $etiqueta = Etiqueta::on('blitzvideo')->findOrFail($id);
+            $nombreAnterior = $etiqueta->nombre;
             $etiqueta->nombre = $request->nombre;
             $etiqueta->save();
-
+            $this->registrarActividadActualizarEtiqueta($etiqueta, $nombreAnterior);
             return redirect()->route('etiquetas.listar')->with('success', "Etiqueta '{$etiqueta->nombre}' actualizada correctamente.");
         } catch (ModelNotFoundException $exception) {
             return redirect()->route('etiquetas.listar')->with('error', 'La etiqueta no existe.');
         }
     }
+
+    private function registrarActividadActualizarEtiqueta(Etiqueta $etiqueta, $nombreAnterior)
+    {
+        $detalles = sprintf(
+            'ID etiqueta: %d; %s -> %s;',
+            $etiqueta->id,
+            $nombreAnterior,
+            $etiqueta->nombre
+        );
+
+        event(new ActividadRegistrada('Etiqueta actualizada', $detalles));
+    }
+
 }

@@ -18,7 +18,9 @@
             {{ session('success') }}
         </div>
     @endif
-
+    <div class="d-flex justify-content-center">
+        {{ $canales->links('vendor.pagination.pagination') }}
+    </div>
     <div class="canal-list-container mx-5">
         @if ($canales->isEmpty())
             <p>No hay canales disponibles.</p>
@@ -65,5 +67,8 @@
                 </div>
             @endforeach
         @endif
+    </div>
+    <div class="d-flex justify-content-center">
+        {{ $canales->links('vendor.pagination.pagination') }}
     </div>
 @endsection

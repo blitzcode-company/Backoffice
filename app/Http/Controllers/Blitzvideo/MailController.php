@@ -2,7 +2,9 @@
 
 namespace App\Http\Controllers\Blitzvideo;
 
+use App\Events\ActividadRegistrada;
 use App\Http\Controllers\Controller;
+use App\Models\Blitzvideo\User;
 use App\Models\EmailTemplate;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Mail;
@@ -21,7 +23,20 @@ class MailController extends Controller
                 ->subject($asunto)
                 ->setBody(view('emails.plantilla', ['asunto' => $asunto, 'mensaje' => $mensaje])->render(), 'text/html');
         });
+        $this->registrarActividadEnviarCorreo($destinatario, $asunto);
         return redirect()->to($redireccion)->with('success', 'Correo enviado exitosamente.');
+    }
+
+    private function registrarActividadEnviarCorreo($destinatario, $asunto)
+    {
+        $usuario = User::where('email', $destinatario)->first();
+        $detalles = sprintf(
+            'Enviado a: %s; ID destinatario: %d; Asunto: %s;',
+            $destinatario,
+            $usuario ? $usuario->id : 'No disponible',
+            $asunto
+        );
+        event(new ActividadRegistrada('Correo enviado', $detalles));
     }
 
     public function enviarCorreo($destinatario, $asunto, $mensaje)

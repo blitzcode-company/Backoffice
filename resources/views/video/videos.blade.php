@@ -16,10 +16,14 @@
     </div>
 
     @if (session('success'))
-        <div class="alert alert-success" style="max-width: 500px; margin-top: 0 !important;">
+        <div class="alert alert-success text-center mx-auto" style="max-width: 500px; margin-top: 0 !important;">
             {{ session('success') }}
         </div>
     @endif
+
+    <div class="d-flex justify-content-center">
+        {{ $videos->links('vendor.pagination.pagination') }}
+    </div>
 
     <div class="video-list-container">
         @if ($videos->isEmpty())
@@ -47,5 +51,8 @@
                 </div>
             @endforeach
         @endif
+    </div>
+    <div class="d-flex justify-content-center">
+        {{ $videos->links('vendor.pagination.pagination') }}
     </div>
 @endsection

@@ -18,6 +18,9 @@
             {{ session('success') }}
         </div>
     @endif
+    <div class="d-flex justify-content-center">
+        {{ $users->links('vendor.pagination.pagination') }}
+    </div>
     <div class="user-list-container">
         @if ($users->isEmpty())
             <p>No hay usuarios disponibles.</p>
@@ -37,7 +40,7 @@
                                 <div class="user-canales">
                                     @foreach ($user->canales as $canal)
                                         <p>
-                                            Canal: 
+                                            Canal:
                                             <a href="{{ route('canal.detalle', ['id' => $canal->id]) }}">
                                                 {{ $canal->nombre }}
                                                 <i class="fas fa-link"></i>
@@ -59,5 +62,8 @@
                 @endforeach
             </ul>
         @endif
+    </div>
+    <div class="d-flex justify-content-center">
+        {{ $users->links('vendor.pagination.pagination') }}
     </div>
 @endsection

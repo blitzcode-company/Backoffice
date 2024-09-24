@@ -45,3 +45,35 @@ input[type="number"]::-webkit-inner-spin-button {
 input[type="number"] {
     -moz-appearance: textfield;
 }
+
+
+
+.pagination-custom {
+    margin: 20px 0;
+}
+
+.pagination-link {
+    margin: 0 5px;
+    padding: 10px 15px;
+    border: 1px solid v.$color-primary-dark;
+    color: v.$color-primary-dark;
+    text-decoration: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+.pagination-link:hover {
+    background-color: v.$color-primary-dark;
+    color: white;
+    text-decoration: none;
+}
+
+.pagination-link.active {
+    background-color: v.$color-primary-dark;
+    color: white;
+}
+
+.pagination-link.disabled {
+    color: #ccc;
+    cursor: default;
+}

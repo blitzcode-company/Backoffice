@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Blitzvideo;
 
+use App\Events\ActividadRegistrada;
 use App\Http\Controllers\Controller;
 use App\Models\Blitzvideo\Comentario;
 use App\Models\Blitzvideo\Video;
@@ -24,6 +25,7 @@ class ComentarioController extends Controller
 
         return view('comentarios.listado', compact('video', 'comentarios'));
     }
+
     public function VerComentario($comentario_id)
     {
         $comentario = Comentario::withTrashed()
@@ -72,9 +74,21 @@ class ComentarioController extends Controller
         $comentario->respuesta_id = $respuesta_id;
         $comentario->bloqueado = false;
         $comentario->save();
-
+        $this->registrarActividadGuardarComentario($comentario);
         return $comentario;
     }
+    private function registrarActividadGuardarComentario(Comentario $comentario)
+    {
+        $detalles = sprintf(
+            ' ID comentario: %d; ID usuario: %d; ID video: %d;',
+            $comentario->id,
+            $comentario->usuario_id,
+            $comentario->video_id,
+        );
+
+        event(new ActividadRegistrada('Nuevo comentario', $detalles));
+    }
+
     public function crearComentario(Request $request)
     {
         $resultado = $this->guardarComentario($request, $request->input('video_id'));
@@ -102,8 +116,19 @@ class ComentarioController extends Controller
     {
         $comentario = Comentario::findOrFail($comentario_id);
         $comentario->delete();
-
+        $this->registrarActividadEliminarComentario($comentario);
         return redirect()->back()->with('success', 'Comentario eliminado exitosamente.');
+    }
+
+    private function registrarActividadEliminarComentario(Comentario $comentario)
+    {
+        $detalles = sprintf(
+            'ID comentario: %d; ID usuario: %d; ID video: %d;',
+            $comentario->id,
+            $comentario->usuario_id,
+            $comentario->video_id
+        );
+        event(new ActividadRegistrada('Comentario eliminado', $detalles));
     }
 
     public function restaurarComentario($comentario_id)
@@ -111,9 +136,22 @@ class ComentarioController extends Controller
         $comentario = Comentario::withTrashed()->findOrFail($comentario_id);
         if ($comentario->trashed()) {
             $comentario->restore();
+            $this->registrarActividadRestaurarComentario($comentario);
             return redirect()->back()->with('success', 'Comentario restaurado correctamente.');
         }
         return redirect()->back()->with('info', 'El comentario no estaba eliminado.');
+    }
+
+    private function registrarActividadRestaurarComentario(Comentario $comentario)
+    {
+        $detalles = sprintf(
+            'ID comentario: %d; ID usuario: %d; ID video: %d;',
+            $comentario->id,
+            $comentario->usuario_id,
+            $comentario->video_id
+        );
+
+        event(new ActividadRegistrada('Comentario restaurado', $detalles));
     }
 
     public function actualizarComentario(Request $request, $comentario_id)
@@ -122,11 +160,28 @@ class ComentarioController extends Controller
             'mensaje' => 'required|string|max:1000',
         ]);
         $comentario = Comentario::withTrashed()->findOrFail($comentario_id);
+        $mensajeAnterior = $comentario->mensaje;
         $comentario->mensaje = $request->input('mensaje');
+        $this->registrarActividadActualizarComentario($comentario, $mensajeAnterior);
         $comentario->save();
         return redirect()->route('comentarios.ver', ['comentario_id' => $comentario_id])
             ->with('success', 'Comentario actualizado exitosamente.');
     }
+
+    private function registrarActividadActualizarComentario(Comentario $comentario, $mensajeAnterior)
+    {
+        $detalles = sprintf(
+            'ID comentario: %d; ID usuario: %d; ID video: %d; Mensaje anterior: "%s"; Mensaje nuevo: "%s";',
+            $comentario->id,
+            $comentario->usuario_id,
+            $comentario->video_id,
+            $mensajeAnterior,
+            $comentario->mensaje
+        );
+
+        event(new ActividadRegistrada('Comentario actualizado', $detalles));
+    }
+
     public function bloquearComentario($comentario_id)
     {
         $comentario = Comentario::withTrashed()->findOrFail($comentario_id);
@@ -134,12 +189,26 @@ class ComentarioController extends Controller
         if ($comentario->bloqueado) {
             return redirect()->back()->with('info', 'El comentario ya está bloqueado.');
         }
-
+        $usuarioId = $comentario->usuario_id;
+        $videoId = $comentario->video_id;
         $comentario->bloqueado = true;
         $comentario->save();
-
+        $this->registrarActividadBloquearComentario($comentario_id, $usuarioId, $videoId);
         return redirect()->back()->with('success', 'Comentario bloqueado exitosamente.');
     }
+
+    private function registrarActividadBloquearComentario($comentario_id, $usuarioId, $videoId)
+    {
+        $detalles = sprintf(
+            'ID comentario: %d; ID usuario: %d; ID video: %d;',
+            $comentario_id,
+            $usuarioId,
+            $videoId
+        );
+
+        event(new ActividadRegistrada('Comentario bloqueado', $detalles));
+    }
+
     public function desbloquearComentario($comentario_id)
     {
         $comentario = Comentario::withTrashed()->findOrFail($comentario_id);
@@ -147,11 +216,23 @@ class ComentarioController extends Controller
         if (!$comentario->bloqueado) {
             return redirect()->back()->with('info', 'El comentario no está bloqueado.');
         }
-
+        $usuarioId = $comentario->usuario_id;
+        $videoId = $comentario->video_id;
         $comentario->bloqueado = false;
         $comentario->save();
-
+        $this->registrarActividadDesbloquearComentario($comentario_id, $usuarioId, $videoId);
         return redirect()->back()->with('success', 'Comentario desbloqueado exitosamente.');
+    }
+
+    private function registrarActividadDesbloquearComentario($comentario_id, $usuarioId, $videoId)
+    {
+        $detalles = sprintf(
+            'ID comentario: %d; ID usuario: %d; ID video: %d;',
+            $comentario_id,
+            $usuarioId,
+            $videoId
+        );
+        event(new ActividadRegistrada('Comentario desbloqueado', $detalles));
     }
 
 }

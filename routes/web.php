@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\AdminController;
 use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\Blitzvideo\CanalController;
 use App\Http\Controllers\Blitzvideo\ComentarioController;
@@ -82,5 +83,9 @@ Route::middleware(['auth'])->group(function () {
         Route::get('/usuarios-creadores', [UserChartController::class, 'UsuarioConCanal'])->name('user_channel');
         Route::get('/videos-por-etiqueta', [VideoChartController::class, 'VideosPorEtiqueta'])->name('videos_por_etiqueta');
         Route::get('/videos-mas-vistados-por-mes', [VideoChartController::class, 'VideosMasVistadosElUltimoMes'])->name('mas_visitados_por_mes');
+    });
+
+    Route::prefix('admin')->name('admin.')->group(function () {
+        Route::get('/', [AdminController::class, 'listarUsuarios'])->name('usuarios');
     });
 });

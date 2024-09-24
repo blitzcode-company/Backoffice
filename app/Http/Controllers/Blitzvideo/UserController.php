@@ -5,11 +5,18 @@ namespace App\Http\Controllers\Blitzvideo;
 use App\Events\ActividadRegistrada;
 use App\Http\Controllers\Controller;
 use App\Models\Blitzvideo\User;
+use App\Traits\Paginable;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 
 class UserController extends Controller
 {
+    private const ROUTE_CREAR_USUARIO = 'usuario.crear.formulario';
+    private const ROUTE_LISTAR_USUARIOS = 'usuario.listar';
+    private const ROUTE_EDITAR_USUARIO = 'usuario.editar.formulario';
+
+    use Paginable;
+
     public function MostrarFormularioCrearUsuario()
     {
         return view('usuario.crear-usuario');
@@ -39,7 +46,7 @@ class UserController extends Controller
             if ($usuario) {
                 $this->subirFoto($request, $usuario);
                 $this->registrarActividadCrearUsuario($usuario);
-                return redirect()->route('usuario.crear.formulario')->with('success', 'Usuario creado correctamente');
+                return redirect()->route(self::ROUTE_CREAR_USUARIO)->with('success', 'Usuario creado correctamente');
             } else {
                 return back()->withInput()->withErrors(['error' => 'No se pudo guardar el usuario']);
             }
@@ -102,7 +109,7 @@ class UserController extends Controller
             }
             $usuario->delete();
             event(new ActividadRegistrada('Eliminación de usuario', 'Se eliminó el usuario con ID: ' . $usuario->id));
-            return redirect()->route('usuario.listar')->with('success', 'Usuario eliminado correctamente');
+            return redirect()->route(self::ROUTE_LISTAR_USUARIOS)->with('success', 'Usuario eliminado correctamente');
         } catch (\Exception $exception) {
             return back()->withErrors(['error' => 'Error al eliminar el usuario']);
         }
@@ -130,7 +137,7 @@ class UserController extends Controller
 
             $this->registrarActividadActualizarUsuario($cambios, $usuario->id);
 
-            return redirect()->route('usuario.editar.formulario', ['id' => $usuario->id])->with('success', 'Usuario actualizado correctamente');
+            return redirect()->route(self::ROUTE_EDITAR_USUARIO, ['id' => $usuario->id])->with('success', 'Usuario actualizado correctamente');
         } catch (\Exception $exception) {
             return back()->withInput()->withErrors(['error' => $exception->getMessage()]);
         }
@@ -224,14 +231,12 @@ class UserController extends Controller
         event(new ActividadRegistrada('Actualización de usuario', $detalles));
     }
 
-    public function ListarTodosLosUsuarios()
+    public function ListarTodosLosUsuarios(Request $request)
     {
-        $users = User::with('canales')
+        $usersQuery = User::with('canales')
             ->where('name', '!=', 'Invitado')
-            ->orderBy('id', 'desc')
-            ->take(10)
-            ->get();
-
+            ->orderBy('id', 'desc');
+        $users = $this->paginateBuilder($usersQuery, 6, $request->input('page', 1));
         return view('usuario.usuarios', compact('users'));
     }
 
@@ -250,12 +255,11 @@ class UserController extends Controller
         $nombre = $request->query('nombre');
         $query = User::with('canales')->where('name', '!=', 'Invitado');
 
-        if ($nombre) {
+        if ($nombre) {  
             $query->where('name', 'like', '%' . $nombre . '%');
         }
-
-        $users = $query->take(10)->get();
-
+        $users = $this->paginateBuilder($query, 6, $request->input('page', 1));
         return view('usuario.usuarios', compact('users'));
     }
+
 }
