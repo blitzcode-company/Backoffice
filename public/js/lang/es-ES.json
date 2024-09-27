@@ -11,8 +11,8 @@
     "paginate": {
         "first": "Primero",
         "last": "Último",
-        "next": "Siguiente",
-        "previous": "Anterior"
+        "next": "»",
+        "previous": "«"
     },
     "aria": {
         "sortAscending": ": Activar para ordenar la columna de manera ascendente",

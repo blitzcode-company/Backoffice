@@ -1,12 +1,10 @@
-<div class="modal fade" id="sendEmailModal" tabindex="-1" role="dialog" aria-labelledby="sendEmailModalLabel"
-    aria-hidden="true">
+<div class="modal fade" id="sendEmailModal" tabindex="-1" aria-labelledby="sendEmailModalLabel" aria-hidden="true">
     <div class="modal-dialog" role="document">
         <div class="modal-content">
             <div class="modal-header">
                 <h5 class="modal-title" id="sendEmailModalLabel">Enviar Correo a ({{ $user->email }})</h5>
-                <button type="button" class="close modal-close" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                </button>
+                <button type="button" class="close modal-close" data-bs-dismiss="modal" aria-label="Close"> <span
+                        aria-hidden="true">&times;</span></button>
             </div>
             <div class="modal-body">
                 <form id="sendEmailForm" action="{{ route('correo.enviar') }}" method="POST">
@@ -25,7 +23,7 @@
                 </form>
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-secondary btn-sm" data-dismiss="modal">
+                <button type="button" class="btn btn-secondary btn-sm" data-bs-dismiss="modal">
                     <i class="fas fa-times"></i> Cerrar
                 </button>
                 <button type="submit" form="sendEmailForm" class="btn btn-success btn-sm">
@@ -38,10 +36,11 @@
 
 <script>
     document.getElementById('sendEmailForm').addEventListener('submit', function(event) {
-        event.preventDefault();
-        $('#sendEmailModal').modal('hide');
-        document.querySelector('.modal-backdrop').remove();
+        const modal = document.getElementById('sendEmailModal');
+        const modalInstance = bootstrap.Modal.getOrCreateInstance(modal);
+        modalInstance.hide();
     });
+
     $('#sendEmailModal').on('hidden.bs.modal', function() {
         $('.modal-backdrop').remove();
     });

@@ -1,7 +1,7 @@
 @extends('layouts.app')
 
 @section('content')
-<div class="titulo">Responder al comentario #{{ $comentario->id }}</div>
+    <div class="titulo">Responder al comentario #{{ $comentario->id }}</div>
     <div class="comments-page-container">
 
         <div class="navigation-buttons mb-4">
@@ -68,25 +68,28 @@
                     </div>
                     <div class="comment-actions">
                         @if ($comentario->trashed())
-                            <button class="btn btn-success btn-sm" data-toggle="modal"
-                                data-target="#restoreCommentModal{{ $comentario->id }}" data-id="{{ $comentario->id }}">
+                            <button class="btn btn-success btn-sm" data-bs-toggle="modal"
+                                data-bs-target="#restoreCommentModal{{ $comentario->id }}" data-id="{{ $comentario->id }}">
                                 <i class="fas fa-undo"></i> Restaurar
                             </button>
                         @else
-                            <button class="btn btn-danger btn-sm" data-toggle="modal"
-                                data-target="#confirmDeleteModal{{ $comentario->id }}" data-id="{{ $comentario->id }}">
+                            <button class="btn btn-danger btn-sm" data-bs-toggle="modal"
+                                data-bs-target="#confirmDeleteModal{{ $comentario->id }}" data-id="{{ $comentario->id }}">
                                 <i class="fas fa-trash"></i> Eliminar
                             </button>
                         @endif
-                        <a href="" class="btn custom-edit-btn btn-sm" data-toggle="modal" data-target="#editCommentModal">
+                        <a href="#" class="btn custom-edit-btn btn-sm" data-bs-toggle="modal"
+                            data-bs-target="#editCommentModal">
                             <i class="fas fa-edit"></i> Editar
                         </a>
 
+
                         <button class="btn {{ $comentario->bloqueado ? 'btn-secondary' : 'btn-warning' }} btn-sm"
-                            data-toggle="modal" data-target="#confirmBlockModal{{ $comentario->id }}"
+                            data-bs-toggle="modal" data-bs-target="#confirmBlockModal{{ $comentario->id }}"
                             data-id="{{ $comentario->id }}">
                             <i class="fas fa-ban"></i> {{ $comentario->bloqueado ? 'Desbloquear' : 'Bloquear' }}
                         </button>
+
                     </div>
                     @include('modals.delete-comment', ['comentario' => $comentario])
                     @include('modals.restore-comment', ['comentario' => $comentario])
@@ -117,26 +120,27 @@
                                             <i class="fas fa-eye"></i> Ver
                                         </a>
                                         @if ($respuesta->trashed())
-                                            <button class="btn btn-success btn-sm" data-toggle="modal"
-                                                data-target="#restoreResponseModal{{ $respuesta->id }}"
+                                            <button class="btn btn-success btn-sm" data-bs-toggle="modal"
+                                                data-bs-target="#restoreResponseModal{{ $respuesta->id }}"
                                                 data-id="{{ $respuesta->id }}">
                                                 <i class="fas fa-undo"></i> Restaurar
                                             </button>
                                         @else
-                                            <button class="btn btn-danger btn-sm" data-toggle="modal"
-                                                data-target="#confirmDeleteModalRespuesta{{ $respuesta->id }}"
+                                            <button class="btn btn-danger btn-sm" data-bs-toggle="modal"
+                                                data-bs-target="#confirmDeleteModalRespuesta{{ $respuesta->id }}"
                                                 data-id="{{ $respuesta->id }}">
                                                 <i class="fas fa-trash"></i> Eliminar
                                             </button>
                                         @endif
                                         <button
                                             class="btn {{ $respuesta->bloqueado ? 'btn-secondary' : 'btn-warning' }} btn-sm"
-                                            data-toggle="modal"
-                                            data-target="#confirmBlockModalRespuesta{{ $respuesta->id }}"
+                                            data-bs-toggle="modal"
+                                            data-bs-target="#confirmBlockModalRespuesta{{ $respuesta->id }}"
                                             data-id="{{ $respuesta->id }}">
                                             <i class="fas fa-ban"></i>
                                             {{ $respuesta->bloqueado ? 'Desbloquear' : 'Bloquear' }}
                                         </button>
+
                                     </div>
                                 </li>
                                 @include('modals.delete-response', ['comentario' => $comentario])

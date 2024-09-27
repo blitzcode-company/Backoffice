@@ -18,9 +18,7 @@
             </video>
         </div>
 
-
         <div class="video-details-container">
-
             <div class="uploader-info">
                 <div class="uploader-photo">
                     @if ($video->canal->user && $video->canal->user->foto)
@@ -34,7 +32,6 @@
                 <div class="uploader-name">
                     <p class="m-0"><strong>Subido por:</strong> {{ $video->canal->user->name }}
                         ({{ $video->canal->user->email }}) </p>
-
                 </div>
             </div>
             <div class="video-info">
@@ -88,7 +85,6 @@
                     </ul>
                     <p><strong>Promedio de Puntuaciones:</strong> {{ $video->promedio_puntuaciones }}</p>
                 </div>
-
             </div>
 
             <div class="video-actions text-center">
@@ -98,36 +94,9 @@
                 <a href="{{ route('video.editar.formulario', ['id' => $video->id]) }}" class="btn btn-primary">
                     <i class="fas fa-edit"></i> Editar
                 </a>
-                <a href="#" class="btn btn-danger" data-toggle="modal" data-target="#confirmDeleteModal">
+                <a href="#" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#confirmDeleteModal">
                     <i class="fas fa-trash-alt"></i> Eliminar
                 </a>
             </div>
-
-            <div class="modal fade" id="confirmDeleteModal" tabindex="-1" role="dialog"
-                aria-labelledby="confirmDeleteModalLabel" aria-hidden="true">
-                <div class="modal-dialog" role="document">
-                    <div class="modal-content">
-                        <div class="modal-header">
-                            <h5 class="modal-title" id="confirmDeleteModalLabel">Confirmar Eliminación</h5>
-                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                <span aria-hidden="true">&times;</span>
-                            </button>
-                        </div>
-                        <div class="modal-body">
-                            <p>¿Estás seguro de que quieres eliminar este video?</p>
-                        </div>
-                        <div class="modal-footer">
-                            <form action="{{ route('video.eliminar', ['id' => $video->id]) }}" method="POST">
-                                @csrf
-                                @method('DELETE')
-                                <button type="submit" class="btn btn-danger">
-                                    <i class="fas fa-trash-alt"></i> Eliminar
-                                </button>
-                            </form>
-                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    @endsection
+            @include('modals.delete-video-modal', ['video' => $video])
+        @endsection

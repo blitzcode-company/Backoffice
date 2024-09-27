@@ -1,13 +1,11 @@
 <div class="modal fade" id="editModal-{{ $etiqueta->id }}" tabindex="-1" role="dialog"
     aria-labelledby="editModalLabel-{{ $etiqueta->id }}" aria-hidden="true">
-    <div class="modal-dialog" role="document">
+    <div class="modal-dialog modal-dialog-centered" role="document">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title" id="editModalLabel-{{ $etiqueta->id }}">Editar Etiqueta
-                </h5>
-                <button type="button" class="close modal-close" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                </button> 
+                <h5 class="modal-title" id="editModalLabel-{{ $etiqueta->id }}">Editar Etiqueta</h5>
+                <button type="button" class="close modal-close" data-bs-dismiss="modal" aria-label="Close"> <span
+                        aria-hidden="true">&times;</span></button>
             </div>
             <div class="modal-body">
                 <form action="{{ route('etiquetas.editar', ['id' => $etiqueta->id]) }}" method="POST">

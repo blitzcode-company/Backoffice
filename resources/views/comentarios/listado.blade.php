@@ -36,7 +36,7 @@
         @endif
 
         <div class="text-center mt-4">
-            <a href="#" class="btn btn-success btn-sm" data-toggle="modal" data-target="#createCommentModal">
+            <a href="#" class="btn btn-success btn-sm" data-bs-toggle="modal" data-bs-target="#createCommentModal">
                 <i class="fas fa-plus"></i> Nuevo Comentario
             </a>
         </div>
@@ -71,24 +71,26 @@
                                     <i class="fas fa-eye"></i> Ver
                                 </a>
                                 @if ($comentario->trashed())
-                                    <button class="btn btn-success btn-sm" data-toggle="modal"
-                                        data-target="#restoreCommentModal{{ $comentario->id }}"
+                                    <button class="btn btn-success btn-sm" data-bs-toggle="modal"
+                                        data-bs-target="#restoreCommentModal{{ $comentario->id }}"
                                         data-id="{{ $comentario->id }}">
                                         <i class="fas fa-undo"></i> Restaurar
                                     </button>
                                 @else
-                                    <button class="btn btn-danger btn-sm" data-toggle="modal"
-                                        data-target="#confirmDeleteModal{{ $comentario->id }}"
+                                    <button class="btn btn-danger btn-sm" data-bs-toggle="modal"
+                                        data-bs-target="#confirmDeleteModal{{ $comentario->id }}"
                                         data-id="{{ $comentario->id }}">
                                         <i class="fas fa-trash"></i> Eliminar
                                     </button>
                                 @endif
 
                                 <button class="btn {{ $comentario->bloqueado ? 'btn-secondary' : 'btn-warning' }} btn-sm"
-                                    data-toggle="modal" data-target="#confirmBlockModal{{ $comentario->id }}"
+                                    data-bs-toggle="modal" 
+                                    data-bs-target="#confirmBlockModal{{ $comentario->id }}"
                                     data-id="{{ $comentario->id }}">
                                     <i class="fas fa-ban"></i> {{ $comentario->bloqueado ? 'Desbloquear' : 'Bloquear' }}
                                 </button>
+                                
                             </div>
 
                             @if ($comentario->respuestas->isNotEmpty())
@@ -120,22 +122,22 @@
                                                     <i class="fas fa-eye"></i> Ver
                                                 </a>
                                                 @if ($respuesta->trashed())
-                                                    <button class="btn btn-success btn-sm" data-toggle="modal"
-                                                        data-target="#restoreResponseModal{{ $respuesta->id }}"
+                                                    <button class="btn btn-success btn-sm" data-bs-toggle="modal"
+                                                        data-bs-target="#restoreResponseModal{{ $respuesta->id }}"
                                                         data-id="{{ $respuesta->id }}">
                                                         <i class="fas fa-undo"></i> Restaurar
                                                     </button>
                                                 @else
-                                                    <button class="btn btn-danger btn-sm" data-toggle="modal"
-                                                        data-target="#confirmDeleteModalRespuesta{{ $respuesta->id }}"
+                                                    <button class="btn btn-danger btn-sm" data-bs-toggle="modal"
+                                                        data-bs-target="#confirmDeleteModalRespuesta{{ $respuesta->id }}"
                                                         data-id="{{ $respuesta->id }}">
                                                         <i class="fas fa-trash"></i> Eliminar
                                                     </button>
                                                 @endif
                                                 <button
                                                     class="btn {{ $respuesta->bloqueado ? 'btn-secondary' : 'btn-warning' }} btn-sm"
-                                                    data-toggle="modal"
-                                                    data-target="#confirmBlockModalRespuesta{{ $respuesta->id }}"
+                                                    data-bs-toggle="modal"
+                                                    data-bs-target="#confirmBlockModalRespuesta{{ $respuesta->id }}"
                                                     data-id="{{ $respuesta->id }}">
                                                     <i class="fas fa-ban"></i>
                                                     {{ $respuesta->bloqueado ? 'Desbloquear' : 'Bloquear' }}

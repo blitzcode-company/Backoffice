@@ -1,12 +1,11 @@
-<div class="modal fade" id="confirmDeleteModal-{{ $canal->id }}" tabindex="-1" role="dialog"
+<div class="modal fade" id="confirmDeleteModal-{{ $canal->id }}" tabindex="-1"
     aria-labelledby="confirmDeleteModalLabel-{{ $canal->id }}" aria-hidden="true">
     <div class="modal-dialog" role="document">
         <div class="modal-content">
             <div class="modal-header">
                 <h5 class="modal-title" id="confirmDeleteModalLabel-{{ $canal->id }}">Confirmar Eliminación</h5>
-                <button type="button" class="close modal-close" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                </button> 
+                <button type="button" class="close modal-close" data-bs-dismiss="modal" aria-label="Close"> <span
+                        aria-hidden="true">&times;</span></button>
             </div>
             <div class="modal-body">
                 <p>¿Con qué motivo deseas eliminar el canal <strong>{{ $canal->nombre }}</strong>?</p><br>
@@ -18,7 +17,7 @@
                     <option value="Contenido inapropiado">Contenido inapropiado</option>
                     <option value="Violación de derechos de autor">Violación de derechos de autor</option>
                 </select>
-  
+
                 <p>Para confirmar la eliminación, ingresa el ID del canal en el siguiente campo:</p><br>
                 <p><strong>ID: #{{ $canal->id }}</strong></p>
                 <input type="text" id="confirm-id-{{ $canal->id }}" class="form-control"
@@ -30,7 +29,6 @@
                     @csrf
                     @method('DELETE')
 
-
                     <input type="hidden" name="motivo" id="hidden-reason-{{ $canal->id }}">
                     <input type="hidden" name="_token" value="{{ csrf_token() }}">
 
@@ -38,7 +36,7 @@
                         <i class="fas fa-trash-alt"></i> Eliminar
                     </button>
                 </form>
-                <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
             </div>
         </div>
     </div>
@@ -55,7 +53,6 @@
 
             select.addEventListener('change', function() {
                 hiddenReason.value = select.value;
-                console.log('Motivo seleccionado: ' + hiddenReason.value);
                 button.disabled = input.value !== modalId || select.value === '';
             });
 

@@ -48,12 +48,13 @@
         </div>
         <div class="modal-footer">
             <div class="mx-auto">
-                <a href="#" class="btn btn-success btn-sm w-40" data-toggle="modal" data-target="#sendEmailModal">
+                <a href="#" class="btn btn-success btn-sm w-40" data-bs-toggle="modal" data-bs-target="#sendEmailModal">
                     <i class="fas fa-envelope"></i> Enviar Correo
                 </a>
-                <a href="" class="btn btn-danger btn-sm w-40" data-toggle="modal" data-target="#confirmDeleteModal">
+                <a href="#" class="btn btn-danger btn-sm w-40" data-bs-toggle="modal" data-bs-target="#confirmDeleteModal">
                     <i class="fas fa-trash-alt"></i> Eliminar
                 </a>
+                
                 <a href="{{ route('usuario.editar.formulario', ['id' => $user->id]) }}" class="btn btn-warning btn-sm w-40">
                     <i class="fas fa-edit"></i> Editar
                 </a>

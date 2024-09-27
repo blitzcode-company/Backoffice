@@ -3,7 +3,6 @@
 .table {
     width: 100%;
     border-collapse: collapse;
-    margin-top: 20px;
 
     thead {
         background-color: v.$color-primary-title;
@@ -40,5 +39,11 @@
     .fas.fa-history {
         color: green;
         margin-left: 5px;
+    }
+}
+
+.table-style {
+    input {
+        margin-bottom: 20px;
     }
 }
