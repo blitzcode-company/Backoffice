@@ -1,0 +1,44 @@
+@use '../partials/variables' as v;
+
+.table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 20px;
+
+    thead {
+        background-color: v.$color-primary-title;
+        color: v.$color-footer-text;
+    }
+
+    th,
+    td {
+        padding: 5px;
+
+        font-size: small;
+    }
+
+    tr:nth-child(even) {
+        background-color: v.$tr-bg-color;
+    }
+
+    tr:hover {
+        background-color: v.$color-primary-light;
+        color: v.$color-footer-text;
+        cursor: pointer !important;
+    }
+
+    thead tr:hover {
+        background-color: v.$color-primary-dark;
+        color: v.$color-footer-text;
+        cursor: default !important;
+    }
+}
+
+.time-column {
+    text-align: right;
+
+    .fas.fa-history {
+        color: green;
+        margin-left: 5px;
+    }
+}

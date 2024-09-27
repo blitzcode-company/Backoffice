@@ -5,9 +5,9 @@
              <div class="modal-header">
                  <h5 class="modal-title" id="deleteModalLabel-{{ $etiqueta->id }}">Eliminar Etiqueta
                  </h5>
-                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                     <span aria-hidden="true">&times;</span>
-                 </button>
+                 <button type="button" class="close modal-close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button> 
              </div>
              <div class="modal-body">
                  <p>¿Estás seguro de que quieres eliminar esta etiqueta?</p>

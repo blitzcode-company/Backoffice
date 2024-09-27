@@ -1,12 +1,14 @@
 @extends('layouts.app')
 
 @section('content')
+<div class="titulo">Subir nuevo del Video</div>
     <div class="container-card-video">
         <div class="row justify-content-center">
             <div class="col-lg-8">
                 <div class="card-video">
-                    <div class="card-header">Subir Nuevo Video</div>
-
+                    <div class="card-header">
+                        Nuevo Video - <span class="text-muted">Haz clic sobre la miniatura para cambiarla</span>
+                    </div>
                     <div class="card-body">
                         <form action="{{ route('video.crear') }}" method="POST" enctype="multipart/form-data">
                             @csrf

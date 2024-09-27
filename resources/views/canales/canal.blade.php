@@ -1,6 +1,7 @@
 @extends('layouts.app')
 
 @section('content')
+    <div class="titulo">Infromación del Canal</div>
     <div class="container container-card">
         <div class="navigation-buttons mb-4">
             <a href="{{ route('canal.listar') }}" class="btn btn-secondary btn-sm">
@@ -19,14 +20,18 @@
                 <div class="row">
                     <div class="col-md-4 text-center">
                         <div class="mb-3 canal-foto-perfil">
-                            @if ($canal->user && $canal->user->foto)
-                                <img src="{{ asset($canal->user->foto) }}" alt="Foto de perfil de {{ $canal->user->name }}"
-                                    class="rounded-circle canal-foto-perfil">
-                            @else
-                                <img src="{{ asset('img/default-user.png') }}" alt="Foto de perfil por defecto"
-                                    class="rounded-circle canal-foto-perfil">
-                            @endif
+                            <a href="{{ route('usuario.detalle', ['id' => $canal->user->id]) }}"
+                                title="Ir a usuario #{{ $canal->user->id }}">
+                                @if ($canal->user && $canal->user->foto)
+                                    <img src="{{ asset($canal->user->foto) }}"  
+                                        alt="Foto de perfil de {{ $canal->user->name }}"
+                                        class="rounded-circle canal-foto-perfil">
+                                @else
+                                    <img src="{{ asset('img/default-user.png') }}" alt="Foto de perfil por defecto"
+                                        class="rounded-circle canal-foto-perfil">
+                                @endif
                         </div>
+                        </a>
                     </div>
                     <div class="col-md-8">
                         <div class="canal-info-box">
@@ -37,7 +42,8 @@
                                 @if ($canal->user)
                                     <p>
                                         <strong>Propietario:</strong>
-                                        <a href="{{ route('usuario.detalle', ['id' => $canal->user->id]) }}">
+                                        <a class="custom-link"
+                                            href="{{ route('usuario.detalle', ['id' => $canal->user->id]) }}">
                                             {{ $canal->user->name }}
                                             <i class="fas fa-link"></i>
                                         </a>
@@ -59,7 +65,7 @@
 
             </div>
             <div class="card-footer text-center">
-                <a href="{{ route('usuario.detalle', ['id' => $canal->user->id]) }}" class="btn btn-primary btn-sm w-40">
+                <a href="{{ route('usuario.detalle', ['id' => $canal->user->id]) }}" class="btn btn-success btn-sm w-40">
                     <i class="fas fa-user"></i> Ir a perfil
                 </a>
 

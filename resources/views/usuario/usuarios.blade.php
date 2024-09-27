@@ -1,6 +1,7 @@
 @extends('layouts.app')
 
 @section('content')
+    <div class="titulo">Usuarios de Blitzvideo</div>
     <div class="search-container">
         <form action="{{ route('usuario.nombre') }}" method="GET">
             <input type="search" name="nombre" placeholder="Buscar usuario por nombre" class="search-bar"
@@ -29,19 +30,49 @@
                 @foreach ($users as $user)
                     <li class="user-item">
                         <div class="user-photo">
-                            <img src="{{ $user->foto ? asset($user->foto) : asset('img/default-user.png') }}"
-                                alt="{{ $user->name }}">
+                            <a href="{{ route('usuario.detalle', ['id' => $user->id]) }}">
+                                <img src="{{ $user->foto ? asset($user->foto) : asset('img/default-user.png') }}"
+                                    alt="{{ $user->name }}">
+                            </a>
                         </div>
                         <div class="user-info">
-                            <h2>{{ $user->name }}</h2>
-                            <p>Email: {{ $user->email }}</p>
-                            <p>Premium: {{ $user->premium ? 'Sí' : 'No' }}</p>
+                            <h2 style="display: flex; align-items: center;">
+                                <a href="{{ route('usuario.detalle', ['id' => $user->id]) }}">
+                                    {{ $user->name }}
+                                </a>
+
+                            </h2>
+
+
+                            <div class="email-container">
+
+                                <p class="d-flex align-items-center">
+                             
+                                    <span class="h4 m-0 button-separator">#{{ $user->id }}</span>
+                                    <a href="{{ route('usuario.detalle', ['id' => $user->id]) }}" class="button-info"
+                                        title="Ver Usuario">
+                                        <i class="fas fa-info-circle"></i>
+                                    </a>
+                                    <button class="btn btn-secondary btn-sm copy-btn" data-copy="{{ $user->id }}">
+                                        <i class="fas fa-copy copy-icon"></i>
+                                    </button>
+                                    <span class="copy-status text-muted ml-2">Copiar</span>
+                                </p>
+                            </div>
+                            <p><strong>Premium:</strong>
+                                @if ($user->premium)
+                                    <i class="fas fa-check" style="color: green;"></i>
+                                @else
+                                    <i class="fas fa-times" style="color: red;"></i>
+                                @endif
+                            </p>
+
                             @if ($user->canales->isNotEmpty())
                                 <div class="user-canales">
                                     @foreach ($user->canales as $canal)
                                         <p>
-                                            Canal:
-                                            <a href="{{ route('canal.detalle', ['id' => $canal->id]) }}">
+                                            <a class="custom-link"
+                                                href="{{ route('canal.detalle', ['id' => $canal->id]) }}">
                                                 {{ $canal->nombre }}
                                                 <i class="fas fa-link"></i>
                                             </a>
@@ -52,12 +83,6 @@
                                 <p>No tiene canal asociado.</p>
                             @endif
                         </div>
-                        <div class="user-actions">
-                            <a href="{{ route('usuario.detalle', ['id' => $user->id]) }}" class="btn-info"
-                                style="margin-right: 50px !important;">
-                                <i class="fas fa-info-circle"></i>
-                            </a>
-                        </div>
                     </li>
                 @endforeach
             </ul>
@@ -66,4 +91,5 @@
     <div class="d-flex justify-content-center">
         {{ $users->links('vendor.pagination.pagination') }}
     </div>
+    <script src="{{ asset('js/copyButton.js') }}"></script>
 @endsection

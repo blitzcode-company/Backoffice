@@ -1,9 +1,8 @@
 @extends('layouts.app')
 
 @section('content')
+<div class="titulo">Administración de Estadísticas</div>
     <div class="stats-container">
-        <h1 class="stats-title">Administración de Canales - Estadísticas</h1>
-        
         <div class="stats-section">
             <div class="stats-box">
                 <h2 class="stats-title">Usuarios</h2>

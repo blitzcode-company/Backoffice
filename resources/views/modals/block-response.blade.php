@@ -5,18 +5,22 @@
             <div class="modal-header">
                 <h5 class="modal-title" id="confirmBlockModalLabelRespuesta{{ $respuesta->id }}">
                     Confirmar {{ $respuesta->bloqueado ? 'Desbloqueo' : 'Bloqueo' }}</h5>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <button type="button" class="close modal-close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                 </button>
             </div>
             <div class="modal-body">
-                <p>¿Estás seguro de que deseas {{ $respuesta->bloqueado ? 'desbloquear' : 'bloquear' }} esta respuesta?</p>
+                <p>¿Estás seguro de que deseas {{ $respuesta->bloqueado ? 'desbloquear' : 'bloquear' }} esta respuesta?
+                </p>
             </div>
             <div class="modal-footer">
-                <form action="{{ $respuesta->bloqueado ? route('comentarios.desbloquear', $respuesta->id) : route('comentarios.bloquear', $respuesta->id) }}" method="POST" class="d-inline">
+                <form
+                    action="{{ $respuesta->bloqueado ? route('comentarios.desbloquear', $respuesta->id) : route('comentarios.bloquear', $respuesta->id) }}"
+                    method="POST" class="d-inline">
                     @csrf
                     @method('PATCH')
-                    <button type="submit" class="btn {{ $respuesta->bloqueado ? 'btn-secondary' : 'btn-warning' }} btn-sm">
+                    <button type="submit"
+                        class="btn {{ $respuesta->bloqueado ? 'btn-secondary' : 'btn-warning' }} btn-sm">
                         <i class="fas fa-ban"></i> {{ $respuesta->bloqueado ? 'Desbloquear' : 'Bloquear' }}
                     </button>
                     <button type="button" class="btn btn-secondary btn-sm" data-dismiss="modal">

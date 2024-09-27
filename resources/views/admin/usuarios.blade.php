@@ -1,6 +1,7 @@
 @extends('layouts.app')
 
 @section('content')
+<div class="titulo">Gestión de usuarios del Sistema</div>
     <div class="container-admin">
         <div class="d-flex justify-content-center">
             {{ $usuarios->links('vendor.pagination.pagination') }}
@@ -23,7 +24,7 @@
                             </p>
                         </div>
                         <div class="card-footer">
-                            <a href="#" class="btn btn-success btn-sm">
+                            <a href="{{ route('admin.actividades', ['id' => $usuario->id]) }}" class="btn btn-success btn-sm">
                                 <i class="fas fa-history"></i> Actividad
                             </a>
                             <a href="#" class="btn btn-secondary btn-sm">

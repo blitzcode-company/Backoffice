@@ -4,7 +4,7 @@
         <div class="modal-content">
             <div class="modal-header">
                 <h5 class="modal-title" id="sendEmailModalLabel">Enviar Correo a ({{ $user->email }})</h5>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <button type="button" class="close modal-close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                 </button>
             </div>
@@ -37,8 +37,12 @@
 </div>
 
 <script>
-    document.querySelector('.btn-success').addEventListener('click', function(event) {
+    document.getElementById('sendEmailForm').addEventListener('submit', function(event) {
         event.preventDefault();
-        $('#sendEmailModal').modal('show');
+        $('#sendEmailModal').modal('hide');
+        document.querySelector('.modal-backdrop').remove();
+    });
+    $('#sendEmailModal').on('hidden.bs.modal', function() {
+        $('.modal-backdrop').remove();
     });
 </script>

@@ -1,7 +1,7 @@
 @extends('layouts.app')
 
 @section('content')
-    <h1>Bienvenido al Dashboard</h1>
+<div class="titulo">Bienvenido al Dashboard</div>
     @if (Auth::check())
         <p>Hola, {{ Auth::user()->name }}.</p>
     @else

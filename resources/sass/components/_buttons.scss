@@ -30,3 +30,23 @@ button.close:focus {
     outline: none;
     box-shadow: none;
 }
+
+.button-info {
+    width: 32px;
+    height: 31px;
+    font-size: 14px;
+    background-color: v.$color-btn-primary !important;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: none;
+    color: white !important;
+    border-radius: 3px;
+    margin-left: 8px;
+    text-decoration: none;
+    transition: background-color 0.3s;
+}
+
+.button-info:hover {
+    background-color: v.$color-primary-hover !important;
+}

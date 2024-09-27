@@ -4,7 +4,7 @@
 @forward 'components/buttons';
 @forward 'components/alerts';
 @forward 'components/forms';
-@forward 'components/logo';
+@forward 'components/navbar';
 @forward 'components/user';
 @forward 'components/canal';
 @forward 'components/modal';
@@ -12,7 +12,9 @@
 @forward 'components/estadisticas';
 @forward 'components/etiquetas';
 @forward 'components/comments';
-
+@forward 'components/table';
+@forward 'components/search-bar';
+@forward 'components/activity';
 
 @forward 'layouts/container';
 @forward 'layouts/footer';

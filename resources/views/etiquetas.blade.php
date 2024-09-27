@@ -1,6 +1,7 @@
 @extends('layouts.app')
 
 @section('content')
+<div class="titulo">Gestión de Etiquetas</div>
     <div class="container-etiquetas">
         <div class="grid-container">
             <div class="form-column-etiqueta">

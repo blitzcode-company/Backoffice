@@ -1,12 +1,14 @@
 @extends('layouts.app')
 
 @section('content')
-
+<div class="titulo">Editar infromación del Canal</div>
     <div class="container container-card">
     
         <div class="row justify-content-center">
             <div class="card">
-                <div class="card-header">Haz clic en la portada para cambiarla.</div>
+                <div class="card-header">
+                    Editar Canal - <span class="text-muted">Para cambiar la foto de portada, haz clic sobre la imagen.</span>
+                </div>
 
                 <div class="card-body" style="padding: 0;">
                     <form action="{{ route('canal.editar', $canal->id) }}" method="POST" enctype="multipart/form-data">

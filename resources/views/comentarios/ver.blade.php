@@ -1,6 +1,7 @@
 @extends('layouts.app')
 
 @section('content')
+<div class="titulo">Responder al comentario #{{ $comentario->id }}</div>
     <div class="comments-page-container">
 
         <div class="navigation-buttons mb-4">
@@ -9,8 +10,6 @@
             </button>
         </div>
 
-        <h4 class="mt-4 text-center">Responder al comentario #{{ $comentario->id }}</h4>
-        <br>
 
         <form action="{{ route('comentarios.responder') }}" method="POST" class="">
             @csrf

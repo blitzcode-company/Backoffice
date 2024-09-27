@@ -1,6 +1,7 @@
 @extends('layouts.app')
 
 @section('content')
+    <div class="titulo">Información de Usuario</div>
     <div class="user-details-container card">
         <div class="user-photo-large">
             <img src="{{ $user->foto ? asset($user->foto) : asset('img/default-user.png') }}" alt="{{ $user->name }}">
@@ -9,18 +10,32 @@
             <div class="user-info">
                 <h2>{{ $user->name }}(#{{ $user->id }})</h2>
                 <p><strong>Inició el:</strong> {{ $user->created_at->format('d/m/Y') }}</p>
-                <p><strong>Email:</strong> {{ $user->email }}</p>
-                <p><strong>Premium:</strong> {{ $user->premium ? 'Sí' : 'No' }}</p>
+                <div class="email-container">
+                    <p>
+                        <i class="fas fa-envelope"></i>
+                        <span class="button-separator">{{ $user->email }}</span>
+                        <button class="btn btn-secondary btn-sm copy-btn" data-copy="{{ $user->email }}">
+                            <i class="fas fa-copy copy-icon"></i>
+                        </button>
+                        <span class="copy-status">Copiar</span>
+                    </p>
+                </div>
+                <p><strong>Premium:</strong>
+                    @if ($user->premium)
+                        <i class="fas fa-check" style="color: green;"></i>
+                    @else
+                        <i class="fas fa-times" style="color: red;"></i>
+                    @endif
+                </p>
 
                 @if ($user->canales->isNotEmpty())
                     @foreach ($user->canales as $canal)
                         <p>
                             <strong>Canal:</strong>
-                            <a href="{{ route('canal.detalle', ['id' => $canal->id]) }}">
+                            <a class="custom-link" href="{{ route('canal.detalle', ['id' => $canal->id]) }}">
                                 {{ $canal->nombre }} <i class="fas fa-link"></i>
                             </a>
                         </p>
-
                         <div class="user-canal-info-box">
                             <p class="text-justify">{!! nl2br(e($canal->descripcion)) !!}</p>
                         </div>
@@ -52,6 +67,9 @@
     @endif
 
     @include('modals.delete-user-modal', ['user' => $user])
-    @include('modals.send-email-modal', ['user' => $user, 'ruta' => route('usuario.detalle', ['id' => $user->id])])
-   
+    @include('modals.send-email-modal', [
+        'user' => $user,
+        'ruta' => route('usuario.detalle', ['id' => $user->id]),
+    ])
+    <script src="{{ asset('js/copyButton.js') }}"></script>
 @endsection

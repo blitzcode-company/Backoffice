@@ -55,7 +55,7 @@ input[type="number"] {
 .pagination-link {
     margin: 0 5px;
     padding: 10px 15px;
-    border: 1px solid v.$color-primary-dark;
+    border: 1px solid v.$color-border;
     color: v.$color-primary-dark;
     text-decoration: none;
     border-radius: 5px;
@@ -63,17 +63,75 @@ input[type="number"] {
 }
 
 .pagination-link:hover {
-    background-color: v.$color-primary-dark;
+    background-color: v.$color-primary-hover;
     color: white;
     text-decoration: none;
+    border: 1px solid v.$color-primary-hover;
 }
 
 .pagination-link.active {
-    background-color: v.$color-primary-dark;
+    background-color: v.$color-btn-primary;
     color: white;
+    border: 1px solid v.$color-btn-primary;
 }
 
 .pagination-link.disabled {
-    color: #ccc;
+    color: v.$color-border;
     cursor: default;
 }
+
+.pagination-link.disabled:hover {
+    color: white;
+}
+
+.titulo {
+    font-size: xx-large;
+    font-weight: 700;
+    color: v.$color-primary-title;
+    width: 100%;
+    margin-left: auto;
+    margin-right: auto;
+    margin-bottom: 50px;
+    border-bottom: 1px solid v.$color-border;
+}
+
+a {
+    text-decoration: none !important;
+}
+
+a.custom-link {
+    text-decoration: none !important;
+    color: v.$color-primary-title !important;
+    position: relative;
+    display: inline-block;
+    transition: color 0.3s ease;
+}
+
+a.custom-link::before {
+    content: '';
+    position: absolute;
+    width: 100%;
+    height: 2px;
+    bottom: 0;
+    left: 0;
+    background-color: v.$color-primary-hover;
+    visibility: hidden;
+    transform: scaleX(0);
+    transition: all 0.3s ease-in-out;
+}
+
+a.custom-link:hover::before {
+    visibility: visible;
+    transform: scaleX(1);
+}
+
+a.custom-link:hover {
+    color: #0077cc !important;
+}
+
+.btn:focus {
+    outline: none;
+    box-shadow: none;
+}
+
+

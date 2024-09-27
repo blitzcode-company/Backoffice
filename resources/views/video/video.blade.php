@@ -1,6 +1,7 @@
 @extends('layouts.app')
 
 @section('content')
+    <div class="titulo">Información del Video</div>
     <div class="video-page-container">
         <div class="navigation-buttons mb-4">
             <a href="{{ route('video.listar') }}" class="btn btn-secondary btn-sm">
@@ -31,26 +32,30 @@
                     @endif
                 </div>
                 <div class="uploader-name">
-                    <p><strong>Subido por:</strong> {{ $video->canal->user->name }} ({{ $video->canal->user->email }})</p>
+                    <p class="m-0"><strong>Subido por:</strong> {{ $video->canal->user->name }}
+                        ({{ $video->canal->user->email }}) </p>
+
                 </div>
             </div>
             <div class="video-info">
-                <p> {{ $video->descripcion }}</p>
-                <p><strong>Canal:</strong> {{ $video->canal->nombre }}</p>
-                <p><strong>Visitas:</strong> {{ $video->visitas_count }}</p>
+                <p class="m-0"><strong>Canal:</strong> <a class="custom-link"
+                        href="{{ route('canal.detalle', ['id' => $video->canal->id]) }}">
+                        {{ $video->canal->nombre }} <i class="fas fa-link"></i>
+                    </a></p>
+                <p class="m-0"><strong>Visitas :</strong> {{ $video->visitas_count }}</p>
                 <div class="video-thumbnail-small mt-4">
-                    <h3>Miniatura</h3>
+                    <h4 class="m-0">Miniatura</h4>
                     @if ($video->miniatura)
-                        <img src="{{ $video->miniatura }}" alt="Miniatura de {{ $video->titulo }}" class="img-fluid">
+                        <img src="{{ $video->miniatura }}" alt="Miniatura de {{ $video->titulo }}" class="img-fluid m-0">
                     @else
-                        <img src="{{ asset('img/video-default.png') }}" alt="Miniatura por defecto" class="img-fluid">
+                        <img src="{{ asset('img/video-default.png') }}" alt="Miniatura por defecto" class="img-fluid m-0">
                     @endif
                 </div>
                 <div class="video-tags">
                     @if ($video->etiquetas->isEmpty())
-                        <p><strong>Etiquetas:</strong> No tiene etiquetas.</p>
+                        <p><strong><i class="fas fa-tags"></i>Etiquetas:</strong> No tiene etiquetas.</p>
                     @else
-                        <p><strong>Etiquetas:</strong>
+                        <p><strong><i class="fas fa-tags"></i>Etiquetas:</strong>
                             @foreach ($video->etiquetas as $etiqueta)
                                 {{ $etiqueta->nombre }}
                                 @if (!$loop->last)
@@ -60,63 +65,69 @@
                         </p>
                     @endif
                 </div>
+                <p class="text-justify">{!! nl2br(e($video->descripcion)) !!}</p>
 
                 <div class="video-ratings">
-                    <h3>Puntuaciones</h3>
+                    <h4>Puntuaciones</h4>
                     <ul>
-                        <li><img src="{{ asset('img/emojis/5.png') }}" alt="5" class="img-fluid emoji">
+                        <li class="rating-item"><img src="{{ asset('img/emojis/5.png') }}" alt="5"
+                                class="img-fluid emoji">
                             {{ $video->puntuacion_5 }}</li>
-                        <li><img src="{{ asset('img/emojis/4.png') }}" alt="4" class="img-fluid emoji">
+                        <li class="rating-item"><img src="{{ asset('img/emojis/4.png') }}" alt="4"
+                                class="img-fluid emoji">
                             {{ $video->puntuacion_4 }}</li>
-                        <li><img src="{{ asset('img/emojis/3.png') }}" alt="3" class="img-fluid emoji">
+                        <li class="rating-item"><img src="{{ asset('img/emojis/3.png') }}" alt="3"
+                                class="img-fluid emoji">
                             {{ $video->puntuacion_3 }}</li>
-                        <li><img src="{{ asset('img/emojis/2.png') }}" alt="2" class="img-fluid emoji">
+                        <li class="rating-item"><img src="{{ asset('img/emojis/2.png') }}" alt="2"
+                                class="img-fluid emoji">
                             {{ $video->puntuacion_2 }}</li>
-                        <li><img src="{{ asset('img/emojis/1.png') }}" alt="1" class="img-fluid emoji">
+                        <li class="rating-item"><img src="{{ asset('img/emojis/1.png') }}" alt="1"
+                                class="img-fluid emoji">
                             {{ $video->puntuacion_1 }}</li>
                     </ul>
+                    <p><strong>Promedio de Puntuaciones:</strong> {{ $video->promedio_puntuaciones }}</p>
                 </div>
-                <p><strong>Promedio de Puntuaciones:</strong> {{ $video->promedio_puntuaciones }}</p>
+
             </div>
-        </div>
 
-        <div class="video-actions text-center">
-            <a href="{{ route('comentarios.listado', ['id' => $video->id]) }}" class="btn btn-primary">
-                <i class="fas fa-comments"></i> Comentarios
-            </a>
-            <a href="{{ route('video.editar.formulario', ['id' => $video->id]) }}" class="btn btn-primary">
-                <i class="fas fa-edit"></i> Editar
-            </a>
-            <a href="#" class="btn btn-danger" data-toggle="modal" data-target="#confirmDeleteModal">
-                <i class="fas fa-trash-alt"></i> Eliminar
-            </a>
-        </div>
+            <div class="video-actions text-center">
+                <a href="{{ route('comentarios.listado', ['id' => $video->id]) }}" class="btn btn-primary">
+                    <i class="fas fa-comments"></i> Comentarios
+                </a>
+                <a href="{{ route('video.editar.formulario', ['id' => $video->id]) }}" class="btn btn-primary">
+                    <i class="fas fa-edit"></i> Editar
+                </a>
+                <a href="#" class="btn btn-danger" data-toggle="modal" data-target="#confirmDeleteModal">
+                    <i class="fas fa-trash-alt"></i> Eliminar
+                </a>
+            </div>
 
-        <div class="modal fade" id="confirmDeleteModal" tabindex="-1" role="dialog"
-            aria-labelledby="confirmDeleteModalLabel" aria-hidden="true">
-            <div class="modal-dialog" role="document">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <h5 class="modal-title" id="confirmDeleteModalLabel">Confirmar Eliminación</h5>
-                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                            <span aria-hidden="true">&times;</span>
-                        </button>
-                    </div>
-                    <div class="modal-body">
-                        <p>¿Estás seguro de que quieres eliminar este video?</p>
-                    </div>
-                    <div class="modal-footer">
-                        <form action="{{ route('video.eliminar', ['id' => $video->id]) }}" method="POST">
-                            @csrf
-                            @method('DELETE')
-                            <button type="submit" class="btn btn-danger">
-                                <i class="fas fa-trash-alt"></i> Eliminar
+            <div class="modal fade" id="confirmDeleteModal" tabindex="-1" role="dialog"
+                aria-labelledby="confirmDeleteModalLabel" aria-hidden="true">
+                <div class="modal-dialog" role="document">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="confirmDeleteModalLabel">Confirmar Eliminación</h5>
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
                             </button>
-                        </form>
-                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
+                        </div>
+                        <div class="modal-body">
+                            <p>¿Estás seguro de que quieres eliminar este video?</p>
+                        </div>
+                        <div class="modal-footer">
+                            <form action="{{ route('video.eliminar', ['id' => $video->id]) }}" method="POST">
+                                @csrf
+                                @method('DELETE')
+                                <button type="submit" class="btn btn-danger">
+                                    <i class="fas fa-trash-alt"></i> Eliminar
+                                </button>
+                            </form>
+                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
+                        </div>
                     </div>
                 </div>
             </div>
         </div>
-    </div>
-@endsection
+    @endsection

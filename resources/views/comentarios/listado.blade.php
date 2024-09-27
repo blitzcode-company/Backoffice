@@ -1,6 +1,7 @@
 @extends('layouts.app')
 
 @section('content')
+<div class="titulo">Comentarios del Video</div>
     <div class="comments-page-container">
         <div class="navigation-buttons mb-4">
             <a href="{{ route('video.detalle', ['id' => $video->id]) }}" class="btn btn-secondary btn-sm">

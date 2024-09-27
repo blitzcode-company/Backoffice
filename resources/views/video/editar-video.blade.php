@@ -1,12 +1,14 @@
 @extends('layouts.app')
 
 @section('content')
+<div class="titulo">Actualziar información del Video</div>
     <div class="container-card-video">
         <div class="row justify-content-center">
             <div class="col-lg-8">
                 <div class="card-video">
-                    <div class="card-header">Editar Video</div>
-
+                    <div class="card-header">
+                        Editar Video - <span class="text-muted">Haz clic sobre la miniatura para cambiarla</span>
+                    </div>
                     <div class="card-body">
                         <form action="{{ route('video.editar', ['id' => $video->id]) }}" method="POST" enctype="multipart/form-data">
                             @csrf

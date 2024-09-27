@@ -80,7 +80,7 @@ class ComentarioController extends Controller
     private function registrarActividadGuardarComentario(Comentario $comentario)
     {
         $detalles = sprintf(
-            ' ID comentario: %d; ID usuario: %d; ID video: %d;',
+            'ID comentario: %d; ID usuario: %d; ID video: %d;',
             $comentario->id,
             $comentario->usuario_id,
             $comentario->video_id,

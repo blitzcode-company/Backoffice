@@ -82,7 +82,7 @@ class UserController extends Controller
     private function registrarActividadCrearUsuario(User $usuario)
     {
         $detallesActividad = sprintf(
-            "name: %s; id: %d; email: %s; premium: %s;",
+            "Nombre: %s; id: %d; Email: %s; Premium: %s;",
             $usuario->name,
             $usuario->id,
             $usuario->email,
@@ -158,7 +158,7 @@ class UserController extends Controller
         $cambios = [];
 
         if ($request->has('name') && $request->input('name') != $usuario->name) {
-            $cambios['name'] = [
+            $cambios['Nombre'] = [
                 'anterior' => $usuario->name,
                 'nuevo' => $request->input('name'),
             ];
@@ -173,7 +173,7 @@ class UserController extends Controller
         $cambios = [];
 
         if ($request->has('email') && $request->input('email') != $usuario->email) {
-            $cambios['email'] = [
+            $cambios['Email'] = [
                 'anterior' => $usuario->email,
                 'nuevo' => $request->input('email'),
             ];
@@ -188,7 +188,7 @@ class UserController extends Controller
         $cambios = [];
 
         if ($request->filled('password')) {
-            $cambios['password'] = 'cambiado';
+            $cambios['Password'] = 'cambiado';
             $usuario->password = bcrypt($request->input('password'));
         }
 
@@ -212,7 +212,7 @@ class UserController extends Controller
             $foto = $request->file('foto');
             $rutaFoto = $foto->store($folderPath, 's3');
             $urlFoto = str_replace('minio', env('BLITZVIDEO_HOST'), Storage::disk('s3')->url($rutaFoto));
-            $cambios['foto'] = [
+            $cambios['Foto'] = [
                 'anterior' => $usuario->foto,
                 'nuevo' => $urlFoto,
             ];

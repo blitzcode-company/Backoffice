@@ -1,12 +1,15 @@
 @extends('layouts.app')
 
 @section('content')
+    <div class="titulo">Actualizar cuenta de Usuario</div>
     <div class="container container-card">
         <div class="row justify-content-center">
             <div class="col-md-10">
                 <div class="card">
-                    <div class="card-header">Para cambiar la foto de perfil, haz clic sobre la imagen.</div>
-
+                    <div class="card-header">
+                        Editar Usuario - <span class="text-muted">Para cambiar la foto de perfil, haz clic sobre la
+                            imagen.</span>
+                    </div>
                     <div class="card-body">
 
                         <form action="{{ route('usuario.editar', ['id' => $user->id]) }}" method="POST"
@@ -15,12 +18,15 @@
                             @method('PUT')
 
                             <div class="row">
-                                <div class="col-md-4 offset-md-4">
+                                <div class="mx-auto position-relative">
                                     <label for="foto" style="cursor: pointer;">
                                         <div class="user-photo text-center mb-3">
                                             <img id="previewFoto"
                                                 src="{{ $user->foto ? $user->foto : asset('img/default-user.png') }}"
-                                                class="img-thumbnail" style="width: 250px; height: 250px;">
+                                                class="img-thumbnail" style="width: 200px; height: 200px;">
+                                            <span class="edit-icon">
+                                                <i class="fas fa-camera"></i>
+                                            </span>
                                         </div>
                                         <input type="file" name="foto" id="foto" class="form-control-file d-none"
                                             onchange="previewImage(this)">

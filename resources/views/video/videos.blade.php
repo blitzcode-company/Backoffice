@@ -1,6 +1,7 @@
 @extends('layouts.app')
 
 @section('content')
+    <div class="titulo">Videos de Blitzvideo</div>
     <div class="search-container">
         <form action="{{ route('video.nombre') }}" method="POST">
             @csrf
@@ -32,21 +33,16 @@
             @foreach ($videos as $video)
                 <div class="card mb-3 video-card">
                     <div class="video-thumbnail">
-                        @if ($video->miniatura)
-                            <img src="{{ $video->miniatura }}" alt="Miniatura del video">
-                        @else
-                            <img src="{{ asset('img/video-default.png') }}" alt="Miniatura por defecto">
-                        @endif
+                        <a href="{{ route('video.detalle', ['id' => $video->id]) }}">
+                            @if ($video->miniatura)
+                                <img src="{{ $video->miniatura }}" alt="Miniatura del video">
+                            @else
+                                <img src="{{ asset('img/video-default.png') }}" alt="Miniatura por defecto">
+                            @endif
+                        </a>
                     </div>
                     <div class="video-info">
                         <h2 class="video-title">{{ $video->titulo }}</h2>
-                    </div>
-                    <div class="card-footer">
-                        <form action="{{ route('video.detalle', ['id' => $video->id]) }}" method="get">
-                            <button type="submit" class="btn btn-primary btn-sm w-40">
-                                <i class="fas fa-info-circle"></i> Ver Detalles
-                            </button>
-                        </form>
                     </div>
                 </div>
             @endforeach

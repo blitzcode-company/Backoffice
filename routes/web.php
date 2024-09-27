@@ -87,5 +87,7 @@ Route::middleware(['auth'])->group(function () {
 
     Route::prefix('admin')->name('admin.')->group(function () {
         Route::get('/', [AdminController::class, 'listarUsuarios'])->name('usuarios');
+        Route::get('/usuario/{id}/actividades', [AdminController::class, 'listarActividadesPorUsuario'])->name('actividades');
+
     });
 });

@@ -15,6 +15,7 @@
 
 .modal-title {
     color: #fff;
+    font-size: small;
 }
 
 .modal-body {
@@ -54,9 +55,30 @@
 }
 
 .modal-close {
-    color: #fff;
-    user-select: none;
-    -webkit-user-select: none;
-    -moz-user-select: none;
-    -ms-user-select: none;
+    color: #fff !important;
+    background-color: transparent;
+    border: none;
+    font-size: 1.5rem;
+    font-weight: bold;
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    padding: 0;
+    line-height: 1;
+    cursor: pointer;
+    transition: transform 0.3s ease, color 0.3s ease;
+}
+
+.modal-close:hover {
+    transform: scale(1.2);
+}
+
+.modal-close:focus {
+    outline: none;
+}
+
+.modal-close span {
+    display: inline-block;
+    font-size: 1.5rem;
+    line-height: 1;
 }

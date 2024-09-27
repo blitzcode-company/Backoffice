@@ -1,11 +1,14 @@
 @extends('layouts.app')
 
 @section('content')
+<div class="titulo">Registro de Usuario</div>
     <div class="container container-card">
         <div class="row justify-content-center">
             <div class="col-md-8">
                 <div class="card">
-                    <div class="card-header">Crear Nuevo Usuario</div>
+                    <div class="card-header">
+                        Nuevo Usuario - <span class="text-muted">Para cambiar la foto de perfil, haz clic sobre la imagen.</span>
+                    </div>
 
                     <div class="card-body">
 
@@ -13,17 +16,22 @@
                             @csrf
 
                             <div class="row">
-                                <div class="col-md-4 offset-md-4">
+                                <div class="mx-auto position-relative">
                                     <label for="foto" style="cursor: pointer;">
                                         <div class="user-photo text-center mb-3">
-                                            <img id="previewFoto" src="{{ asset('img/default-user.png') }}"
-                                                class="img-thumbnail" style="width: 150px; height: 150px;">
+                                            <img id="previewFoto"
+                                                src="{{ asset('img/default-user.png') }}"
+                                                class="img-thumbnail" style="width: 200px; height: 200px;">
+                                            <span class="edit-icon">
+                                                <i class="fas fa-camera"></i>
+                                            </span>
                                         </div>
                                         <input type="file" name="foto" id="foto" class="form-control-file d-none"
                                             onchange="previewImage(this)">
                                     </label>
                                 </div>
                             </div>
+
 
                             <div class="row">
                                 <div class="col-md-6">
