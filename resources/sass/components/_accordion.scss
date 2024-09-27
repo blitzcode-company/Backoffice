@@ -1,0 +1,52 @@
+@use '../partials/variables' as v;
+
+.accordion-button {
+    border-radius: 0 !important;
+    color: v.$color-black !important;
+    padding: 0.5rem 1rem !important;
+    outline: none !important;
+}
+
+.accordion-button:not(.collapsed) {
+    background-color: transparent !important;
+    color: v.$color-black !important;
+    outline: none !important;
+}
+
+.accordion-button-custom {
+    background-color: transparent !important;
+    border-radius: 0 !important;
+    padding: 0.5rem 1rem !important;
+    transition: background-color 0.3s;
+    outline: none !important;
+}
+
+.accordion-button-custom:hover {
+    background-color: v.$tr-bg-color !important;
+    color: v.$color-black !important;
+}
+
+.accordion-button-custom:focus,
+.accordion-button-custom:active {
+    background-color: transparent !important;
+    color: v.$color-black !important;
+}
+
+.accordion-body-custom {
+    background-color: #ffffff !important;
+    color: #000000 !important;
+    padding: 0 !important;
+}
+
+.accordion-body-custom .list-group-item-custom {
+    background-color: transparent !important;
+    color: v.$color-black !important;
+}
+
+.accordion-body-custom .list-group-item-custom:hover {
+    background-color: v.$tr-bg-color !important;
+}
+
+.accordion-button::after {
+    display: none;
+}

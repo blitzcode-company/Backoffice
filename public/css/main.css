@@ -207,6 +207,24 @@ label {
   margin-left: 5%;
 }
 
+.password-container {
+  position: relative;
+}
+
+.form-control {
+  padding-right: 40px;
+}
+
+.toggle-password {
+  position: absolute;
+  right: 10px;
+  top: 58%;
+  transform: translateY(-50%);
+  cursor: pointer;
+  font-size: 1.2em;
+  color: #083c5d;
+}
+
 .logo-container {
   text-align: center;
   margin-bottom: 20px;
@@ -959,6 +977,58 @@ p {
     gap: 10px;
   }
 }
+.etiquetas-container {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+  gap: 20px;
+  padding: 20px;
+}
+
+.etiqueta-card {
+  background-color: #f5f5f5;
+  border-radius: 12px;
+  padding: 20px;
+  text-align: center;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+.etiqueta-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 6px 15px rgba(0, 0, 0, 0.2);
+}
+.etiqueta-card .etiqueta-icon {
+  font-size: 3rem;
+  color: #083c5d;
+  margin-bottom: 15px;
+}
+.etiqueta-card .etiqueta-content h3 {
+  font-size: 1.5rem;
+  color: #042234;
+  margin-bottom: 10px;
+}
+.etiqueta-card .etiqueta-content p {
+  font-size: 1rem;
+  color: #666;
+  margin-bottom: 15px;
+}
+.etiqueta-card .etiqueta-content .ver-videos-btn {
+  background-color: #083c5d;
+  color: #ffffff;
+  padding: 10px 20px;
+  border-radius: 8px;
+  text-decoration: none;
+  font-size: 1rem;
+  display: inline-block;
+  transition: background-color 0.3s ease;
+  font-weight: bold;
+}
+.etiqueta-card .etiqueta-content .ver-videos-btn i {
+  margin-right: 8px;
+}
+.etiqueta-card .etiqueta-content .ver-videos-btn:hover {
+  background-color: #0077cc;
+}
+
 .comments-page-container {
   width: 80%;
   max-width: 1200px;
@@ -1032,6 +1102,7 @@ p {
   border: 0 !important;
   border-radius: 0 !important;
   border-left: 1px solid #dddddd !important;
+  margin-left: 2rem;
 }
 
 .comment-box {
@@ -1136,13 +1207,62 @@ p {
   outline: none;
 }
 
+.accordion-button {
+  border-radius: 0 !important;
+  color: #363d44 !important;
+  padding: 0.5rem 1rem !important;
+  outline: none !important;
+}
+
+.accordion-button:not(.collapsed) {
+  background-color: transparent !important;
+  color: #363d44 !important;
+  outline: none !important;
+}
+
+.accordion-button-custom {
+  background-color: transparent !important;
+  border-radius: 0 !important;
+  padding: 0.5rem 1rem !important;
+  transition: background-color 0.3s;
+  outline: none !important;
+}
+
+.accordion-button-custom:hover {
+  background-color: #f2f2f2 !important;
+  color: #363d44 !important;
+}
+
+.accordion-button-custom:focus,
+.accordion-button-custom:active {
+  background-color: transparent !important;
+  color: #363d44 !important;
+}
+
+.accordion-body-custom {
+  background-color: #ffffff !important;
+  color: #000000 !important;
+  padding: 0 !important;
+}
+
+.accordion-body-custom .list-group-item-custom {
+  background-color: transparent !important;
+  color: #363d44 !important;
+}
+
+.accordion-body-custom .list-group-item-custom:hover {
+  background-color: #f2f2f2 !important;
+}
+
+.accordion-button::after {
+  display: none;
+}
+
 .container {
   width: 100%;
   max-width: 350px;
   min-width: 100px;
-  height: auto;
   min-height: 300px;
-  max-height: 55vh;
   margin: 100px auto;
   padding: 20px;
   border-radius: 8px;
@@ -1236,7 +1356,7 @@ h3.login-text {
 }
 
 .list-group-item-action:hover {
-  background-color: #0baafe;
+  background-color: #f2f2f2 !important;
   color: #fff;
 }
 

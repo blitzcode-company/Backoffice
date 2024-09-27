@@ -2,21 +2,21 @@
 
 @section('content')
 <div class="titulo">Comentarios del Video</div>
-    <div class="comments-page-container">
+    <div class="comments-page-container mx-auto">
         <div class="navigation-buttons mb-4">
             <a href="{{ route('video.detalle', ['id' => $video->id]) }}" class="btn btn-secondary btn-sm">
                 <i class="fas fa-arrow-left"></i> Ir a detalles
             </a>
         </div>
         <div class="video-player-container">
-            <video controls autoplay class="video-player">
+            <video controls autoplay class="video-player" style="max-width: 800px;">
                 <source src="{{ $video->link }}" type="video/mp4">
                 Tu navegador no soporta la etiqueta de video.
             </video>
         </div>
 
         <header class="comments-header">
-            <h1 class="text-center">Comentarios del Video: <strong>{{ $video->titulo }}</strong>(#{{ $video->id }})</h1>
+            <h3 class="text-center">Comentarios del Video: <strong>{{ $video->titulo }}</strong>(#{{ $video->id }})</h3>
         </header>
 
         @if ($errors->any())
@@ -37,7 +37,7 @@
 
         <div class="text-center mt-4">
             <a href="#" class="btn btn-success btn-sm" data-bs-toggle="modal" data-bs-target="#createCommentModal">
-                <i class="fas fa-plus"></i> Nuevo Comentario
+                <i class="fas fa-comment"></i> Nuevo Comentario
             </a>
         </div>
 
@@ -97,7 +97,7 @@
                                 <ul class="list-group mt-3">
                                     @foreach ($comentario->respuestas as $respuesta)
                                         <li class="list-group-item ml-4 respuesta-box">
-                                            <div class="comment-header">
+                                            <div class="comment-header ">
                                                 <p><strong>ID: </strong>#{{ $respuesta->id }}</p>
                                                 <p><strong>Respuesta de:</strong> {{ $respuesta->user->name }}
                                                     (#{{ $respuesta->user->id }})

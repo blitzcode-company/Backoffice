@@ -1,34 +1,13 @@
 @extends('layouts.app')
 
 @section('content')
-    <div class="titulo">Responder al comentario #{{ $comentario->id }}</div>
-    <div class="comments-page-container">
-
-        <div class="navigation-buttons mb-4">
-            <button onclick="window.history.back()" class="btn btn-secondary btn-sm">
-                <i class="fas fa-arrow-left"></i> Anterior
-            </button>
-        </div>
-
-
-        <form action="{{ route('comentarios.responder') }}" method="POST" class="">
-            @csrf
-            <input type="hidden" name="video_id" value="{{ $video->id }}">
-            <div class="form-group">
-                <label for="usuario_id">ID del Usuario:</label>
-                <input type="number" class="form-control no-arrows" id="usuario_id" name="usuario_id" required
-                    min="1">
-            </div>
-            <div class="form-group">
-                <label for="mensaje">Comentario:</label>
-                <textarea class="form-control" id="mensaje" name="mensaje" rows="3" required></textarea>
-            </div>
-            <input type="hidden" id="respuesta_id" name="respuesta_id" value="{{ $comentario->id }}">
-            <button type="submit" class="btn btn-primary btn-sm">
-                <i class="fas fa-save"></i> Guardar Comentario
-            </button>
-        </form>
-
+    <div class="titulo mb-4">Responder al comentario #{{ $comentario->id }}</div>
+    <div class="navigation-buttons mb-1">
+        <button onclick="window.history.back()" class="btn btn-secondary btn-sm">
+            <i class="fas fa-arrow-left"></i> Anterior
+        </button>
+    </div>
+    <div class="comments-page-container mx-auto">
         @if (!$comentario)
             <div class="alert alert-danger">
                 <p>El comentario que estás tratando de ver no existe o ha sido eliminado.</p>
@@ -67,6 +46,12 @@
                         </p>
                     </div>
                     <div class="comment-actions">
+
+                        <button type="button" class="btn btn-success btn-sm" data-bs-toggle="modal"
+                            data-bs-target="#replyCommentModal">
+                            <i class="fas fa-comments"></i> Responder
+                        </button>
+
                         @if ($comentario->trashed())
                             <button class="btn btn-success btn-sm" data-bs-toggle="modal"
                                 data-bs-target="#restoreCommentModal{{ $comentario->id }}" data-id="{{ $comentario->id }}">
@@ -82,7 +67,6 @@
                             data-bs-target="#editCommentModal">
                             <i class="fas fa-edit"></i> Editar
                         </a>
-
 
                         <button class="btn {{ $comentario->bloqueado ? 'btn-secondary' : 'btn-warning' }} btn-sm"
                             data-bs-toggle="modal" data-bs-target="#confirmBlockModal{{ $comentario->id }}"
@@ -146,6 +130,7 @@
                                 @include('modals.delete-response', ['comentario' => $comentario])
                                 @include('modals.restore-response', ['comentario' => $comentario])
                                 @include('modals.block-response', ['comentario' => $comentario])
+                                @include('modals.response-comment', ['comentario' => $comentario])
                             @endforeach
                         </ul>
                     @else

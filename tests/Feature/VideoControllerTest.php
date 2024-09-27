@@ -46,11 +46,11 @@ class VideoControllerTest extends TestCase
         $user = User::first();
         $this->actingAs($user);
 
-        $response = $this->get(route('video.detalle', ['id' => 4]));
+        $response = $this->get(route('video.detalle', ['id' => 5]));
         $response->assertStatus(Response::HTTP_OK);
         $response->assertViewHas('video');
         $videoFromResponse = $response->viewData('video');
-        $this->assertEquals(4, $videoFromResponse->id);
+        $this->assertEquals(5, $videoFromResponse->id);
         $this->assertTrue($videoFromResponse->relationLoaded('canal'));
         $this->assertTrue($videoFromResponse->relationLoaded('etiquetas'));
     }
@@ -157,4 +157,43 @@ class VideoControllerTest extends TestCase
             'id' => $video->id,
         ]);
     }
+
+
+    /** @test */
+public function mostrar_etiquetas_con_conteo_videos()
+{
+    $user = User::first();
+    $this->actingAs($user);
+
+    $response = $this->get(route('video.etiquetas'));
+    $response->assertStatus(Response::HTTP_OK);
+    $response->assertViewHas('etiquetas');
+    $etiquetasFromResponse = $response->viewData('etiquetas');
+    $this->assertNotEmpty($etiquetasFromResponse, 'Las etiquetas no se encontraron en la respuesta.');
+
+    foreach ($etiquetasFromResponse as $etiqueta) {
+        $this->assertArrayHasKey('videos_count', $etiqueta->getAttributes());
+    }
+}
+
+/** @test */
+public function listar_videos_por_etiqueta()
+{
+    $user = User::first();
+    $this->actingAs($user);
+
+    $etiquetaId = 4;
+    $response = $this->get(route('video.etiqueta', ['id' => $etiquetaId]));
+    $response->assertStatus(Response::HTTP_OK);
+    $response->assertViewHas('videos');
+    $response->assertViewHas('etiqueta');
+
+    $videosFromResponse = $response->viewData('videos');
+    $this->assertNotEmpty($videosFromResponse, 'Los videos no se encontraron en la respuesta.');
+
+    foreach ($videosFromResponse as $video) {
+        $this->assertTrue($video->etiquetas->contains($etiquetaId), 'El video no pertenece a la etiqueta esperada.');
+    }
+}
+
 }

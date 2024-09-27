@@ -10,7 +10,6 @@
     <link rel="stylesheet" href="{{ asset('css/datatables-custom.css') }}">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
-
 </head>
 
 <body>
@@ -18,7 +17,7 @@
         <a class="navbar-brand" href="{{ route('inicio') }}">
             <img src="{{ asset('img/favicon.png') }}" alt="Logo" class="logo-navbar">
         </a>
-        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav"
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
             aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span>
         </button>
@@ -27,10 +26,10 @@
                 <ul class="navbar-nav">
                     <li class="nav-item dropdown">
                         <a class="nav-link dropdown-toggle" href="#" id="navbarMenu" role="button"
-                            data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                             <i class="fas fa-bars"></i> Menú
                         </a>
-                        <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarMenu">
+                        <div class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarMenu">
                             <a href="{{ route('inicio') }}" class="dropdown-item">Dashboard</a>
                             <a href="{{ route('usuario.listar') }}" class="dropdown-item">Usuarios</a>
                             <a href="{{ route('canal.listar') }}" class="dropdown-item">Canales</a>
@@ -44,10 +43,10 @@
                     @if (Auth::check())
                         <li class="nav-item dropdown">
                             <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button"
-                                data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                                 <i class="fas fa-user-circle"></i> {{ Auth::user()->username }}
                             </a>
-                            <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdown">
+                            <div class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown">
                                 <a class="dropdown-item" href="{{ route('perfil') }}">Mi Perfil</a>
                                 <div class="dropdown-divider"></div>
                                 <a class="dropdown-item" href="{{ route('logout') }}">Cerrar Sesión</a>
@@ -66,8 +65,54 @@
                 <a href="{{ route('inicio') }}" class="list-group-item list-group-item-action">Dashboard</a>
                 <a href="{{ route('usuario.listar') }}" class="list-group-item list-group-item-action">Usuarios</a>
                 <a href="{{ route('canal.listar') }}" class="list-group-item list-group-item-action">Canales</a>
-                <a href="{{ route('video.listar') }}" class="list-group-item list-group-item-action">Videos</a>
-                <a href="{{ route('etiquetas.listar') }}" class="list-group-item list-group-item-action">Etiquetas</a>
+
+                <div class="accordion accordion-custom" id="videosAccordion">
+                    <div class="">
+                        <button
+                            class="accordion-button accordion-button-custom d-flex justify-content-between align-items-center"
+                            type="button" data-bs-toggle="collapse" data-bs-target="#collapseOne" aria-expanded="false"
+                            aria-controls="collapseOne">
+                            <span>Videos</span>
+                            <i class="fas fa-chevron-down" id="toggle-icon"></i>
+                        </button>
+
+                        <div id="collapseOne" class="accordion-collapse collapse" aria-labelledby="headingOne"
+                            data-bs-parent="#videosAccordion">
+                            <div class="accordion-body accordion-body-custom">
+                                <a href="{{ route('video.crear') }}"
+                                    class="list-group-item list-group-item-action list-group-item-custom">
+                                    <i class="fas fa-plus"></i> Subir video
+                                </a>
+
+                                <a href="{{ route('video.listar') }}"
+                                    class="list-group-item list-group-item-action list-group-item-custom">
+                                    <i class="fas fa-list"></i> Todos
+                                </a>
+
+                                <a href="{{ route('video.etiquetas') }}"
+                                    class="list-group-item list-group-item-action list-group-item-custom">
+                                    <i class="fas fa-tags"></i> Por etiquetas
+                                </a>
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <script>
+                    document.addEventListener('DOMContentLoaded', function() {
+                        const accordionButton = document.querySelector('.accordion-button');
+                        const icon = document.getElementById('toggle-icon');
+
+                        accordionButton.addEventListener('click', function() {
+                            icon.classList.toggle('fa-chevron-down');
+                            icon.classList.toggle('fa-chevron-up');
+                        });
+                    });
+                </script>
+
+                <a href="{{ route('etiquetas.listar') }}"
+                    class="list-group-item list-group-item-action">Etiquetas</a>
                 <a href="{{ route('estadisticas') }}" class="list-group-item list-group-item-action">Estadísticas</a>
                 <a href="{{ route('anuncios') }}" class="list-group-item list-group-item-action">Anuncios</a>
                 <a href="{{ route('ajustes') }}" class="list-group-item list-group-item-action">Ajustes</a>

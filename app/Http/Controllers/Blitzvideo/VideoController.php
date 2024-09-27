@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Blitzvideo;
 use App\Events\ActividadRegistrada;
 use App\Http\Controllers\Controller;
 use App\Models\Blitzvideo\Canal;
+use App\Models\Blitzvideo\Etiqueta;
 use App\Models\Blitzvideo\Video;
 use App\Traits\Paginable;
 use Illuminate\Http\Request;
@@ -29,28 +30,28 @@ class VideoController extends Controller
             'canal.user:id,name,email',
             'etiquetas:id,nombre',
         ])
-        ->whereHas('canal.user', function ($query) {
-            $query->where('name', '<>', 'Invitado');
-        })
-        ->withCount([
-            'puntuaciones as puntuacion_1' => function ($query) {
-                $query->where('valora', 1);
-            },
-            'puntuaciones as puntuacion_2' => function ($query) {
-                $query->where('valora', 2);
-            },
-            'puntuaciones as puntuacion_3' => function ($query) {
-                $query->where('valora', 3);
-            },
-            'puntuaciones as puntuacion_4' => function ($query) {
-                $query->where('valora', 4);
-            },
-            'puntuaciones as puntuacion_5' => function ($query) {
-                $query->where('valora', 5);
-            },
-            'visitas',
-        ])
-        ->get()->each(function ($video) {
+            ->whereHas('canal.user', function ($query) {
+                $query->where('name', '<>', 'Invitado');
+            })
+            ->withCount([
+                'puntuaciones as puntuacion_1' => function ($query) {
+                    $query->where('valora', 1);
+                },
+                'puntuaciones as puntuacion_2' => function ($query) {
+                    $query->where('valora', 2);
+                },
+                'puntuaciones as puntuacion_3' => function ($query) {
+                    $query->where('valora', 3);
+                },
+                'puntuaciones as puntuacion_4' => function ($query) {
+                    $query->where('valora', 4);
+                },
+                'puntuaciones as puntuacion_5' => function ($query) {
+                    $query->where('valora', 5);
+                },
+                'visitas',
+            ])
+            ->get()->each(function ($video) {
             $video->promedio_puntuaciones = $video->puntuacion_promedio;
         });
     }
@@ -371,4 +372,37 @@ class VideoController extends Controller
         $detalles = "ID video: $idVideo; Título: $tituloVideo";
         event(new ActividadRegistrada('Baja de video', $detalles));
     }
+
+    public function MostrarEtiquetasConConteoVideos()
+    {
+        $etiquetas = Etiqueta::on('blitzvideo')
+            ->withCount(['videos' => function ($query) {
+                $query->whereHas('canal.user', function ($subQuery) {
+                    $subQuery->where('name', '<>', 'Invitado');
+                });
+            }])
+            ->orderBy('id', 'desc')
+            ->get();
+
+        return view('video.etiquetas-videos', compact('etiquetas'));
+    }
+
+    public function listarVideosPorEtiqueta($id)
+    {
+        try {
+            $etiqueta = Etiqueta::findOrFail($id);
+            
+            $videos = $etiqueta->videos()
+                ->whereDoesntHave('canal.user', function ($query) {
+                    $query->where('name', 'Invitado');
+                })
+                ->paginate(9);
+            
+            return view('video.listar-por-etiqueta', compact('videos', 'etiqueta'));
+        } catch (\Exception $e) {
+            return redirect()->route('video.etiquetas')->with('error', 'No se pudieron listar los videos.');
+        }
+    }
+    
+
 }

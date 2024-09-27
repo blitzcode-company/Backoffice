@@ -121,4 +121,5 @@ class EtiquetaController extends Controller
         event(new ActividadRegistrada('Etiqueta actualizada', $detalles));
     }
 
+
 }

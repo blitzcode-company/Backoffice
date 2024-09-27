@@ -16,6 +16,7 @@ Route::get('login', [LoginController::class, 'showLoginForm'])->name('login');
 Route::post('login', [LoginController::class, 'login']);
 
 Route::middleware(['auth'])->group(function () {
+
     Route::prefix('usuario')->name('usuario.')->group(function () {
         Route::get('/', [UserController::class, 'ListarTodosLosUsuarios'])->name('listar');
         Route::get('/buscar', [UserController::class, 'ListarUsuariosPorNombre'])->name('nombre');
@@ -52,10 +53,12 @@ Route::middleware(['auth'])->group(function () {
         Route::post('/', [VideoController::class, 'ListarVideosPorNombre'])->name('nombre');
         Route::get('/subir', [VideoController::class, 'MostrarFormularioSubida'])->name('crear.formulario');
         Route::post('/subir', [VideoController::class, 'SubirVideo'])->name('crear');
-        Route::delete('/{id}', [VideoController::class, 'BajaVideo'])->name('eliminar');
-        Route::get('/canal/{id}', [VideoController::class, 'MostrarInformacionVideo'])->name('detalle');
+        Route::get('/etiquetas', [VideoController::class, 'MostrarEtiquetasConConteoVideos'])->name('etiquetas');
+        Route::get('/etiquetas/{id}', [VideoController::class, 'listarVideosPorEtiqueta'])->name('etiqueta');
+        Route::get('/{id}/detalle', [VideoController::class, 'MostrarInformacionVideo'])->name('detalle');
         Route::get('/{id}', [VideoController::class, 'MostrarFormularioEditar'])->name('editar.formulario');
         Route::put('/{id}', [VideoController::class, 'EditarVideo'])->name('editar');
+        Route::delete('/{id}', [VideoController::class, 'BajaVideo'])->name('eliminar');
     });
 
     Route::prefix('etiquetas')->name('etiquetas.')->group(function () {
@@ -88,6 +91,5 @@ Route::middleware(['auth'])->group(function () {
     Route::prefix('admin')->name('admin.')->group(function () {
         Route::get('/', [AdminController::class, 'listarUsuarios'])->name('usuarios');
         Route::get('/usuario/{id}/actividades', [AdminController::class, 'listarActividadesPorUsuario'])->name('actividades');
-
     });
 });

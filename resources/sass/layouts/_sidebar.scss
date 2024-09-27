@@ -15,10 +15,11 @@
 
 .list-group-item-action {
     color: v.$color-primary-dark;
+
 }
 
 .list-group-item-action:hover {
-    background-color: v.$color-primary-light;
+    background-color: v.$tr-bg-color !important;
     color: #fff;
 }
 
