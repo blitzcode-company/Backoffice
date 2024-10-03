@@ -6,6 +6,7 @@ use App\Http\Controllers\Blitzvideo\CanalController;
 use App\Http\Controllers\Blitzvideo\ComentarioController;
 use App\Http\Controllers\Blitzvideo\EtiquetaController;
 use App\Http\Controllers\Blitzvideo\MailController;
+use App\Http\Controllers\Blitzvideo\SuscriptoresController;
 use App\Http\Controllers\Blitzvideo\UserController;
 use App\Http\Controllers\Blitzvideo\VideoController;
 use App\Http\Controllers\Chart\UserChartController;
@@ -46,6 +47,13 @@ Route::middleware(['auth'])->group(function () {
         Route::get('/{id}/formulario', [CanalController::class, 'MostrarFormularioEditarCanal'])->name('editar.formulario');
         Route::put('/editar/{id}', [CanalController::class, 'EditarCanal'])->name('editar');
         Route::delete('/{id}', [CanalController::class, 'DarDeBajaCanal'])->name('eliminar');
+    });
+
+    Route::prefix('/suscriptores')->name('suscriptores.')->group(function () {
+        Route::get('/canal/{id}', [SuscriptoresController::class, 'listarSuscriptores'])->name('listar');
+        Route::get('/canal/{id}/buscar', [SuscriptoresController::class, 'listarSuscriptoresPorNombre'])->name('nombre');
+        Route::delete('/canal/{canalId}/desuscribir/{suscribeId}', [SuscriptoresController::class, 'desuscribir'])->name('desuscribir');
+        Route::post('/canal/{canalId}/suscribir', [SuscriptoresController::class, 'suscribir'])->name('suscribir');
     });
 
     Route::prefix('video')->name('video.')->group(function () {

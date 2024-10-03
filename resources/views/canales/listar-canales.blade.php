@@ -59,14 +59,16 @@
                                     title="Ir a canal #{{ $canal->id }}">
                                     <i class="fas fa-info-circle"></i>
                                 </a>
-                                <button class="btn btn-secondary btn-sm copy-btn"
-                                    data-copy="{{ $canal->id }}" title="Copiar ID">
+                                <button class="btn btn-secondary btn-sm copy-btn" data-copy="{{ $canal->id }}"
+                                    title="Copiar ID">
                                     <i class="fas fa-copy copy-icon"></i>
                                 </button>
                                 <span class="copy-status text-muted ml-2">Copiar</span>
                             </p>
 
                             <i class="fas fa-video text-muted"></i> Videos: {{ $canal->videos_count }}
+                            | <i class="fas fa-user text-muted"></i> Suscriptores: {{ $canal->suscriptores_count }}
+
 
                         </div>
 

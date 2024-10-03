@@ -28,9 +28,13 @@ class CanalController extends Controller
             ->whereHas('user', function ($query) {
                 $query->where('name', '!=', self::USUARIO_EXCLUIDO);
             })
-            ->withCount('videos')
+            ->withCount(['videos', 'suscriptores' => function ($query) {
+                $query->whereNull('suscribe.deleted_at');
+            }])
             ->orderBy('id', 'desc');
+
         $canales = $this->paginateBuilder($canalesQuery, 6, $request->input('page', 1));
+
         return view('canales.listar-canales', compact('canales'));
     }
 
@@ -41,7 +45,9 @@ class CanalController extends Controller
             ->whereHas('user', function ($query) {
                 $query->where('name', '!=', self::USUARIO_EXCLUIDO);
             })
-            ->withCount('videos')
+            ->withCount(['videos', 'suscriptores' => function ($query) {
+                $query->whereNull('suscribe.deleted_at');
+            }])
             ->firstOrFail();
 
         return view('canales.canal', compact('canal'));
@@ -59,11 +65,14 @@ class CanalController extends Controller
             ->whereHas('user', function ($query) {
                 $query->where('name', '!=', self::USUARIO_EXCLUIDO);
             })
-            ->withCount('videos');
+            ->withCount(['videos', 'suscriptores' => function ($query) {
+                $query->whereNull('suscribe.deleted_at');
+            }]);
 
         if ($nombre) {
             $query->where('nombre', 'like', '%' . $nombre . '%');
         }
+
         $canales = $this->paginateBuilder($query, 10, $request->input('page', 1));
 
         return view('canales.listar-canales', compact('canales'));

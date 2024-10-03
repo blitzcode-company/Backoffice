@@ -9,6 +9,8 @@ class Suscribe extends Model
 {
     use SoftDeletes;
 
+    protected $dates = ['deleted_at'];
+
     protected $connection = 'blitzvideo';
 
     protected $table = 'suscribe';

@@ -583,8 +583,7 @@ label {
 .modal-footer .btn-primary {
   color: #ffffff;
   padding: 5px 10px;
-  width: 20%;
-  max-width: 50px;
+  max-width: 80px !important;
   border: none;
   outline: none;
   box-shadow: none;
