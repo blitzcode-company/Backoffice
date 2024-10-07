@@ -33,6 +33,7 @@ class LoginController extends Controller
         }
 
         $this->ensureIsNotRateLimited($request);
+
         $credentials = [
             'samaccountname' => $request->username,
             'password' => $request->password,
