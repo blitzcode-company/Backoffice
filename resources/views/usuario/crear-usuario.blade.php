@@ -32,7 +32,6 @@
                                 </div>
                             </div>
 
-
                             <div class="row">
                                 <div class="col-md-6">
                                     <div class="form-group">
@@ -44,13 +43,6 @@
                                     <div class="form-group">
                                         <label for="password">Contraseña</label>
                                         <input type="password" name="password" id="password" class="form-control" required>
-                                    </div>
-
-                                    <div class="form-check">
-                                        <input class="form-check-input" type="checkbox" name="premium" id="premium">
-                                        <label class="form-check-label" for="premium">
-                                            Premium
-                                        </label>
                                     </div>
                                 </div>
 
@@ -65,6 +57,25 @@
                                         <label for="password_confirmation">Confirmar Contraseña</label>
                                         <input type="password" name="password_confirmation" id="password_confirmation"
                                             class="form-control" required>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <label for="fecha_de_nacimiento">Fecha de Nacimiento</label>
+                                        <input type="date" name="fecha_de_nacimiento" id="fecha_de_nacimiento" class="form-control"
+                                            value="{{ old('fecha_de_nacimiento') }}">
+                                    </div>
+                                </div>
+
+                                <div class="col-md-6 d-flex align-items-center">
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="checkbox" name="premium" id="premium">
+                                        <label class="form-check-label" for="premium">
+                                            Premium
+                                        </label>
                                     </div>
                                 </div>
                             </div>

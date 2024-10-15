@@ -38,6 +38,7 @@ class UserController extends Controller
             'email' => 'required|email|unique:users,email',
             'password' => 'required|min:6',
             'foto' => 'image|mimes:jpeg,png,jpg,gif|max:2048',
+            'fecha_de_nacimiento' => 'required|date',
         ]);
 
         try {
@@ -61,9 +62,9 @@ class UserController extends Controller
         $usuario->name = $request->input('name');
         $usuario->email = $request->input('email');
         $usuario->password = bcrypt($request->input('password'));
+        $usuario->fecha_de_nacimiento = $request->input('fecha_de_nacimiento');
         $usuario->premium = $request->has('premium');
         $usuario->save();
-
         return $usuario;
     }
 
@@ -132,6 +133,8 @@ class UserController extends Controller
             $cambios = array_merge($cambios, $this->actualizarEmail($request, $usuario));
             $cambios = array_merge($cambios, $this->actualizarPassword($request, $usuario));
             $cambios = array_merge($cambios, $this->actualizarFoto($request, $usuario));
+            $cambios = array_merge($cambios, $this->actualizarFechaDeNacimiento($request, $usuario));
+            $cambios = array_merge($cambios, $this->actualizarPremium($request, $usuario));
 
             $usuario->save();
 
@@ -150,6 +153,8 @@ class UserController extends Controller
             'email' => 'sometimes|required|email|unique:users,email,' . $id,
             'password' => 'nullable|min:6',
             'foto' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
+            'fecha_de_nacimiento' => 'nullable|date',
+            'premium' => 'nullable|boolean',
         ];
     }
 
@@ -190,6 +195,35 @@ class UserController extends Controller
         if ($request->filled('password')) {
             $cambios['Password'] = 'cambiado';
             $usuario->password = bcrypt($request->input('password'));
+        }
+
+        return $cambios;
+    }
+
+    private function actualizarFechaDeNacimiento(Request $request, User $usuario)
+    {
+        $cambios = [];
+        if ($request->has('fecha_de_nacimiento') && $request->input('fecha_de_nacimiento') != $usuario->fecha_de_nacimiento) {
+            $cambios['Fecha de Nacimiento'] = [
+                'anterior' => $usuario->fecha_de_nacimiento,
+                'nuevo' => $request->input('fecha_de_nacimiento'),
+            ];
+            $usuario->fecha_de_nacimiento = $request->input('fecha_de_nacimiento');
+        }
+
+        return $cambios;
+    }
+
+    private function actualizarPremium(Request $request, User $usuario)
+    {
+        $cambios = [];
+
+        if ($request->has('premium') && $request->input('premium') != $usuario->premium) {
+            $cambios['Premium'] = [
+                'anterior' => $usuario->premium ? 'Sí' : 'No',
+                'nuevo' => $request->input('premium') ? 'Sí' : 'No',
+            ];
+            $usuario->premium = $request->input('premium');
         }
 
         return $cambios;
@@ -255,7 +289,7 @@ class UserController extends Controller
         $nombre = $request->query('nombre');
         $query = User::with('canales')->where('name', '!=', 'Invitado');
 
-        if ($nombre) {  
+        if ($nombre) {
             $query->where('name', 'like', '%' . $nombre . '%');
         }
         $users = $this->paginateBuilder($query, 6, $request->input('page', 1));

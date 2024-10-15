@@ -63,6 +63,27 @@
                                 </div>
                             </div>
 
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <label for="fecha_de_nacimiento">Fecha de Nacimiento</label>
+                                        <input type="date" name="fecha_de_nacimiento" id="fecha_de_nacimiento"
+                                            class="form-control" value="{{ $user->fecha_de_nacimiento }}">
+                                    </div>
+                                </div>
+
+                                <div class="col-md-6 d-flex align-items-center">
+                                    <div class="form-check">
+                                        <input type="hidden" name="premium" value="0">
+                                        <input class="form-check-input" type="checkbox" name="premium" id="premium"
+                                            value="1" {{ $user->premium ? 'checked' : '' }}>
+                                        <label class="form-check-label" for="premium">
+                                            Premium
+                                        </label>
+                                    </div>
+                                </div>
+                            </div>
+
                             <button type="submit" class="btn btn-primary">Guardar Cambios</button>
 
                             @if ($errors->any())

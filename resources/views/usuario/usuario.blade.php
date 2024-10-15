@@ -10,6 +10,15 @@
             <div class="user-info">
                 <h2>{{ $user->name }}(#{{ $user->id }})</h2>
                 <p><strong>Inició el:</strong> {{ $user->created_at->format('d/m/Y') }}</p>
+                
+                <!-- Fecha de nacimiento y edad -->
+                @if ($user->fecha_de_nacimiento)
+                    <p><strong>Fecha de Nacimiento:</strong> {{ \Carbon\Carbon::parse($user->fecha_de_nacimiento)->format('d/m/Y') }}</p>
+                    <p><strong>Edad:</strong> {{ \Carbon\Carbon::parse($user->fecha_de_nacimiento)->age }} años</p>
+                @else
+                    <p><strong>Fecha de Nacimiento:</strong> No disponible</p>
+                @endif
+
                 <div class="email-container">
                     <p>
                         <i class="fas fa-envelope"></i>
