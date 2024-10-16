@@ -32,7 +32,7 @@
         @else
             @foreach ($videos as $video)
                 <div class="card mb-3 video-card">
-                    <div class="video-thumbnail">
+                    <div class="video-thumbnail position-relative">
                         <a href="{{ route('video.detalle', ['id' => $video->id]) }}">
                             @if ($video->miniatura)
                                 <img src="{{ $video->miniatura }}" alt="Miniatura del video">
@@ -40,6 +40,9 @@
                                 <img src="{{ asset('img/video-default.png') }}" alt="Miniatura por defecto">
                             @endif
                         </a>
+                        <div class="video-duration">
+                            {{ floor($video->duracion / 60) }}:{{ str_pad($video->duracion % 60, 2, '0', STR_PAD_LEFT) }}
+                        </div>
                     </div>
                     <div class="video-info">
                         <h2 class="video-title">{{ $video->titulo }}</h2>

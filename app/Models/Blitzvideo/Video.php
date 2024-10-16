@@ -18,6 +18,7 @@ class Video extends Model
         'activo',
         'canal_id',
         'miniatura',
+        'duracion',
         'bloqueado', 
         'acceso',      
     ];

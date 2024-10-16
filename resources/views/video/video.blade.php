@@ -39,20 +39,16 @@
                         href="{{ route('canal.detalle', ['id' => $video->canal->id]) }}">
                         {{ $video->canal->nombre }} <i class="fas fa-link"></i>
                     </a></p>
+                <p class="m-0"><strong>Duración:</strong> 
+                    {{ floor($video->duracion / 60) }}:{{ str_pad($video->duracion % 60, 2, '0', STR_PAD_LEFT) }}
+                </p>
                 <p class="m-0"><strong>Visitas :</strong> {{ $video->visitas_count }}</p>
-                <div class="video-thumbnail-small mt-4">
-                    <h4 class="m-0">Miniatura</h4>
-                    @if ($video->miniatura)
-                        <img src="{{ $video->miniatura }}" alt="Miniatura de {{ $video->titulo }}" class="img-fluid m-0">
-                    @else
-                        <img src="{{ asset('img/video-default.png') }}" alt="Miniatura por defecto" class="img-fluid m-0">
-                    @endif
-                </div>
+           
                 <div class="video-tags">
                     @if ($video->etiquetas->isEmpty())
-                        <p><strong><i class="fas fa-tags"></i>Etiquetas:</strong> No tiene etiquetas.</p>
+                        <p class="m-0"><strong><i class="fas fa-tags"></i>Etiquetas:</strong> No tiene etiquetas.</p>
                     @else
-                        <p><strong><i class="fas fa-tags"></i>Etiquetas:</strong>
+                        <p class="m-0"><strong><i class="fas fa-tags"></i>Etiquetas:</strong>
                             @foreach ($video->etiquetas as $etiqueta)
                                 {{ $etiqueta->nombre }}
                                 @if (!$loop->last)
@@ -62,7 +58,7 @@
                         </p>
                     @endif
                 </div>
-                <p class="text-justify">{!! nl2br(e($video->descripcion)) !!}</p>
+                <p class="text-justify m-2">{!! nl2br(e($video->descripcion)) !!}</p>
 
                 <div class="video-ratings">
                     <h4>Puntuaciones</h4>
@@ -99,4 +95,6 @@
                 </a>
             </div>
             @include('modals.delete-video-modal', ['video' => $video])
-        @endsection
+        </div>
+    </div>
+@endsection

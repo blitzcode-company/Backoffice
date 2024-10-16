@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Blitzvideo;
 
 use App\Events\ActividadRegistrada;
+use App\Helpers\FFMpegHelper;
 use App\Http\Controllers\Controller;
 use App\Models\Blitzvideo\Canal;
 use App\Models\Blitzvideo\Etiqueta;
@@ -206,17 +207,20 @@ class VideoController extends Controller
     private function actualizarVideo(Request $request, Video $video)
     {
         $cambios = [];
-
+    
         if ($request->hasFile('video')) {
             $rutaAnterior = $video->link;
             $rutaVideo = $this->GuardarArchivo($request->file('video'), 'videos/' . $video->canal_id);
+            
+            $video->link = $this->GenerarUrl($rutaVideo);
+            $duracion = $this->obtenerDuracionDeVideo($request->file('video'));
+            $video->duracion = $duracion;
             $cambios['video'] = [
                 'anterior' => $rutaAnterior,
-                'nuevo' => $this->GenerarUrl($rutaVideo),
+                'nuevo' => $video->link,
             ];
-            $video->link = $this->GenerarUrl($rutaVideo);
         }
-
+    
         return $cambios;
     }
 
@@ -278,14 +282,23 @@ class VideoController extends Controller
 
         $canal = Canal::findOrFail($canalId);
         $videoData = $this->ProcesarVideo($request->file('video'), $request->file('miniatura'), $canalId);
-
-        $video = $this->CrearNuevoVideo($request, $canal, $videoData);
-
+        $duracion = $this->obtenerDuracionDeVideo($request->file('video'));
+        $video = $this->CrearNuevoVideo($request, $canal, $videoData, $duracion);
         if ($request->has('etiquetas')) {
             $this->AsignarEtiquetas($request, $video->id);
         }
         $this->registrarActividadSubirVideo($video);
+
         return redirect()->route('video.crear.formulario')->with('success', 'Video subido exitosamente');
+    }
+
+    private function obtenerDuracionDeVideo($videoFile)
+    {
+        $ffmpeg = FFMpegHelper::crearFFMpeg();
+        $video = $ffmpeg->open($videoFile->getRealPath());
+        $duracionTotalDelVideo = $video->getStreams()->videos()->first()->get('duration');
+
+        return $duracionTotalDelVideo;
     }
 
     private function registrarActividadSubirVideo($video)
@@ -337,14 +350,15 @@ class VideoController extends Controller
         return str_replace('minio', env('BLITZVIDEO_HOST'), Storage::disk('s3')->url($ruta));
     }
 
-    private function CrearNuevoVideo($request, $canal, $videoData)
+    private function CrearNuevoVideo(Request $request, Canal $canal, array $videoData, $duracion)
     {
         return Video::create([
-            'titulo' => $request->titulo,
-            'descripcion' => $request->descripcion,
+            'titulo' => $request->input('titulo'),
+            'descripcion' => $request->input('descripcion'),
             'link' => $videoData['urlVideo'],
             'miniatura' => $videoData['urlMiniatura'],
             'canal_id' => $canal->id,
+            'duracion' => $duracion,
         ]);
     }
 
@@ -391,18 +405,17 @@ class VideoController extends Controller
     {
         try {
             $etiqueta = Etiqueta::findOrFail($id);
-            
+
             $videos = $etiqueta->videos()
                 ->whereDoesntHave('canal.user', function ($query) {
                     $query->where('name', 'Invitado');
                 })
                 ->paginate(9);
-            
+
             return view('video.listar-por-etiqueta', compact('videos', 'etiqueta'));
         } catch (\Exception $e) {
             return redirect()->route('video.etiquetas')->with('error', 'No se pudieron listar los videos.');
         }
     }
-    
 
 }
