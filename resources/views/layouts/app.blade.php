@@ -33,13 +33,25 @@
                             <a href="{{ route('inicio') }}" class="dropdown-item">Dashboard</a>
                             <a href="{{ route('usuario.listar') }}" class="dropdown-item">Usuarios</a>
                             <a href="{{ route('canal.listar') }}" class="dropdown-item">Canales</a>
-                            <a href="{{ route('video.listar') }}" class="dropdown-item">Videos</a>
+                            
+                            <!-- Submenú para Videos -->
+                            <div class="dropdown-submenu">
+                                <a class="dropdown-item dropdown-toggle" href="#" data-toggle="dropdown">Videos</a>
+                                <div class="dropdown-menu">
+                                    <a href="{{ route('video.listar') }}" class="dropdown-item">Todos</a>
+                                    <a href="{{ route('video.crear') }}" class="dropdown-item">Subir Video</a>
+                                    <a href="{{ route('video.etiquetas') }}" class="dropdown-item">Por etiquetas</a>
+                                </div>
+                            </div>
+                        
                             <a href="{{ route('playlists.listar') }}" class="dropdown-item">Playlist</a>
                             <a href="{{ route('etiquetas.listar') }}" class="dropdown-item">Etiquetas</a>
                             <a href="{{ route('estadisticas') }}" class="dropdown-item">Estadísticas</a>
                             <a href="{{ route('anuncios') }}" class="dropdown-item">Anuncios</a>
                             <a href="{{ route('ajustes') }}" class="dropdown-item">Ajustes</a>
                         </div>
+                        
+                        
                     </li>
                     @if (Auth::check())
                         <li class="nav-item dropdown">
@@ -127,6 +139,34 @@
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
     <script src="https://cdn.datatables.net/1.12.1/js/jquery.dataTables.min.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            // Selecciona todos los elementos de submenú
+            const dropdownSubmenus = document.querySelectorAll('.dropdown-submenu > .dropdown-item');
+    
+            dropdownSubmenus.forEach(function (submenu) {
+                submenu.addEventListener('click', function (event) {
+                    event.preventDefault(); // Previene el comportamiento predeterminado del enlace
+                    const parent = this.parentElement; // Obtiene el elemento padre
+    
+                    // Alterna la clase 'active' para mostrar/ocultar el submenú
+                    parent.classList.toggle('active');
+                });
+            });
+    
+            // Cierra el submenú al hacer clic en cualquier otra parte del documento
+            document.addEventListener('click', function (event) {
+                // Verifica si el clic no fue en el submenú o en su elemento padre
+                if (!event.target.closest('.dropdown-submenu')) {
+                    dropdownSubmenus.forEach(function (submenu) {
+                        submenu.parentElement.classList.remove('active');
+                    });
+                }
+            });
+        });
+    </script>
+    
+    
 </body>
 
 </html>
