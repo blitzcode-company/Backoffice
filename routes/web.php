@@ -6,6 +6,7 @@ use App\Http\Controllers\Blitzvideo\CanalController;
 use App\Http\Controllers\Blitzvideo\ComentarioController;
 use App\Http\Controllers\Blitzvideo\EtiquetaController;
 use App\Http\Controllers\Blitzvideo\MailController;
+use App\Http\Controllers\Blitzvideo\PlaylistController;
 use App\Http\Controllers\Blitzvideo\SuscriptoresController;
 use App\Http\Controllers\Blitzvideo\UserController;
 use App\Http\Controllers\Blitzvideo\VideoController;
@@ -15,6 +16,13 @@ use Illuminate\Support\Facades\Route;
 
 Route::get('login', [LoginController::class, 'showLoginForm'])->name('login');
 Route::post('login', [LoginController::class, 'login']);
+
+Route::prefix('playlists')->name('playlists.')->group(function () {
+    Route::get('/buscar/video', [PlaylistController::class, 'buscar']);
+    Route::get('/formulario', [PlaylistController::class, 'create'])->name('crear.formulario');
+    Route::post('/', [PlaylistController::class, 'crearPlaylist'])->name('crear');
+    Route::get('/', [PlaylistController::class, 'listarPlaylists'])->name('listar');
+});
 
 Route::middleware(['auth'])->group(function () {
 

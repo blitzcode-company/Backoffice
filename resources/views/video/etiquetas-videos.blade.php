@@ -1,6 +1,7 @@
 @extends('layouts.app')
 
 @section('content')
+<div class="titulo">Videos por Etiquetas</div>
     <div class="etiquetas-container">
         @foreach ($etiquetas as $etiqueta)
             <div class="etiqueta-card">

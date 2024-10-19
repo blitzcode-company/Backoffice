@@ -34,6 +34,7 @@
                             <a href="{{ route('usuario.listar') }}" class="dropdown-item">Usuarios</a>
                             <a href="{{ route('canal.listar') }}" class="dropdown-item">Canales</a>
                             <a href="{{ route('video.listar') }}" class="dropdown-item">Videos</a>
+                            <a href="{{ route('playlists.listar') }}" class="dropdown-item">Playlist</a>
                             <a href="{{ route('etiquetas.listar') }}" class="dropdown-item">Etiquetas</a>
                             <a href="{{ route('estadisticas') }}" class="dropdown-item">Estadísticas</a>
                             <a href="{{ route('anuncios') }}" class="dropdown-item">Anuncios</a>
@@ -110,7 +111,7 @@
                         });
                     });
                 </script>
-
+                <a href="{{ route('playlists.listar') }}" class="list-group-item list-group-item-action">Playlist</a>
                 <a href="{{ route('etiquetas.listar') }}"
                     class="list-group-item list-group-item-action">Etiquetas</a>
                 <a href="{{ route('estadisticas') }}" class="list-group-item list-group-item-action">Estadísticas</a>

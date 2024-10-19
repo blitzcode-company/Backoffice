@@ -137,7 +137,6 @@ public function editar_video()
     Storage::disk('s3')->assertExists('miniaturas/' . $formData['miniatura']->hashName());
 }
 
-
     /** @test */
     public function baja_video()
     {
