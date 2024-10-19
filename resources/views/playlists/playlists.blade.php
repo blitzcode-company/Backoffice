@@ -9,21 +9,25 @@
             <button type="submit" class="btn-info"><i class="fas fa-search"></i></button>
         </form>
     </div>
+
+    <div class="text-center my-4">
+        <a href="{{ route('playlists.crear.formulario') }}" class="btn btn-primary">
+            <i class="fas fa-plus"></i> Nueva playlist
+        </a>
+    </div>
     <div class="d-flex justify-content-center">
         {{ $playlists->links('vendor.pagination.pagination') }}
     </div>
     <div class="playlist-container mx-auto">
         @if ($playlists->isEmpty())
-            <div class="alert alert-info" role="alert">
-                No hay playlists disponibles.
-            </div>
+                <p class="text-muted mx-auto">No hay playlists disponibles.</p>
         @else
             <div class="row">
                 @foreach ($playlists as $playlist)
                     <div class="col-md-4 mb-4">
                         <div class="card">
                             <div class="card-header">
-                                <h5 class="mb-0">{{ $playlist['nombre'] }}</h5>
+                                <h2 class="video-title">{{ $playlist['nombre'] }}</h2>
                             </div>
                             <div class="card-body">
                                 <p class="card-text text-start">
@@ -38,6 +42,9 @@
                                     <i class="fas fa-user text-muted"></i>
                                     <span class="text-muted">Propietario:</span> {{ $playlist['propietario'] }}
                                 </p>
+                                <a href="{{ route('playlists.videos', ['id' => $playlist['id']]) }}" class="btn btn-primary">
+                                    Ver Videos
+                                </a>
                             </div>
                         </div>
                     </div>

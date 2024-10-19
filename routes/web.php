@@ -17,15 +17,17 @@ use Illuminate\Support\Facades\Route;
 Route::get('login', [LoginController::class, 'showLoginForm'])->name('login');
 Route::post('login', [LoginController::class, 'login']);
 
-Route::prefix('playlists')->name('playlists.')->group(function () {
-    Route::get('/buscar/video', [PlaylistController::class, 'buscar']);
-    Route::get('/formulario', [PlaylistController::class, 'create'])->name('crear.formulario');
-    Route::post('/', [PlaylistController::class, 'crearPlaylist'])->name('crear');
-    Route::get('/', [PlaylistController::class, 'listarPlaylists'])->name('listar');
-});
-
 Route::middleware(['auth'])->group(function () {
 
+   
+    Route::get('logout', [LoginController::class, 'logout'])->name('logout');
+    Route::get('/', function () {return view('inicio');})->name('inicio');
+    Route::get('/estadisticas', function () {return view('estadisticas');})->name('estadisticas');
+    Route::get('/anuncios', function () {return view('anuncios');})->name('anuncios');
+    Route::get('/perfil', function () {return view('perfil');})->name('perfil');
+    Route::get('/ajustes', function () {return view('ajustes');})->name('ajustes');
+    
+    Route::post('/correo', [MailController::class, 'enviarCorreoPorFormulario'])->name('correo.enviar');
     Route::prefix('usuario')->name('usuario.')->group(function () {
         Route::get('/', [UserController::class, 'ListarTodosLosUsuarios'])->name('listar');
         Route::get('/buscar', [UserController::class, 'ListarUsuariosPorNombre'])->name('nombre');
@@ -36,15 +38,6 @@ Route::middleware(['auth'])->group(function () {
         Route::put('/{id}', [UserController::class, 'ActualizarUsuario'])->name('editar');
         Route::delete('/{id}', [UserController::class, 'EliminarUsuario'])->name('eliminar');
     });
-
-    Route::post('/correo', [MailController::class, 'enviarCorreoPorFormulario'])->name('correo.enviar');
-
-    Route::get('logout', [LoginController::class, 'logout'])->name('logout');
-    Route::get('/', function () {return view('inicio');})->name('inicio');
-    Route::get('/estadisticas', function () {return view('estadisticas');})->name('estadisticas');
-    Route::get('/anuncios', function () {return view('anuncios');})->name('anuncios');
-    Route::get('/perfil', function () {return view('perfil');})->name('perfil');
-    Route::get('/ajustes', function () {return view('ajustes');})->name('ajustes');
 
     Route::prefix('canal')->name('canal.')->group(function () {
         Route::get('/', [CanalController::class, 'ListarCanales'])->name('listar');
@@ -76,6 +69,19 @@ Route::middleware(['auth'])->group(function () {
         Route::put('/{id}', [VideoController::class, 'EditarVideo'])->name('editar');
         Route::delete('/{id}', [VideoController::class, 'BajaVideo'])->name('eliminar');
         Route::get('/canal/{id}', [VideoController::class, 'ListarVideosPorCanal'])->name('canal');
+    });
+
+    Route::prefix('playlists')->name('playlists.')->group(function () {
+        Route::get('/buscar/video', [PlaylistController::class, 'buscar']);
+        Route::get('/formulario', [PlaylistController::class, 'create'])->name('crear.formulario');
+        Route::post('/', [PlaylistController::class, 'crearPlaylist'])->name('crear');
+        Route::get('/', [PlaylistController::class, 'listarPlaylists'])->name('listar');
+        Route::get('/usuario/{id}', [PlaylistController::class, 'listarPlaylists'])->name('usuario.listar');
+        Route::get('/{id}/videos', [PlaylistController::class, 'mostrarVideosDePlaylist'])->name('videos');
+        Route::post('/{id}/acceso', [PlaylistController::class, 'cambiarAcceso'])->name('acceso');
+        Route::delete('/{id}', [PlaylistController::class, 'borrarPlaylist'])->name('eliminar');
+        Route::put('/{id}', [PlaylistController::class, 'editarNombrePlaylist'])->name('editar');
+
     });
 
     Route::prefix('etiquetas')->name('etiquetas.')->group(function () {

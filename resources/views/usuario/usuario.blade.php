@@ -8,12 +8,11 @@
         </div>
         <div class="user-info-box">
             <div class="user-info">
-                <h2>{{ $user->name }}(#{{ $user->id }})</h2>
+                <h2>{{ $user->name }} (#{{ $user->id }})</h2>
                 <p><strong>Inició el:</strong> {{ $user->created_at->format('d/m/Y') }}</p>
-                
-                <!-- Fecha de nacimiento y edad -->
                 @if ($user->fecha_de_nacimiento)
-                    <p><strong>Fecha de Nacimiento:</strong> {{ \Carbon\Carbon::parse($user->fecha_de_nacimiento)->format('d/m/Y') }}</p>
+                    <p><strong>Fecha de Nacimiento:</strong>
+                        {{ \Carbon\Carbon::parse($user->fecha_de_nacimiento)->format('d/m/Y') }}</p>
                     <p><strong>Edad:</strong> {{ \Carbon\Carbon::parse($user->fecha_de_nacimiento)->age }} años</p>
                 @else
                     <p><strong>Fecha de Nacimiento:</strong> No disponible</p>
@@ -57,16 +56,23 @@
         </div>
         <div class="modal-footer">
             <div class="mx-auto">
-                <a href="#" class="btn btn-success btn-sm w-40" data-bs-toggle="modal" data-bs-target="#sendEmailModal">
+                <a href="#" class="btn btn-success btn-sm w-40" data-bs-toggle="modal"
+                    data-bs-target="#sendEmailModal">
                     <i class="fas fa-envelope"></i> Enviar Correo
                 </a>
-                <a href="#" class="btn btn-danger btn-sm w-40" data-bs-toggle="modal" data-bs-target="#confirmDeleteModal">
+                <a href="#" class="btn btn-danger btn-sm w-40" data-bs-toggle="modal"
+                    data-bs-target="#confirmDeleteModal">
                     <i class="fas fa-trash-alt"></i> Eliminar
                 </a>
-                
-                <a href="{{ route('usuario.editar.formulario', ['id' => $user->id]) }}" class="btn btn-warning btn-sm w-40">
+                <a href="{{ route('usuario.editar.formulario', ['id' => $user->id]) }}"
+                    class="btn btn-warning btn-sm w-40">
                     <i class="fas fa-edit"></i> Editar
                 </a>
+
+                <a href="{{ route('playlists.usuario.listar', ['id' => $user->id]) }}" class="btn btn-dark btn-sm w-40">
+                    <i class="fas fa-th-list"></i> Ver Playlists
+                </a>
+
             </div>
         </div>
     </div>
