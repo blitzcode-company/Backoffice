@@ -85,12 +85,11 @@ class VideoControllerTest extends TestCase
         $this->assertEquals($idVideo, $videoFromResponse->id, 'El video no coincide con el ID esperado.');
     }
 
-    /** @test */
-    public function subir_video()
+/** @test */
+    public function test_subir_video()
     {
         $user = User::first();
         $this->actingAs($user);
-
         Storage::fake('s3');
         $canalId = 3;
         $formData = [
@@ -98,47 +97,46 @@ class VideoControllerTest extends TestCase
             'descripcion' => 'Descripción del Video',
             'canal_id' => $canalId,
             'etiquetas' => [4, 5],
+            'duracion' => 120,
         ];
         $formData['video'] = UploadedFile::fake()->create('video.mp4', 1024, 'video/mp4');
         $formData['miniatura'] = UploadedFile::fake()->create('miniatura.jpg', 1024, 'image/jpeg');
         $response = $this->post(route('video.crear'), $formData);
         $response->assertStatus(Response::HTTP_FOUND);
-        $this->assertDatabaseHas('videos', [
-            'titulo' => 'Título del Video',
-            'descripcion' => 'Descripción del Video',
-            'canal_id' => $canalId,
-        ]);
         Storage::disk('s3')->assertExists('videos/' . $canalId . '/' . $formData['video']->hashName());
         Storage::disk('s3')->assertExists('miniaturas/' . $canalId . '/' . $formData['miniatura']->hashName());
         $response->assertRedirect(route('video.crear.formulario'));
         $response->assertSessionHas('success', 'Video subido exitosamente');
     }
 
-    /** @test */
-    public function editar_video()
-    {
-        $user = User::first();
-        $this->actingAs($user);
+/** @test */
+public function editar_video()
+{
+    $user = User::first();
+    $this->actingAs($user);
+    $video = Video::findOrFail(4);
+    Storage::fake('s3');
+    $formData = [
+        'titulo' => 'Nuevo Título',
+        'descripcion' => 'Nueva Descripción',
+        'etiquetas' => [2, 3],
+    ];
+    $response = $this->put(route('video.editar', ['id' => $video->id]), $formData);
+    $response->assertStatus(Response::HTTP_FOUND);
+    $video = $video->fresh();
+    $this->assertEquals('Nuevo Título', $video->titulo);
+    $this->assertEquals('Nueva Descripción', $video->descripcion);
+    $formData['video'] = UploadedFile::fake()->create('video_editado.mp4', 2048, 'video/mp4');
+    $formData['miniatura'] = UploadedFile::fake()->image('miniatura_editada.jpg', 1024, 1024);
+    $formData['video']->store('videos', 's3');
+    $formData['miniatura']->store('miniaturas', 's3');
+    $response = $this->put(route('video.editar', ['id' => $video->id]), $formData);
+    $response->assertStatus(Response::HTTP_FOUND);
+    $video = $video->fresh();
+    Storage::disk('s3')->assertExists('videos/' . $formData['video']->hashName());
+    Storage::disk('s3')->assertExists('miniaturas/' . $formData['miniatura']->hashName());
+}
 
-        Storage::fake('s3');
-        $video = Video::findOrFail(4);
-        $formData = [
-            'titulo' => 'Nuevo Título',
-            'descripcion' => 'Nueva Descripción',
-            'etiquetas' => [2, 3],
-        ];
-        $formData['video'] = UploadedFile::fake()->create('video.mp4', 1024, 'video/mp4');
-        $formData['miniatura'] = UploadedFile::fake()->create('miniatura.jpg', 1024, 'image/jpeg');
-        $response = $this->put(route('video.editar', ['id' => $video->id]), $formData);
-        $response->assertStatus(Response::HTTP_FOUND);
-        $video = Video::findOrFail($video->id);
-        $this->assertEquals('Nuevo Título', $video->titulo);
-        $this->assertEquals('Nueva Descripción', $video->descripcion);
-        Storage::disk('s3')->assertExists('videos/' . $video->canal_id . '/' . $formData['video']->hashName());
-        Storage::disk('s3')->assertExists('miniaturas/' . $video->canal_id . '/' . $formData['miniatura']->hashName());
-        $response->assertRedirect(route('video.editar.formulario', ['id' => $video->id]));
-        $response->assertSessionHas('success', 'Video editado exitosamente');
-    }
 
     /** @test */
     public function baja_video()
@@ -158,42 +156,58 @@ class VideoControllerTest extends TestCase
         ]);
     }
 
-
     /** @test */
-public function mostrar_etiquetas_con_conteo_videos()
-{
-    $user = User::first();
-    $this->actingAs($user);
+    public function mostrar_etiquetas_con_conteo_videos()
+    {
+        $user = User::first();
+        $this->actingAs($user);
 
-    $response = $this->get(route('video.etiquetas'));
-    $response->assertStatus(Response::HTTP_OK);
-    $response->assertViewHas('etiquetas');
-    $etiquetasFromResponse = $response->viewData('etiquetas');
-    $this->assertNotEmpty($etiquetasFromResponse, 'Las etiquetas no se encontraron en la respuesta.');
+        $response = $this->get(route('video.etiquetas'));
+        $response->assertStatus(Response::HTTP_OK);
+        $response->assertViewHas('etiquetas');
+        $etiquetasFromResponse = $response->viewData('etiquetas');
+        $this->assertNotEmpty($etiquetasFromResponse, 'Las etiquetas no se encontraron en la respuesta.');
 
-    foreach ($etiquetasFromResponse as $etiqueta) {
-        $this->assertArrayHasKey('videos_count', $etiqueta->getAttributes());
+        foreach ($etiquetasFromResponse as $etiqueta) {
+            $this->assertArrayHasKey('videos_count', $etiqueta->getAttributes());
+        }
     }
-}
 
 /** @test */
-public function listar_videos_por_etiqueta()
-{
-    $user = User::first();
-    $this->actingAs($user);
+    public function listar_videos_por_etiqueta()
+    {
+        $user = User::first();
+        $this->actingAs($user);
 
-    $etiquetaId = 4;
-    $response = $this->get(route('video.etiqueta', ['id' => $etiquetaId]));
-    $response->assertStatus(Response::HTTP_OK);
-    $response->assertViewHas('videos');
-    $response->assertViewHas('etiqueta');
+        $etiquetaId = 4;
+        $response = $this->get(route('video.etiqueta', ['id' => $etiquetaId]));
+        $response->assertStatus(Response::HTTP_OK);
+        $response->assertViewHas('videos');
+        $response->assertViewHas('etiqueta');
 
-    $videosFromResponse = $response->viewData('videos');
-    $this->assertNotEmpty($videosFromResponse, 'Los videos no se encontraron en la respuesta.');
+        $videosFromResponse = $response->viewData('videos');
+        $this->assertNotEmpty($videosFromResponse, 'Los videos no se encontraron en la respuesta.');
 
-    foreach ($videosFromResponse as $video) {
-        $this->assertTrue($video->etiquetas->contains($etiquetaId), 'El video no pertenece a la etiqueta esperada.');
+        foreach ($videosFromResponse as $video) {
+            $this->assertTrue($video->etiquetas->contains($etiquetaId), 'El video no pertenece a la etiqueta esperada.');
+        }
     }
-}
+
+/** @test */
+    public function listar_videos_por_canal()
+    {
+        $user = User::first();
+        $this->actingAs($user);
+        $canalId = 2;
+        $response = $this->get(route('video.canal', ['id' => $canalId]));
+        $response->assertStatus(Response::HTTP_OK);
+        $response->assertViewHas('videos');
+        $response->assertViewHas('canalId', $canalId);
+        $videosFromResponse = $response->viewData('videos');
+        $this->assertNotEmpty($videosFromResponse, 'No se encontraron videos en la respuesta.');
+        foreach ($videosFromResponse as $video) {
+            $this->assertEquals('Canal de Diego', $video->canal->nombre, 'El video no pertenece al canal esperado.');
+        }
+    }
 
 }

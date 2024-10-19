@@ -207,20 +207,24 @@ class VideoController extends Controller
     private function actualizarVideo(Request $request, Video $video)
     {
         $cambios = [];
-    
+
         if ($request->hasFile('video')) {
             $rutaAnterior = $video->link;
             $rutaVideo = $this->GuardarArchivo($request->file('video'), 'videos/' . $video->canal_id);
-            
             $video->link = $this->GenerarUrl($rutaVideo);
-            $duracion = $this->obtenerDuracionDeVideo($request->file('video'));
+            if ($request->has('duracion')) {
+                $video->duracion = $request->input('duracion');
+            } else {
+                $duracion = $this->obtenerDuracionDeVideo($request->file('video'));
+                $video->duracion = $duracion;
+            }
             $video->duracion = $duracion;
             $cambios['video'] = [
                 'anterior' => $rutaAnterior,
                 'nuevo' => $video->link,
             ];
         }
-    
+
         return $cambios;
     }
 
@@ -282,7 +286,10 @@ class VideoController extends Controller
 
         $canal = Canal::findOrFail($canalId);
         $videoData = $this->ProcesarVideo($request->file('video'), $request->file('miniatura'), $canalId);
-        $duracion = $this->obtenerDuracionDeVideo($request->file('video'));
+        $duracion = $request->input('duracion', null);
+        if (is_null($duracion)) {
+            $duracion = $this->obtenerDuracionDeVideo($request->file('video'));
+        }
         $video = $this->CrearNuevoVideo($request, $canal, $videoData, $duracion);
         if ($request->has('etiquetas')) {
             $this->AsignarEtiquetas($request, $video->id);
@@ -416,6 +423,50 @@ class VideoController extends Controller
         } catch (\Exception $e) {
             return redirect()->route('video.etiquetas')->with('error', 'No se pudieron listar los videos.');
         }
+    }
+
+    public function ListarVideosPorCanal($canalId, Request $request)
+    {
+        $page = $request->input('page', 1);
+        $titulo = $request->input('titulo');
+        $videos = $this->obtenerVideosPorCanal($canalId, $titulo);
+        $videos = $this->paginateCollection($videos, 9, $page);
+        return view('video.listar-por-canal', compact('videos', 'canalId'));
+    }
+
+    private function obtenerVideosPorCanal($canalId, $titulo = null)
+    {
+        $query = Video::with([
+            'canal:id,nombre,descripcion,user_id',
+            'canal.user:id,name,email',
+            'etiquetas:id,nombre',
+        ])
+            ->where('canal_id', $canalId)
+            ->withCount([
+                'puntuaciones as puntuacion_1' => function ($query) {
+                    $query->where('valora', 1);
+                },
+                'puntuaciones as puntuacion_2' => function ($query) {
+                    $query->where('valora', 2);
+                },
+                'puntuaciones as puntuacion_3' => function ($query) {
+                    $query->where('valora', 3);
+                },
+                'puntuaciones as puntuacion_4' => function ($query) {
+                    $query->where('valora', 4);
+                },
+                'puntuaciones as puntuacion_5' => function ($query) {
+                    $query->where('valora', 5);
+                },
+                'visitas',
+            ]);
+        if (!empty($titulo)) {
+            $query->where('titulo', 'like', '%' . $titulo . '%');
+        }
+
+        return $query->get()->each(function ($video) {
+            $video->promedio_puntuaciones = $video->puntuacion_promedio;
+        });
     }
 
 }

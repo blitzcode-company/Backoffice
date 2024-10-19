@@ -67,6 +67,7 @@ Route::middleware(['auth'])->group(function () {
         Route::get('/{id}', [VideoController::class, 'MostrarFormularioEditar'])->name('editar.formulario');
         Route::put('/{id}', [VideoController::class, 'EditarVideo'])->name('editar');
         Route::delete('/{id}', [VideoController::class, 'BajaVideo'])->name('eliminar');
+        Route::get('/canal/{id}', [VideoController::class, 'ListarVideosPorCanal'])->name('canal');
     });
 
     Route::prefix('etiquetas')->name('etiquetas.')->group(function () {

@@ -86,12 +86,14 @@ class UserControllerTest extends TestCase
         $response = $this->post(route('usuario.crear'), [
             'name' => 'Nuevo Usuario',
             'email' => 'nuevo.usuario@gmail.com',
+            'fecha_de_nacimiento' => '1985-08-30',
             'password' => 'contraseña123',
         ]);
         $response->assertStatus(302);
         $this->assertDatabaseHas('users', [
             'name' => 'Nuevo Usuario',
             'email' => 'nuevo.usuario@gmail.com',
+            'fecha_de_nacimiento' => '1985-08-30',
         ]);
     }
 

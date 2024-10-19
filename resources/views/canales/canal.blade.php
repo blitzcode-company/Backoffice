@@ -79,7 +79,7 @@
                 <a href="{{ route('usuario.detalle', ['id' => $canal->user->id]) }}" class="btn btn-success btn-sm w-40">
                     <i class="fas fa-user"></i> Ir a perfil
                 </a>
-                <a href="#" class="btn custom-edit-btn btn-sm w-40">
+                <a href="{{ route('video.canal', ['id' => $canal->id]) }}" class="btn custom-edit-btn btn-sm w-40">
                     <i class="fas fa-video"></i> Videos
                 </a>
                 <a href="{{ route('canal.editar.formulario', ['id' => $canal->id]) }}" class="btn btn-warning btn-sm w-40">
