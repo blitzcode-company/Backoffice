@@ -71,8 +71,8 @@ Route::middleware(['auth'])->group(function () {
     });
 
     Route::prefix('playlists')->name('playlists.')->group(function () {
-        Route::get('/buscar/video', [PlaylistController::class, 'buscar']);
-        Route::get('/formulario', [PlaylistController::class, 'create'])->name('crear.formulario');
+        Route::get('/buscar/video', [PlaylistController::class, 'buscar'])->name('buscar');
+        Route::get('/formulario', [PlaylistController::class, 'formulario'])->name('crear.formulario');
         Route::post('/', [PlaylistController::class, 'crearPlaylist'])->name('crear');
         Route::get('/', [PlaylistController::class, 'listarPlaylists'])->name('listar');
         Route::get('/usuario/{id}', [PlaylistController::class, 'listarPlaylists'])->name('usuario.listar');

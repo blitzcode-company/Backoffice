@@ -34,7 +34,6 @@
                             <a href="{{ route('usuario.listar') }}" class="dropdown-item">Usuarios</a>
                             <a href="{{ route('canal.listar') }}" class="dropdown-item">Canales</a>
                             
-                            <!-- Submenú para Videos -->
                             <div class="dropdown-submenu">
                                 <a class="dropdown-item dropdown-toggle" href="#" data-toggle="dropdown">Videos</a>
                                 <div class="dropdown-menu">
@@ -141,22 +140,16 @@
     <script src="https://cdn.datatables.net/1.12.1/js/jquery.dataTables.min.js"></script>
     <script>
         document.addEventListener('DOMContentLoaded', function () {
-            // Selecciona todos los elementos de submenú
             const dropdownSubmenus = document.querySelectorAll('.dropdown-submenu > .dropdown-item');
     
             dropdownSubmenus.forEach(function (submenu) {
                 submenu.addEventListener('click', function (event) {
-                    event.preventDefault(); // Previene el comportamiento predeterminado del enlace
-                    const parent = this.parentElement; // Obtiene el elemento padre
-    
-                    // Alterna la clase 'active' para mostrar/ocultar el submenú
+                    event.preventDefault();
+                    const parent = this.parentElement;
                     parent.classList.toggle('active');
                 });
             });
-    
-            // Cierra el submenú al hacer clic en cualquier otra parte del documento
             document.addEventListener('click', function (event) {
-                // Verifica si el clic no fue en el submenú o en su elemento padre
                 if (!event.target.closest('.dropdown-submenu')) {
                     dropdownSubmenus.forEach(function (submenu) {
                         submenu.parentElement.classList.remove('active');

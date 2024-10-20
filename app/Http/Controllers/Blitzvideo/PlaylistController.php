@@ -12,7 +12,7 @@ class PlaylistController extends Controller
 {
     use Paginable;
 
-    public function create()
+    public function formulario()
     {
         return view('playlists.create-playlist');
     }
