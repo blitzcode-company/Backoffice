@@ -6,6 +6,7 @@ use App\Http\Controllers\Blitzvideo\CanalController;
 use App\Http\Controllers\Blitzvideo\ComentarioController;
 use App\Http\Controllers\Blitzvideo\EtiquetaController;
 use App\Http\Controllers\Blitzvideo\MailController;
+use App\Http\Controllers\Blitzvideo\TransaccionController;
 use App\Http\Controllers\Blitzvideo\PlaylistController;
 use App\Http\Controllers\Blitzvideo\SuscriptoresController;
 use App\Http\Controllers\Blitzvideo\UserController;
@@ -36,6 +37,10 @@ Route::middleware(['auth'])->group(function () {
         Route::get('/{id}/formulario', [UserController::class, 'MostrarFormularioActualizarUsuario'])->name('editar.formulario');
         Route::put('/{id}', [UserController::class, 'ActualizarUsuario'])->name('editar');
         Route::delete('/{id}', [UserController::class, 'EliminarUsuario'])->name('eliminar');
+    });
+
+    Route::prefix('transaccion')->name('transaccion.')->group(function () {
+        Route::get('/', [TransaccionController::class, 'filtrar'])->name('filtrar');
     });
 
     Route::prefix('canal')->name('canal.')->group(function () {

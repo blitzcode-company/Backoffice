@@ -32,6 +32,7 @@
                         <div class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarMenu">
                             <a href="{{ route('inicio') }}" class="dropdown-item">Dashboard</a>
                             <a href="{{ route('usuario.listar') }}" class="dropdown-item">Usuarios</a>
+                            <a href="{{ route('transaccion.filtrar') }}" class="dropdown-item">Transacciones</a>
                             <a href="{{ route('canal.listar') }}" class="dropdown-item">Canales</a>
                             
                             <div class="dropdown-submenu">
@@ -76,6 +77,7 @@
             <div class="list-group list-group-flush">
                 <a href="{{ route('inicio') }}" class="list-group-item list-group-item-action">Dashboard</a>
                 <a href="{{ route('usuario.listar') }}" class="list-group-item list-group-item-action">Usuarios</a>
+                <a href="{{ route('transaccion.filtrar') }}" class="list-group-item list-group-item-action">Transacciones</a>
                 <a href="{{ route('canal.listar') }}" class="list-group-item list-group-item-action">Canales</a>
 
                 <div class="accordion accordion-custom" id="videosAccordion">
