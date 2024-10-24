@@ -1,7 +1,14 @@
 @extends('layouts.app')
 
 @section('content')
-<div class="titulo">Actualziar información del Video</div>
+    <div class="titulo">
+        <div class="navigation-buttons">
+            <a href="javascript:history.back()" class="btn btn-secondary btn-sm">
+                <i class="fas fa-arrow-left"></i>
+            </a>
+        </div>
+        <span>Actualziar información del Video</span>
+    </div>
     <div class="container-card-video">
         <div class="row justify-content-center">
             <div class="col-lg-8">
@@ -10,7 +17,8 @@
                         Editar Video - <span class="text-muted">Haz clic sobre la miniatura para cambiarla</span>
                     </div>
                     <div class="card-body">
-                        <form action="{{ route('video.editar', ['id' => $video->id]) }}" method="POST" enctype="multipart/form-data">
+                        <form action="{{ route('video.editar', ['id' => $video->id]) }}" method="POST"
+                            enctype="multipart/form-data">
                             @csrf
                             @method('PUT')
 
@@ -18,15 +26,20 @@
                                 <div class="col-md-6">
                                     <div class="form-group">
                                         <label for="miniatura">Miniatura del Video</label>
-                                        <label for="miniatura" class="video-thumbnail-large text-center mb-3" style="cursor: pointer;">
-                                            <img id="previewMiniatura" src="{{ $video->miniatura ? asset($video->miniatura) : asset('img/video-default.png') }}" alt="Miniatura del video">
-                                            <input type="file" name="miniatura" id="miniatura" class="form-control-file d-none" onchange="previewImage(this)">
+                                        <label for="miniatura" class="video-thumbnail-large text-center mb-3"
+                                            style="cursor: pointer;">
+                                            <img id="previewMiniatura"
+                                                src="{{ $video->miniatura ? asset($video->miniatura) : asset('img/video-default.png') }}"
+                                                alt="Miniatura del video">
+                                            <input type="file" name="miniatura" id="miniatura"
+                                                class="form-control-file d-none" onchange="previewImage(this)">
                                         </label>
                                     </div>
 
                                     <div class="form-group">
                                         <label for="titulo">Título del Video</label>
-                                        <input type="text" name="titulo" id="titulo" class="form-control custom-input" required value="{{ $video->titulo }}">
+                                        <input type="text" name="titulo" id="titulo"
+                                            class="form-control custom-input" required value="{{ $video->titulo }}">
                                     </div>
 
                                     <div class="form-group">
@@ -46,9 +59,12 @@
                                         <div class="etiquetas-list">
                                             @foreach ($etiquetas as $etiqueta)
                                                 <div class="form-check">
-                                                    <input class="form-check-input" type="checkbox" id="etiqueta_{{ $etiqueta->id }}" name="etiquetas[]" value="{{ $etiqueta->id }}"
-                                                        @if(in_array($etiqueta->id, $video->etiquetas->pluck('id')->toArray())) checked @endif>
-                                                    <label class="form-check-label" for="etiqueta_{{ $etiqueta->id }}">{{ $etiqueta->nombre }}</label>
+                                                    <input class="form-check-input" type="checkbox"
+                                                        id="etiqueta_{{ $etiqueta->id }}" name="etiquetas[]"
+                                                        value="{{ $etiqueta->id }}"
+                                                        @if (in_array($etiqueta->id, $video->etiquetas->pluck('id')->toArray())) checked @endif>
+                                                    <label class="form-check-label"
+                                                        for="etiqueta_{{ $etiqueta->id }}">{{ $etiqueta->nombre }}</label>
                                                 </div>
                                             @endforeach
                                         </div>

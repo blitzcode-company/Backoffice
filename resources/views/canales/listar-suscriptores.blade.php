@@ -1,22 +1,20 @@
 @extends('layouts.app')
 
 @section('content')
-    <div class="titulo">Suscriptores del Canal: {{ $canal->nombre }}</div>
-
-
-
-    <div class="search-container">
+    <div class="titulo">
+        <div class="navigation-buttons">
+            <a href="javascript:history.back()" class="btn btn-secondary btn-sm">
+                <i class="fas fa-arrow-left"></i>
+            </a>
+        </div>
+        <span>Suscriptores del Canal: {{ $canal->nombre }}</span>
+    </div>
+    <div class="search-container mb-5">
         <form action="{{ route('suscriptores.nombre', ['id' => $canal->id]) }}" method="GET">
             <input type="search" name="nombre" placeholder="Buscar suscriptor por nombre" class="search-bar"
                 value="{{ request('nombre') }}">
             <button type="submit" class="btn-info"><i class="fas fa-search"></i></button>
         </form>
-    </div>
-
-    <div class="text-center mb-3">
-        <a href="{{ route('canal.detalle', ['id' => $canal->id]) }}" class="btn btn-primary">
-            <i class="fas fa-arrow-left"></i> Ir al Canal
-        </a>
     </div>
 
     @if (session('success'))
@@ -56,8 +54,8 @@
                                         data-bs-target="#modalDesuscribir{{ $suscriptor->id }}">
                                         <i class="fas fa-user-times"></i> Desuscribir
                                     </button>
-                                    <a href="{{ route('usuario.detalle', ['id' => $suscriptor->id]) }}" class="button-info mx-0"
-                                        title="Ver Usuario">
+                                    <a href="{{ route('usuario.detalle', ['id' => $suscriptor->id]) }}"
+                                        class="button-info mx-0" title="Ver Usuario">
                                         <i class="fas fa-info-circle"></i>
                                     </a>
                                     <button class="btn btn-secondary btn-sm copy-btn" data-copy="{{ $suscriptor->id }}">

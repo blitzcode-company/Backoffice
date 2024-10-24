@@ -1,0 +1,66 @@
+@use '../partials/variables' as v;
+
+.publicidad-container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 20px;
+}
+
+.alerta-exito {
+    background-color: #d4edda;
+    color: #155724;
+    padding: 15px;
+    border: 1px solid #c3e6cb;
+    border-radius: 5px;
+    margin-bottom: 20px;
+}
+
+.publicidad-lista {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+    gap: 20px;
+}
+
+.publicidad-item {
+    background-color: #fff;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    transition: box-shadow 0.3s;
+}
+
+.publicidad-item:hover {
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+}
+
+.publicidad-datos {
+    margin-bottom: 15px;
+}
+
+.publicidad-empresa {
+    font-size: 1.5rem;
+    color: #0077cc;
+    margin-bottom: 10px;
+}
+
+.publicidad-prioridad {
+    font-size: 1.1rem;
+    color: #555;
+}
+
+.video-datos {
+    background-color: #f1f1f1;
+    padding: 10px;
+    border-radius: 5px;
+}
+
+.video-titulo {
+    font-size: 1.2rem;
+    color: #333;
+    margin-bottom: 5px;
+}
+
+.video-datos p {
+    font-size: 1rem;
+    color: #666;
+}

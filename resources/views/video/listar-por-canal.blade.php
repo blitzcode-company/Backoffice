@@ -1,7 +1,14 @@
 @extends('layouts.app')
 
 @section('content')
-    <div class="titulo">Videos de Blitzvideo</div>
+<div class="titulo">
+    <div class="navigation-buttons">
+        <a href="javascript:history.back()" class="btn btn-secondary btn-sm">
+            <i class="fas fa-arrow-left"></i>
+        </a>
+    </div>
+    <span>Videos de "{{ $videos[0]->canal->nombre }}"</span>
+</div>
     <div class="search-container">
         <form action="{{ route('video.canal', ['id' => $canalId ?? '']) }}" method="GET">
             <input type="search" name="titulo" placeholder="Buscar video por título" class="search-bar" required>

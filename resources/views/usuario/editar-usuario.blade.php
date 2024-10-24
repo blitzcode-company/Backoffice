@@ -1,9 +1,16 @@
 @extends('layouts.app')
 
 @section('content')
-    <div class="titulo">Actualizar cuenta de Usuario</div>
+    <div class="titulo">
+        <div class="navigation-buttons">
+            <a href="javascript:history.back()" class="btn btn-secondary btn-sm">
+                <i class="fas fa-arrow-left"></i>
+            </a>
+        </div>
+        <span>Actualizar cuenta de Usuario</span>
+    </div>
     <div class="container container-card">
-        <div class="row justify-content-center">
+        <div class="justify-content-center">
             <div class="col-md-10">
                 <div class="card">
                     <div class="card-header">

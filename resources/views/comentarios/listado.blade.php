@@ -1,13 +1,16 @@
 @extends('layouts.app')
 
 @section('content')
-<div class="titulo">Comentarios del Video</div>
-    <div class="comments-page-container mx-auto">
-        <div class="navigation-buttons mb-4">
-            <a href="{{ route('video.detalle', ['id' => $video->id]) }}" class="btn btn-secondary btn-sm">
-                <i class="fas fa-arrow-left"></i> Ir a detalles
+    <div class="titulo">
+        <div class="navigation-buttons">
+            <a href="javascript:history.back()" class="btn btn-secondary btn-sm">
+                <i class="fas fa-arrow-left"></i>
             </a>
         </div>
+        <span>Comentarios del Video</span>
+    </div>
+    <div class="comments-page-container mx-auto">
+        <h3 class="text-center"><strong>{{ $video->titulo }}</strong>(#{{ $video->id }})</h3>
         <div class="video-player-container">
             <video controls autoplay class="video-player" style="max-width: 800px;">
                 <source src="{{ $video->link }}" type="video/mp4">
@@ -16,7 +19,7 @@
         </div>
 
         <header class="comments-header">
-            <h3 class="text-center">Comentarios del Video: <strong>{{ $video->titulo }}</strong>(#{{ $video->id }})</h3>
+            <h3 class="text-center">Comentarios del Video:</h3>
         </header>
 
         @if ($errors->any())
@@ -85,12 +88,11 @@
                                 @endif
 
                                 <button class="btn {{ $comentario->bloqueado ? 'btn-secondary' : 'btn-warning' }} btn-sm"
-                                    data-bs-toggle="modal" 
-                                    data-bs-target="#confirmBlockModal{{ $comentario->id }}"
+                                    data-bs-toggle="modal" data-bs-target="#confirmBlockModal{{ $comentario->id }}"
                                     data-id="{{ $comentario->id }}">
                                     <i class="fas fa-ban"></i> {{ $comentario->bloqueado ? 'Desbloquear' : 'Bloquear' }}
                                 </button>
-                                
+
                             </div>
 
                             @if ($comentario->respuestas->isNotEmpty())

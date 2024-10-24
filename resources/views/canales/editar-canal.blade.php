@@ -1,10 +1,16 @@
 @extends('layouts.app')
 
 @section('content')
-<div class="titulo">Editar infromación del Canal</div>
+    <div class="titulo">
+        <div class="navigation-buttons">
+            <a href="javascript:history.back()" class="btn btn-secondary btn-sm">
+                <i class="fas fa-arrow-left"></i>
+            </a>
+        </div>
+        <span>Editar infromación del Canal</span>
+    </div>
     <div class="container container-card">
-    
-        <div class="row justify-content-center">
+        <div class="justify-content-center">
             <div class="card">
                 <div class="card-header">
                     Editar Canal - <span class="text-muted">Para cambiar la foto de portada, haz clic sobre la imagen.</span>
@@ -19,7 +25,8 @@
                                 <img id="previewPortada"
                                     src="{{ $canal->portada ? asset($canal->portada) : asset('img/cover-default.png') }}"
                                     class="img-fluid">
-                                <img src="{{ asset('img/camara.png') }}" alt="Camara" class="position-absolute camara-icon">
+                                <img src="{{ asset('img/camara.png') }}" alt="Camara"
+                                    class="position-absolute camara-icon">
                             </div>
                             <input type="file" name="portada" id="portada" class="form-control-file d-none"
                                 onchange="previewImage(this)">

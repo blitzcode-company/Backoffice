@@ -1,14 +1,21 @@
 @extends('layouts.app')
 
 @section('content')
-    <div class="titulo">Crear Nueva Playlist</div>
+    <div class="titulo">
+        <div class="navigation-buttons">
+            <a href="javascript:history.back()" class="btn btn-secondary btn-sm">
+                <i class="fas fa-arrow-left"></i>
+            </a>
+        </div>
+        <span>Crear Nueva Playlist</span>
+    </div>
     <div class="playlist-container mt-4">
         <div class="playlist-form-container">
             <form id="playlistForm" method="POST" action="{{ route('playlists.crear') }}">
                 @csrf
                 <div class="mb-3">
-                    <input type="text" class="playlist-input" id="nombre" name="nombre" placeholder="Ingresa el nombre"
-                        required>
+                    <input type="text" class="playlist-input" id="nombre" name="nombre"
+                        placeholder="Ingresa el nombre" required>
                 </div>
 
                 <div class="mb-3">

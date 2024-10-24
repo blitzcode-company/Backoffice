@@ -1,13 +1,15 @@
 @extends('layouts.app')
 
 @section('content')
-    <div class="titulo">Información del Video</div>
-    <div class="video-page-container">
-        <div class="navigation-buttons mb-4">
-            <a href="{{ route('video.listar') }}" class="btn btn-secondary btn-sm">
-                <i class="fas fa-arrow-left"></i> Ir a videos
+    <div class="titulo">
+        <div class="navigation-buttons">
+            <a href="javascript:history.back()" class="btn btn-secondary btn-sm">
+                <i class="fas fa-arrow-left"></i>
             </a>
         </div>
+        <span>Información del Video</span>
+    </div>
+    <div class="video-page-container">
         <header class="video-title">
             <h1>{{ $video->titulo }}</h1>
         </header>
@@ -39,11 +41,11 @@
                         href="{{ route('canal.detalle', ['id' => $video->canal->id]) }}">
                         {{ $video->canal->nombre }} <i class="fas fa-link"></i>
                     </a></p>
-                <p class="m-0"><strong>Duración:</strong> 
+                <p class="m-0"><strong>Duración:</strong>
                     {{ floor($video->duracion / 60) }}:{{ str_pad($video->duracion % 60, 2, '0', STR_PAD_LEFT) }}
                 </p>
                 <p class="m-0"><strong>Visitas :</strong> {{ $video->visitas_count }}</p>
-           
+
                 <div class="video-tags">
                     @if ($video->etiquetas->isEmpty())
                         <p class="m-0"><strong><i class="fas fa-tags"></i>Etiquetas:</strong> No tiene etiquetas.</p>

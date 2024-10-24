@@ -1,7 +1,14 @@
 @extends('layouts.app')
 
 @section('content')
-<div class="titulo">Subir nuevo del Video</div>
+    <div class="titulo">
+        <div class="navigation-buttons">
+            <a href="javascript:history.back()" class="btn btn-secondary btn-sm">
+                <i class="fas fa-arrow-left"></i>
+            </a>
+        </div>
+        <span>Subir nuevo del Video</span>
+    </div>
     <div class="container-card-video">
         <div class="row justify-content-center">
             <div class="col-lg-8">
@@ -17,30 +24,38 @@
                                 <div class="col-md-6">
                                     <div class="form-group">
                                         <label for="miniatura">Miniatura del Video</label>
-                                        <label for="miniatura" class="video-thumbnail-large text-center mb-3" style="cursor: pointer;">
-                                            <img id="previewMiniatura" src="{{ asset('img/video-default.png') }}" alt="Miniatura del video">
-                                            <input type="file" name="miniatura" id="miniatura" class="form-control-file d-none" onchange="previewImage(this)">
+                                        <label for="miniatura" class="video-thumbnail-large text-center mb-3"
+                                            style="cursor: pointer;">
+                                            <img id="previewMiniatura" src="{{ asset('img/video-default.png') }}"
+                                                alt="Miniatura del video">
+                                            <input type="file" name="miniatura" id="miniatura"
+                                                class="form-control-file d-none" onchange="previewImage(this)">
                                         </label>
                                     </div>
 
                                     <div class="form-group">
                                         <label for="canal_id">ID del Canal</label>
-                                        <input type="text" name="canal_id" id="canal_id" class="form-control custom-input" required placeholder="Ingrese ID del canal">
+                                        <input type="text" name="canal_id" id="canal_id"
+                                            class="form-control custom-input" required placeholder="Ingrese ID del canal">
                                     </div>
 
                                     <div class="form-group">
                                         <label for="titulo">Título del Video</label>
-                                        <input type="text" name="titulo" id="titulo" class="form-control custom-input" required placeholder="Ingrese título del video">
+                                        <input type="text" name="titulo" id="titulo"
+                                            class="form-control custom-input" required
+                                            placeholder="Ingrese título del video">
                                     </div>
 
                                     <div class="form-group">
                                         <label for="descripcion">Descripción del Video</label>
-                                        <textarea name="descripcion" id="descripcion" class="form-control custom-textarea" rows="6" required placeholder="Ingrese descripción del video"></textarea>
+                                        <textarea name="descripcion" id="descripcion" class="form-control custom-textarea" rows="6" required
+                                            placeholder="Ingrese descripción del video"></textarea>
                                     </div>
 
                                     <div class="form-group">
                                         <label for="video">Video</label>
-                                        <input type="file" name="video" id="video" class="form-control-file" required>
+                                        <input type="file" name="video" id="video" class="form-control-file"
+                                            required>
                                     </div>
                                 </div>
 
@@ -50,8 +65,11 @@
                                         <div class="etiquetas-list">
                                             @foreach ($etiquetas as $etiqueta)
                                                 <div class="form-check">
-                                                    <input class="form-check-input" type="checkbox" id="etiqueta_{{ $etiqueta->id }}" name="etiquetas[]" value="{{ $etiqueta->id }}">
-                                                    <label class="form-check-label" for="etiqueta_{{ $etiqueta->id }}">{{ $etiqueta->nombre }}</label>
+                                                    <input class="form-check-input" type="checkbox"
+                                                        id="etiqueta_{{ $etiqueta->id }}" name="etiquetas[]"
+                                                        value="{{ $etiqueta->id }}">
+                                                    <label class="form-check-label"
+                                                        for="etiqueta_{{ $etiqueta->id }}">{{ $etiqueta->nombre }}</label>
                                                 </div>
                                             @endforeach
                                         </div>

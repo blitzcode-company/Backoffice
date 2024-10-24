@@ -1,12 +1,15 @@
 @extends('layouts.app')
 
 @section('content')
-    <div class="titulo mb-4">Responder al comentario #{{ $comentario->id }}</div>
-    <div class="navigation-buttons mb-1">
-        <button onclick="window.history.back()" class="btn btn-secondary btn-sm">
-            <i class="fas fa-arrow-left"></i> Anterior
-        </button>
+    <div class="titulo mb-4">
+        <div class="navigation-buttons">
+            <a href="javascript:history.back()" class="btn btn-secondary btn-sm">
+                <i class="fas fa-arrow-left"></i>
+            </a>
+        </div>
+        <span>Responder al comentario #{{ $comentario->id }}</span>
     </div>
+
     <div class="comments-page-container mx-auto">
         @if (!$comentario)
             <div class="alert alert-danger">

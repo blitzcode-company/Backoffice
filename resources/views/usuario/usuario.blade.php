@@ -1,7 +1,14 @@
 @extends('layouts.app')
 
 @section('content')
-    <div class="titulo">Información de Usuario</div>
+    <div class="titulo">
+        <div class="navigation-buttons">
+            <a href="javascript:history.back()" class="btn btn-secondary btn-sm">
+                <i class="fas fa-arrow-left"></i>
+            </a>
+        </div>
+        <span>Información de Usuario</span>
+    </div>
     <div class="user-details-container card">
         <div class="user-photo-large">
             <img src="{{ $user->foto ? asset($user->foto) : asset('img/default-user.png') }}" alt="{{ $user->name }}">

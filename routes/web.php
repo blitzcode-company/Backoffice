@@ -6,9 +6,10 @@ use App\Http\Controllers\Blitzvideo\CanalController;
 use App\Http\Controllers\Blitzvideo\ComentarioController;
 use App\Http\Controllers\Blitzvideo\EtiquetaController;
 use App\Http\Controllers\Blitzvideo\MailController;
-use App\Http\Controllers\Blitzvideo\TransaccionController;
 use App\Http\Controllers\Blitzvideo\PlaylistController;
+use App\Http\Controllers\Blitzvideo\PublicidadController;
 use App\Http\Controllers\Blitzvideo\SuscriptoresController;
+use App\Http\Controllers\Blitzvideo\TransaccionController;
 use App\Http\Controllers\Blitzvideo\UserController;
 use App\Http\Controllers\Blitzvideo\VideoController;
 use App\Http\Controllers\Chart\UserChartController;
@@ -26,8 +27,8 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/anuncios', function () {return view('anuncios');})->name('anuncios');
     Route::get('/perfil', function () {return view('perfil');})->name('perfil');
     Route::get('/ajustes', function () {return view('ajustes');})->name('ajustes');
-
     Route::post('/correo', [MailController::class, 'enviarCorreoPorFormulario'])->name('correo.enviar');
+
     Route::prefix('usuario')->name('usuario.')->group(function () {
         Route::get('/', [UserController::class, 'ListarTodosLosUsuarios'])->name('listar');
         Route::get('/buscar', [UserController::class, 'ListarUsuariosPorNombre'])->name('nombre');
@@ -74,7 +75,13 @@ Route::middleware(['auth'])->group(function () {
         Route::delete('/{id}', [VideoController::class, 'BajaVideo'])->name('eliminar');
         Route::get('/canal/{id}', [VideoController::class, 'ListarVideosPorCanal'])->name('canal');
     });
-
+    Route::prefix('publicidad')->name('publicidad.')->group(function () {
+        Route::get('/', [PublicidadController::class, 'listarPublicidades'])->name('listar');
+        Route::get('/formulario', [PublicidadController::class, 'formulario'])->name('crear.formulario');
+        Route::get('/{id}/formulario', [PublicidadController::class, 'formularioEditar'])->name('editar.formulario');
+        Route::post('/', [PublicidadController::class, 'crearPublicidad'])->name('crear');
+        Route::put('/{id}', [PublicidadController::class, 'modificarPublicidad'])->name('editar');
+    });
     Route::prefix('playlists')->name('playlists.')->group(function () {
         Route::get('/buscar/video', [PlaylistController::class, 'buscar'])->name('buscar');
         Route::get('/formulario', [PlaylistController::class, 'formulario'])->name('crear.formulario');

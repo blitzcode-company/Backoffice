@@ -1,8 +1,15 @@
 @extends('layouts.app')
 
 @section('content')
-    <div class="titulo">{{ $playlistData['nombre'] }}</div>
-
+    <div class="titulo">
+        <div class="navigation-buttons">
+            <a href="javascript:history.back()" class="btn btn-secondary btn-sm">
+                <i class="fas fa-arrow-left"></i>
+            </a>
+        </div>
+        <span>{{ $playlistData['nombre'] }}</span>
+    </div>
+    
     <div class="playlist-info mb-5 ml-4">
         <i class="fas fa-user text-muted"></i>
         <span class="text-muted">Propietario:</span>

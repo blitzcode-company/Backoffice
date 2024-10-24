@@ -2,7 +2,7 @@
 
 @section('content')
     <div class="titulo">Registro de Pagos</div>
-    <div class="">
+    <div class="container-transaccion">
         <form action="{{ route('transaccion.filtrar') }}" method="GET" class="mb-4">
             <div class="row">
                 <div class="col-md-4">
@@ -33,37 +33,40 @@
                 </div>
             </div>
         </form>
+        
         @if ($transaccion->isEmpty())
             <p>No se encontraron planes.</p>
         @else
-            <table class="table table-striped">
-                <thead>
-                    <tr>
-                        <th>ID</th>
-                        <th>Nombre</th>
-                        <th>Método de Pago</th>
-                        <th>Fecha de Inicio</th>
-                        <th>Fecha de Cancelación</th>
-                        <th>ID de Usuario</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    @foreach ($transaccion as $t)
+            <div class="table-responsive">
+                <table class="table table-striped">
+                    <thead>
                         <tr>
-                            <td>{{ $t->id }}</td>
-                            <td>{{ $t->plan }}</td>
-                            <td>{{ $t->metodo_de_pago }}</td>
-                            <td>{{ $t->fecha_inicio }}</td>
-                            <td>{{ $t->fecha_cancelacion ?? 'Activo' }}</td>
-                            <td>
-                                <a href="{{ route('usuario.detalle', $t->user_id) }}">
-                                    {{ $t->user_id }}
-                                </a>
-                            </td>
+                            <th>ID</th>
+                            <th>Nombre</th>
+                            <th>Método de Pago</th>
+                            <th>Fecha de Inicio</th>
+                            <th>Fecha de Cancelación</th>
+                            <th>ID de Usuario</th>
                         </tr>
-                    @endforeach
-                </tbody>
-            </table>
+                    </thead>
+                    <tbody>
+                        @foreach ($transaccion as $t)
+                            <tr>
+                                <td>{{ $t->id }}</td>
+                                <td>{{ $t->plan }}</td>
+                                <td>{{ $t->metodo_de_pago }}</td>
+                                <td>{{ $t->fecha_inicio }}</td>
+                                <td>{{ $t->fecha_cancelacion ?? 'Activo' }}</td>
+                                <td>
+                                    <a href="{{ route('usuario.detalle', $t->user_id) }}">
+                                        {{ $t->user_id }}
+                                    </a>
+                                </td>
+                            </tr>
+                        @endforeach
+                    </tbody>
+                </table>
+            </div>
         @endif
     </div>
 @endsection

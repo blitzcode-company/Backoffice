@@ -1,13 +1,21 @@
 @extends('layouts.app')
 
 @section('content')
-<div class="titulo">Registro de Usuario</div>
+    <div class="titulo">
+        <div class="navigation-buttons">
+            <a href="javascript:history.back()" class="btn btn-secondary btn-sm">
+                <i class="fas fa-arrow-left"></i>
+            </a>
+        </div>
+        <span>Registro de Usuario</span>
+    </div>
     <div class="container container-card">
         <div class="row justify-content-center">
             <div class="col-md-8">
                 <div class="card">
                     <div class="card-header">
-                        Nuevo Usuario - <span class="text-muted">Para cambiar la foto de perfil, haz clic sobre la imagen.</span>
+                        Nuevo Usuario - <span class="text-muted">Para cambiar la foto de perfil, haz clic sobre la
+                            imagen.</span>
                     </div>
 
                     <div class="card-body">
@@ -19,8 +27,7 @@
                                 <div class="mx-auto position-relative">
                                     <label for="foto" style="cursor: pointer;">
                                         <div class="user-photo text-center mb-3">
-                                            <img id="previewFoto"
-                                                src="{{ asset('img/default-user.png') }}"
+                                            <img id="previewFoto" src="{{ asset('img/default-user.png') }}"
                                                 class="img-thumbnail" style="width: 200px; height: 200px;">
                                             <span class="edit-icon">
                                                 <i class="fas fa-camera"></i>
@@ -65,8 +72,8 @@
                                 <div class="col-md-6">
                                     <div class="form-group">
                                         <label for="fecha_de_nacimiento">Fecha de Nacimiento</label>
-                                        <input type="date" name="fecha_de_nacimiento" id="fecha_de_nacimiento" class="form-control"
-                                            value="{{ old('fecha_de_nacimiento') }}">
+                                        <input type="date" name="fecha_de_nacimiento" id="fecha_de_nacimiento"
+                                            class="form-control" value="{{ old('fecha_de_nacimiento') }}">
                                     </div>
                                 </div>
 

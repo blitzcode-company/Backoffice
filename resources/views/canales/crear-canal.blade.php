@@ -1,9 +1,17 @@
 @extends('layouts.app')
 
 @section('content')
-<div class="titulo">Crear nuevo Canal</div>
+    <div class="titulo">
+        <div class="navigation-buttons">
+            <a href="javascript:history.back()" class="btn btn-secondary btn-sm">
+                <i class="fas fa-arrow-left"></i>
+            </a>
+        </div>
+        <span>Crear nuevo Canal</span>
+    </div>
+
     <div class="container container-card">
-        <div class="row justify-content-center">
+        <div class="justify-content-center">
             <div class="card">
                 <div class="card-header">
                     Nuevo Canal - <span class="text-muted">Para cambiar la foto de portada, haz clic sobre la imagen.</span>

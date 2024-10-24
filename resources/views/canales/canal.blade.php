@@ -1,13 +1,16 @@
 @extends('layouts.app')
 
 @section('content')
-    <div class="titulo">Información del Canal</div>
+    <div class="titulo">
+        <div class="navigation-buttons">
+            <a href="javascript:history.back()" class="btn btn-secondary btn-sm">
+                <i class="fas fa-arrow-left"></i>
+            </a>
+        </div>
+        <span>Información del Canal</span>
+    </div>
     <div class="container container-card">
         <div class="navigation-buttons mb-4">
-            <a href="{{ route('canal.listar') }}" class="btn btn-secondary btn-sm">
-                <i class="fas fa-arrow-left"></i> Ir a canales
-            </a>
-
             <button class="btn btn-success btn-sm" data-bs-toggle="modal" data-bs-target="#suscribirModal">
                 <i class="fas fa-user-plus"></i> Suscribir
             </button>
