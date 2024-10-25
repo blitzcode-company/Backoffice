@@ -394,7 +394,7 @@ class VideoController extends Controller
         event(new ActividadRegistrada('Baja de video', $detalles));
     }
 
-    public function MostrarEtiquetasConConteoVideos()
+    public function MostrarEtiquetasConConteoVideos(Request $request)
     {
         $etiquetas = Etiqueta::on('blitzvideo')
             ->withCount(['videos' => function ($query) {
@@ -403,10 +403,11 @@ class VideoController extends Controller
                 });
             }])
             ->orderBy('id', 'desc')
-            ->get();
-
+            ->paginate(8);
+    
         return view('video.etiquetas-videos', compact('etiquetas'));
     }
+    
 
     public function listarVideosPorEtiqueta($id)
     {

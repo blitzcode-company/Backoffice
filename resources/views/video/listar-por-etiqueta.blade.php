@@ -16,26 +16,28 @@
     </div>
 
     <div class="video-list-container">
-        @if ($videos->isEmpty())
-            <p>No hay videos disponibles.</p>
-        @else
-            @foreach ($videos as $video)
-                <div class="card mb-3 video-card">
-                    <div class="video-thumbnail">
-                        <a href="{{ route('video.detalle', ['id' => $video->id]) }}">
-                            @if ($video->miniatura)
-                                <img src="{{ $video->miniatura }}" alt="Miniatura del video">
-                            @else
-                                <img src="{{ asset('img/video-default.png') }}" alt="Miniatura por defecto">
-                            @endif
-                        </a>
+        <div class="video-list">
+            @if ($videos->isEmpty())
+                <p>No hay videos disponibles.</p>
+            @else
+                @foreach ($videos as $video)
+                    <div class="card video-card">
+                        <div class="video-thumbnail">
+                            <a href="{{ route('video.detalle', ['id' => $video->id]) }}">
+                                @if ($video->miniatura)
+                                    <img src="{{ $video->miniatura }}" alt="Miniatura del video">
+                                @else
+                                    <img src="{{ asset('img/video-default.png') }}" alt="Miniatura por defecto">
+                                @endif
+                            </a>
+                        </div>
+                        <div class="video-info">
+                            <h2 class="video-title">{{ $video->titulo }}</h2>
+                        </div>
                     </div>
-                    <div class="video-info">
-                        <h2 class="video-title">{{ $video->titulo }}</h2>
-                    </div>
-                </div>
-            @endforeach
-        @endif
+                @endforeach
+            @endif
+        </div>
     </div>
     <div class="d-flex justify-content-center">
         {{ $videos->links('vendor.pagination.pagination') }}
