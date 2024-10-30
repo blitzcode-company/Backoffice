@@ -29,6 +29,21 @@
     transition: box-shadow 0.3s;
 }
 
+[data-theme='dark'] {
+    .publicidad-item {
+        border: 1px solid #2c323a !important;
+        background-color: v.$color-background-dark;
+        .video-datos {
+            background-color: v.$color-sidebar-hover-dark;
+        }
+
+        p {
+            color: v.$color-white;
+        }
+    }
+
+}
+
 .publicidad-item:hover {
     box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
 }

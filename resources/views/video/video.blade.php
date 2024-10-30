@@ -10,9 +10,7 @@
         <span>Información del Video</span>
     </div>
     <div class="video-page-container">
-        <header class="video-title">
-            <h1>{{ $video->titulo }}</h1>
-        </header>
+      
         <div class="video-player-container">
             <video controls autoplay class="video-player">
                 <source src="{{ $video->link }}" type="video/mp4">
@@ -21,6 +19,9 @@
         </div>
 
         <div class="video-details-container">
+            <div class="video-title">
+                <h5>{{ $video->titulo }}</h5>
+            </div>
             <div class="uploader-info">
                 <div class="uploader-photo">
                     @if ($video->canal->user && $video->canal->user->foto)

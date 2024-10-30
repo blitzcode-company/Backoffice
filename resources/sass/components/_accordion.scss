@@ -50,3 +50,20 @@
 .accordion-button::after {
     display: none;
 }
+
+
+[data-theme='dark'] {
+    .accordion-button {
+        color: v.$color-white !important;
+    }
+    .accordion-button:not(.collapsed) {
+        background-color: transparent !important;
+        color: v.$color-white  !important;
+        outline: none !important;
+    }
+
+    .accordion-button-custom:hover {
+        background-color: v.$color-background-dark!important;
+        color: v.$color-white !important;
+    }
+}

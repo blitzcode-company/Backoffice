@@ -21,7 +21,7 @@
                             @csrf
 
                             <div class="row">
-                                <div class="col-md-6">
+                                <div class="col-md-8">
                                     <div class="form-group">
                                         <label for="miniatura">Miniatura del Video</label>
                                         <label for="miniatura" class="video-thumbnail-large text-center mb-3"
@@ -59,7 +59,7 @@
                                     </div>
                                 </div>
 
-                                <div class="col-md-6">
+                                <div class="col-md-4">
                                     <div class="form-group">
                                         <label for="etiquetas">Etiquetas</label>
                                         <div class="etiquetas-list">

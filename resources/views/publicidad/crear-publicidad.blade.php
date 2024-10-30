@@ -9,7 +9,7 @@
         </div>
         <span>Crear Publicidad</span>
     </div>
-    <div class="container container-card">
+    <div class="container-publicidad  container-card">
         <div class="row justify-content-center">
             <div class="col-md-8">
                 <div class="card">

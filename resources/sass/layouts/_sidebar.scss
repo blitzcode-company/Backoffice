@@ -29,3 +29,20 @@
     background-color: v.$color-primary-dark;
     color: #fff !important;
 }
+
+
+[data-theme='dark'] {
+    #sidebar-wrapper {
+        background-color: v.$color-background-dark !important;
+        border-right: 1px solid #2c323a; 
+    }
+    
+    .list-group-item-action {
+        background-color: v.$color-background-dark !important;
+        color: v.$color-white !important;
+    }
+
+    .list-group-item-action:hover {
+        background-color: v.$color-sidebar-hover-dark !important;   
+    }
+}

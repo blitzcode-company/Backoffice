@@ -149,7 +149,9 @@
                                         @include('modals.delete-response', ['comentario' => $comentario])
                                         @include('modals.restore-response', ['comentario' => $comentario])
                                         @include('modals.block-response', ['comentario' => $comentario])
+                                     
                                     @endforeach
+                                    <hr class="my-5">
                                 </ul>
                             @endif
                         </li>

@@ -37,7 +37,7 @@ class UserController extends Controller
             'name' => 'required|string',
             'email' => 'required|email|unique:users,email',
             'password' => 'required|min:6',
-            'foto' => 'image|mimes:jpeg,png,jpg,gif|max:2048',
+            'foto' => 'image|mimes:jpeg,png,jpg,gif,avif|max:2048',
             'fecha_de_nacimiento' => 'required|date',
         ]);
 
@@ -152,7 +152,7 @@ class UserController extends Controller
             'name' => 'sometimes|required|string',
             'email' => 'sometimes|required|email|unique:users,email,' . $id,
             'password' => 'nullable|min:6',
-            'foto' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
+            'foto' => 'nullable|image|mimes:jpeg,png,jpg,gif,avif|max:2048',
             'fecha_de_nacimiento' => 'nullable|date',
             'premium' => 'nullable|boolean',
         ];

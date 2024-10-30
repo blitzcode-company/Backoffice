@@ -6,6 +6,22 @@
     box-shadow: 0 0 10px v.$shadow-color;
 }
 
+[data-theme='dark'] {
+    .modal-content {
+        background-color: v.$color-background-dark;
+        border: none;
+
+        p {
+            color: v.$color-white;
+        }
+        .modal-header{
+            border-bottom: 1px solid v.$color-border-dark;
+        }
+    }
+
+}
+
+
 .modal-header {
     background-color: v.$color-primary-dark;
     border-bottom: 1px solid v.$color-border;

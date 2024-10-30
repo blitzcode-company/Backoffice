@@ -3,10 +3,25 @@
 .comments-page-container {
     width: 80%;
     max-width: 1200px;
-
     padding: 20px;
-    background-color: #f9f9f9;
     box-sizing: border-box;
+
+    .list-group-item {
+        border: none;
+    }
+
+    hr {
+        width: 100%;
+        margin: auto;
+        border: none;
+        height: 2px;
+        background: repeating-linear-gradient(to right,
+                rgba(0, 0, 0, 0.5),
+                rgba(0, 0, 0, 0.5) 4px,
+                transparent 4px,
+                transparent 8px);
+    }
+
 }
 
 .comments-page-container form {
@@ -97,6 +112,50 @@
 }
 
 .custom-edit-btn:hover {
-    background-color:  #5a2a91 !important;
+    background-color: #5a2a91 !important;
     border: 0 !important;
+}
+
+[data-theme='dark'] {
+    .comments-list {
+        border: 1px solid #2c323a !important;
+
+        .list-group-item {
+            color: v.$color-white;
+            background-color: v.$color-background-dark !important;
+
+            .comment-box {
+                background-color: v.$color-sidebar-hover-dark !important;
+            }
+
+            hr {
+                width: 100%;
+                margin: auto;
+                border: none;
+                height: 2px;
+                background: repeating-linear-gradient(to right,
+                        rgb(170, 170, 170),
+                        rgb(170, 170, 170) 4px,
+                        transparent 4px,
+                        transparent 8px);
+            }
+        }
+
+        .respuesta-box {
+            border-left: 1px solid rgba(170, 170, 170, 0.678) !important;
+        }
+    }
+
+    .comments-page-container {
+        border: 1px solid #2c323a !important;
+        .list-group-item {
+            color: v.$color-white;
+            background-color: v.$color-background-dark !important;
+
+            .comment-box {
+                background-color: v.$color-sidebar-hover-dark !important;
+            }
+        }
+
+    }
 }

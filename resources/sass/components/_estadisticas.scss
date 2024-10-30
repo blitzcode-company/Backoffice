@@ -23,6 +23,12 @@
     padding: 20px;
 }
 
+[data-theme='dark'] {
+    .stats-box {
+        background-color: v.$color-sidebar-hover-dark;
+    }
+}
+
 .stats-title {
     font-size: 20px;
     font-weight: bold;
@@ -49,11 +55,3 @@
 .stats-list a:hover {
     color: v.$color-primary-light;
 }
-
-
-
-
-
-
-
-

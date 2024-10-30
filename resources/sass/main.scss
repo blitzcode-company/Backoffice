@@ -1,6 +1,7 @@
 @forward 'partials/variables';
 @forward 'global';
 
+@forward 'components/switch_toggle';
 @forward 'components/buttons';
 @forward 'components/alerts';
 @forward 'components/forms';
@@ -18,6 +19,7 @@
 @forward 'components/accordion';
 @forward 'components/playlist';
 @forward 'components/publicidad';
+@forward 'components/ajuste';
 
 @forward 'layouts/container';
 @forward 'layouts/footer';

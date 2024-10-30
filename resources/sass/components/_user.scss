@@ -24,7 +24,6 @@
     border-bottom: none;
 }
 
-
 .user-photo img {
     width: 100px;
     height: 100px;
@@ -34,7 +33,6 @@
     display: block;
     box-shadow: 0px 0px 10px v.$shadow-color;
     margin-right: 20px;
-
 }
 
 .user-info {
@@ -56,8 +54,6 @@
     margin-left: auto;
 }
 
-
-
 .user-details-container {
     max-width: 800px;
     margin: 0 auto;
@@ -78,11 +74,40 @@
 
 }
 
+[data-theme='dark'] {
+    .user-item:hover {
+        background-color: v.$color-sidebar-hover-dark;
+    }
+
+    .user-info h2 {
+        color: v.$color-white;
+    }
+
+    .user-info p {
+        color: v.$color-white;
+    }
+
+    .user-details-container {
+        background-color: v.$color-background-dark;
+    }
+
+    .modal-footer {
+        background-color: v.$color-sidebar-hover-dark;
+        border-top: 1px solid #2c323a;
+    }
+    .user-canal-info-box {
+        background-color: v.$color-sidebar-hover-dark;
+    }
+    
+}
+
 .user-info-box {
     text-align: left;
     margin: 0px 20px;
     color: v.$color-primary-dark;
 }
+
+
 
 
 .user-canal-info-box {
@@ -159,4 +184,4 @@
     border-right: 1px solid v.$color-border;
     margin-right: 2px;
     padding-right: 5px;
-}   
+}

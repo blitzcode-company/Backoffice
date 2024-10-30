@@ -13,10 +13,6 @@
     object-fit: cover;
 }
 
-.container-card {
-    margin-top: 20px;
-}
-
 .canal-photo-large {
     position: relative;
     width: 100%;
@@ -127,4 +123,23 @@
     width: 10% !important;
     height: auto;
     pointer-events: none;
+}
+
+[data-theme='dark'] {
+    .canal-list {
+        .card-body {
+            background-color: v.$color-sidebar-hover-dark;
+            color: v.$color-white;
+        }
+    }
+
+    .canal-info {
+        color: v.$color-white;
+    }
+
+    .card-body{
+        p{
+            color:v.$color-white;
+        }
+    }
 }

@@ -49,6 +49,7 @@
     display: flex;
     justify-content: space-between;
     align-items: center;
+    margin-right: 10px;
 }
 
 .etiqueta-text {
@@ -58,6 +59,7 @@
 .etiqueta-actions {
     display: flex;
     gap: 5px;
+    padding-right: 20px;
 }
 
 .form-group {
@@ -83,13 +85,15 @@
     padding: 20px;
     max-width: 1200px;
     min-height: 560px;
+    margin: auto;
 }
 
 .etiquetas-list-content {
- 
+
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
     gap: 20px;
+
     @media (min-width: 1200px) {
         grid-template-columns: repeat(4, 1fr);
     }
@@ -162,5 +166,58 @@
                 background-color: v.$color-primary-hover;
             }
         }
+    }
+}
+
+[data-theme='dark'] {
+    .etiqueta-card {
+        background-color: v.$color-sidebar-hover-dark;
+
+        .etiqueta-icon {
+            color: v.$color-primary-hover;
+        }
+
+        .etiqueta-content {
+            p {
+                color: #adadad;
+            }
+
+            .ver-videos-btn {
+                background-color: v.$color-primary-hover;
+                color: #ffffff;
+
+                &:hover {
+                    background-color: v.$color-primary-title;
+                }
+            }
+        }
+    }
+
+    .form-column-etiqueta,
+    .list-column {
+        background-color: v.$color-background-dark;
+        border: 1px solid #2c323a;
+        color: v.$color-white;
+    }
+}
+
+body {
+
+    * {
+        scrollbar-width: thin;
+        scrollbar-color: v.$color-btn-primary v.$color-border;
+    }
+
+
+}
+
+[data-theme='dark'] {
+    body {
+
+        * {
+            scrollbar-width: thin;
+            scrollbar-color: v.$color-white #3a424d;
+        }
+    
     }
 }

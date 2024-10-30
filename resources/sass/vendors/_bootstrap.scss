@@ -1,0 +1,89 @@
+@use '../partials/variables' as v;
+
+[data-theme='dark'] {
+    .card {
+        border: 1px solid #2c323a;
+        background-color: v.$color-background-dark;
+    }
+
+    .card-body {
+        background-color: v.$color-background-dark;
+    }
+
+    .card-header {
+        color: v.$color-white;
+        background-color: v.$color-sidebar-hover-dark;
+        border-bottom: 1px solid #2c323a;
+    }
+
+    .form-control {
+        background-color: v.$color-background-dark-search;
+        color: v.$color-white;
+        border: 1px solid #2c323a;
+        box-shadow: none;
+
+        &::placeholder {
+            color: lighten(v.$color-white, 30%);
+            opacity: 0.8;
+        }
+
+        &::-webkit-input-placeholder {
+            color: lighten(v.$color-white, 30%);
+            opacity: 0.8;
+        }
+
+        &:-ms-input-placeholder {
+            color: lighten(v.$color-white, 30%);
+            opacity: 0.8;
+        }
+
+        &::-ms-input-placeholder {
+            color: lighten(v.$color-white, 30%);
+            opacity: 0.8;
+        }
+
+        &:focus {
+            background-color: #2c323a;
+            color: v.$color-white;
+        }
+    }
+
+    select {
+        background-color: #2c323a;
+        color: v.$color-white;
+    }
+
+    textarea {
+        background-color: #2c323a;
+        color: v.$color-white;
+
+        &::placeholder {
+            color: lighten(v.$color-white, 30%);
+        }
+
+        &:focus {
+            border-color: v.$color-primary-light;
+            box-shadow: 0 0 5px v.$color-primary-light;
+        }
+    }
+
+    label {
+        color: v.$color-white;
+    }
+
+    .select-icon {
+        color: v.$color-white;
+    }
+
+    .form-control[type='date'] {
+        &::-webkit-calendar-picker-indicator {
+            filter: invert(1);
+        }
+
+        &::-moz-calendar-picker-indicator {
+            color: v.$color-white !important;
+        }
+    }
+}
+
+

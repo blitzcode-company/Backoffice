@@ -17,7 +17,7 @@
             </div>
         @else
             @if ($errors->any())
-                <div class="alert alert-danger">
+                <div class="alert alert-danger mt-4 text-center">
                     <ul>
                         @foreach ($errors->all() as $error)
                             <li>{{ $error }}</li>
@@ -27,7 +27,7 @@
             @endif
 
             @if (session('success'))
-                <div class="alert alert-success mt-4">
+                <div class="alert alert-success mt-4 text-center">
                     {{ session('success') }}
                 </div>
             @endif
@@ -81,6 +81,7 @@
                     @include('modals.delete-comment', ['comentario' => $comentario])
                     @include('modals.restore-comment', ['comentario' => $comentario])
                     @include('modals.block-comment', ['comentario' => $comentario])
+                    @include('modals.response-comment', ['comentario' => $comentario])
                     <br>
                     @if ($comentario->respuestas->isNotEmpty())
                         <ul class="list-group">

@@ -1,0 +1,49 @@
+@use '../partials/variables' as v;
+
+
+.container-ajuste {
+    width: 100%;
+    max-width: 1200px;
+    min-width: 400px;
+    margin: 20px auto;
+    padding: 20px;
+    background-color: v.$color-background;
+    text-align: center;
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+
+}
+
+#theme-label {
+    color: v.$color-black;
+}
+
+.titulos-ajustes {
+    font-size: medium;
+    font-weight: 700;
+    color: v.$color-primary-title;
+    width: 80%;
+    margin-left: 10px;
+    margin-bottom: 20px;
+    border-bottom: 1px solid v.$color-border;
+    display: flex;
+    align-items: left;
+    justify-content: flex-start;
+}
+
+[data-theme='dark'] {
+    .titulos-ajustes {
+        color: v.$color-white;
+        border-bottom: 1px solid v.$color-border;
+    }
+
+    #theme-label {
+        color: v.$color-white;
+    }
+
+    .container-ajuste {
+        background-color: v.$color-background-dark;
+    }
+}
