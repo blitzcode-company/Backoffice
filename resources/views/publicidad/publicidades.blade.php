@@ -55,10 +55,13 @@
                             <a href="{{ route('publicidad.editar.formulario', ['id' => $publicidad->id]) }}" class="button-info ml-2" title="Editar Publicidad">
                                 <i class="fas fa-edit"></i>
                             </a>
+                            <a href="#" class="button-info button-delete ml-2" data-bs-toggle="modal" data-bs-target="#confirmDeleteModal-{{ $publicidad->id }}" title="Eliminar Publicidad">
+                                <i class="fas fa-trash-alt"></i>
+                            </a>
                         </div>
-                        
                     </div>
                 </div>
+                @include('modals.delete-publicidad', ['publicidad' => $publicidad])
             @empty
                 <p>No hay publicidades disponibles.</p>
             @endforelse

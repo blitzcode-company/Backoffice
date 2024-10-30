@@ -1,10 +1,6 @@
 @extends('layouts.app')
 
 @section('content')
-    <div class="titulo">Bienvenido al Dashboard</div>
-    @if (Auth::check())
-        <p>Hola, {{ Auth::user()->name }}.</p>
-    @endif
     <div class="titulo">Estadísticas</div>
     <div class="stats-container">
         <div class="stats-section">

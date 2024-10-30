@@ -51,21 +51,17 @@ class PublicidadController extends Controller
         return redirect()->route('publicidad.editar.formulario', ['id' => $publicidad->id])
             ->with('success', 'Publicidad modificada exitosamente');
     }
-/*
-
-
-FALTA BORRA PUBLICIDAD
-
 
     public function eliminarPublicidad($id)
     {
         $publicidad = Publicidad::findOrFail($id);
+        $publicidad->video()->detach();
         $publicidad->delete();
 
-        return redirect()->route('publicidades.listar')
+        return redirect()->route('publicidad.listar')
             ->with('mensaje', 'Publicidad eliminada exitosamente');
     }
-*/
+
     public function listarPublicidades(Request $request)
     {
         $nombre = $request->input('nombre');
@@ -85,8 +81,4 @@ FALTA BORRA PUBLICIDAD
         return Publicidad::with('video')->get();
     }
 
-    public function contarVistasPublicidad($publicidadId, $userId)
-    {
-
-    }
 }

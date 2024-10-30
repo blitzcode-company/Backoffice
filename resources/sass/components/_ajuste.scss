@@ -33,6 +33,14 @@
     justify-content: flex-start;
 }
 
+.ajustes-seccion{
+    margin-bottom: 10px;
+    p{
+     margin: 0 10px;
+     text-align: left;   
+    }
+}
+
 [data-theme='dark'] {
     .titulos-ajustes {
         color: v.$color-white;

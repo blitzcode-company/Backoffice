@@ -115,6 +115,22 @@ h3.login-text {
         background-color: v.$color-background-dark;
         border: 1px solid #2c323a;
         color: v.$color-white;
+
+        .table {
+
+            td {
+                color: v.$color-white !important;
+            }
+        }
+
+        tbody,
+        td,
+        tfoot,
+        th,
+        thead,
+        tr {
+            border-style: none;
+        }
     }
 
     .container-admin {

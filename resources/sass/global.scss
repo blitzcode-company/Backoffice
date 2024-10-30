@@ -243,7 +243,7 @@ input[type="file"] {
     .dropdown-menu.dropdown-menu-end.show,
     .dropdown-menu {
         background-color: v.$color-primary-dark !important;
-        border-color: v.$color-border;
+        border-color: v.$color-background-dark;
     }
 
     .dropdown-item {

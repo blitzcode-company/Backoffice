@@ -81,6 +81,7 @@ Route::middleware(['auth'])->group(function () {
         Route::get('/{id}/formulario', [PublicidadController::class, 'formularioEditar'])->name('editar.formulario');
         Route::post('/', [PublicidadController::class, 'crearPublicidad'])->name('crear');
         Route::put('/{id}', [PublicidadController::class, 'modificarPublicidad'])->name('editar');
+        Route::delete('/{id}', [PublicidadController::class, 'eliminarPublicidad'])->name('eliminar');
     });
     Route::prefix('playlists')->name('playlists.')->group(function () {
         Route::get('/buscar/video', [PlaylistController::class, 'buscar'])->name('buscar');
