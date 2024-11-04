@@ -237,3 +237,34 @@ input:checked+.slider:before {
     margin-right: auto;
 }
 
+
+.playlist-container {
+
+    .video-title {
+        margin: 0;
+        background-color: transparent;
+    }
+
+    .card-header {
+        background-color: rgba(0, 0, 0, .03);
+    }
+}
+
+[data-theme='dark'] {
+    .playlist-container {
+
+        .video-title {
+            margin: 0;
+            background-color: transparent;
+        }
+
+        .card-header {
+            background-color: v.$color-sidebar-hover-dark !important;
+        }
+
+        .card-body {
+        
+            background-color: v.$color-background-dark !important;
+        }
+    }
+}

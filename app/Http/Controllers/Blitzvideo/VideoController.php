@@ -404,10 +404,9 @@ class VideoController extends Controller
             }])
             ->orderBy('id', 'desc')
             ->paginate(8);
-    
+
         return view('video.etiquetas-videos', compact('etiquetas'));
     }
-    
 
     public function listarVideosPorEtiqueta($id)
     {
@@ -468,6 +467,48 @@ class VideoController extends Controller
         return $query->get()->each(function ($video) {
             $video->promedio_puntuaciones = $video->puntuacion_promedio;
         });
+    }
+
+    public function bloquearVideo(Request $request, $id)
+    {
+        $video = $this->cambiarEstadoVideo($id, true);
+        $motivo = $request->input('motivo');
+        $this->registrarYEnviarCorreoDeBloqueo($video, 'Bloqueo de video', $motivo);
+
+        return redirect()->route('video.detalle', ['id' => $id])->with('success', 'El video ha sido bloqueado exitosamente.');
+    }
+
+    public function desbloquearVideo($id)
+    {
+        $video = $this->cambiarEstadoVideo($id, false);
+        $this->registrarActividadBloqueoDesbloqueo($video, 'Desbloqueo de video');
+
+        return redirect()->route('video.detalle', ['id' => $id])->with('success', 'El video ha sido desbloqueado exitosamente.');
+    }
+
+    private function cambiarEstadoVideo($id, $estado)
+    {
+        $video = Video::findOrFail($id);
+        $video->bloqueado = $estado;
+        $video->save();
+
+        return $video;
+    }
+
+    private function registrarYEnviarCorreoDeBloqueo($video, $tipoActividad, $motivo)
+    {
+        $this->registrarActividadBloqueoDesbloqueo($video, $tipoActividad);
+
+        $usuario = $video->canal->user;
+        $titulo_video = $video->titulo;
+        $mailController = new MailController();
+        $mailController->correoBloqueoDeVideo($usuario->email, $usuario->name, $titulo_video, $motivo);
+    }
+
+    private function registrarActividadBloqueoDesbloqueo($video, $tipoActividad)
+    {
+        $detalles = "ID video: $video->id; Título: $video->titulo";
+        event(new ActividadRegistrada($tipoActividad, $detalles));
     }
 
 }

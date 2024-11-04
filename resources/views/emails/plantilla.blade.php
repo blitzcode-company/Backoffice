@@ -42,6 +42,9 @@
 <body>
     <div class="container">
         <h1>{{ $asunto }}</h1>
+        <p align="center">
+            <img src="https://lh3.googleusercontent.com/pw/AP1GczPTSuQ4hwjzLK1tjehAK1OmEoDEGwZCA4SmwAvHBh3uwA6Yu-4Vlg9lgEX-kMaYEcZvU2Fj5qPeGjAAXMFdas1JZA7opLNi7KTF6c3JDjtY88LQ9AzuqqsqI-8AsLOixsQ9v0WPfwEsShRELzD8FSpI=w709-h804-s-no?authuser=0" width="200">
+        </p>
         <p>{!! nl2br(e($mensaje)) !!}</p>
         <div class="footer">
             <p>Este es un mensaje generado automáticamente. No respondas a este correo.</p>

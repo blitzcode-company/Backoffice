@@ -2,10 +2,13 @@
 
 namespace Tests\Feature;
 
+use App\Events\ActividadRegistrada;
 use App\Models\Blitzvideo\User;
 use App\Models\Blitzvideo\Video;
 use Illuminate\Http\Response;
 use Illuminate\Http\UploadedFile;
+use Illuminate\Support\Facades\Event;
+use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Storage;
 use Tests\TestCase;
 
@@ -110,32 +113,32 @@ class VideoControllerTest extends TestCase
     }
 
 /** @test */
-public function editar_video()
-{
-    $user = User::first();
-    $this->actingAs($user);
-    $video = Video::findOrFail(4);
-    Storage::fake('s3');
-    $formData = [
-        'titulo' => 'Nuevo Título',
-        'descripcion' => 'Nueva Descripción',
-        'etiquetas' => [2, 3],
-    ];
-    $response = $this->put(route('video.editar', ['id' => $video->id]), $formData);
-    $response->assertStatus(Response::HTTP_FOUND);
-    $video = $video->fresh();
-    $this->assertEquals('Nuevo Título', $video->titulo);
-    $this->assertEquals('Nueva Descripción', $video->descripcion);
-    $formData['video'] = UploadedFile::fake()->create('video_editado.mp4', 2048, 'video/mp4');
-    $formData['miniatura'] = UploadedFile::fake()->image('miniatura_editada.jpg', 1024, 1024);
-    $formData['video']->store('videos', 's3');
-    $formData['miniatura']->store('miniaturas', 's3');
-    $response = $this->put(route('video.editar', ['id' => $video->id]), $formData);
-    $response->assertStatus(Response::HTTP_FOUND);
-    $video = $video->fresh();
-    Storage::disk('s3')->assertExists('videos/' . $formData['video']->hashName());
-    Storage::disk('s3')->assertExists('miniaturas/' . $formData['miniatura']->hashName());
-}
+    public function editar_video()
+    {
+        $user = User::first();
+        $this->actingAs($user);
+        $video = Video::findOrFail(4);
+        Storage::fake('s3');
+        $formData = [
+            'titulo' => 'Nuevo Título',
+            'descripcion' => 'Nueva Descripción',
+            'etiquetas' => [2, 3],
+        ];
+        $response = $this->put(route('video.editar', ['id' => $video->id]), $formData);
+        $response->assertStatus(Response::HTTP_FOUND);
+        $video = $video->fresh();
+        $this->assertEquals('Nuevo Título', $video->titulo);
+        $this->assertEquals('Nueva Descripción', $video->descripcion);
+        $formData['video'] = UploadedFile::fake()->create('video_editado.mp4', 2048, 'video/mp4');
+        $formData['miniatura'] = UploadedFile::fake()->image('miniatura_editada.jpg', 1024, 1024);
+        $formData['video']->store('videos', 's3');
+        $formData['miniatura']->store('miniaturas', 's3');
+        $response = $this->put(route('video.editar', ['id' => $video->id]), $formData);
+        $response->assertStatus(Response::HTTP_FOUND);
+        $video = $video->fresh();
+        Storage::disk('s3')->assertExists('videos/' . $formData['video']->hashName());
+        Storage::disk('s3')->assertExists('miniaturas/' . $formData['miniatura']->hashName());
+    }
 
     /** @test */
     public function baja_video()
@@ -207,6 +210,42 @@ public function editar_video()
         foreach ($videosFromResponse as $video) {
             $this->assertEquals('Canal de Diego', $video->canal->nombre, 'El video no pertenece al canal esperado.');
         }
+    }
+
+/** @test */
+    public function puede_bloquear_un_video()
+    {
+        Mail::fake();
+        Event::fake();
+        $user = User::first();
+        $this->actingAs($user);
+        $video = Video::findOrFail(5);
+        $this->patch(route('video.bloquear', ['id' => $video->id]), [
+            'motivo' => 'Contenido inapropiado',
+        ]);
+        $video->refresh();
+        $this->assertEquals(1, $video->bloqueado);
+        Mail::assertNothingSent();
+        Event::assertDispatched(ActividadRegistrada::class, function ($event) use ($video) {
+            return $event->detalles === "ID video: {$video->id}; Título: {$video->titulo}";
+        });
+    }
+
+/** @test */
+    public function puede_desbloquear_un_video()
+    {
+        Event::fake();
+        $user = User::first();
+        $this->actingAs($user);
+        $video = Video::findOrFail(5);
+        $response = $this->patch(route('video.desbloquear', ['id' => $video->id]));
+        $response->assertRedirect(route('video.detalle', ['id' => $video->id]));
+        $response->assertSessionHas('success', 'El video ha sido desbloqueado exitosamente.');
+        $video->refresh();
+        $this->assertEquals(0, $video->bloqueado);
+        Event::assertDispatched(ActividadRegistrada::class, function ($event) use ($video) {
+            return $event->detalles === "ID video: {$video->id}; Título: {$video->titulo}";
+        });
     }
 
 }

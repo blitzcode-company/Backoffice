@@ -10,7 +10,7 @@
         <span>Información del Video</span>
     </div>
     <div class="video-page-container">
-      
+
         <div class="video-player-container">
             <video controls autoplay class="video-player">
                 <source src="{{ $video->link }}" type="video/mp4">
@@ -86,7 +86,7 @@
                 </div>
             </div>
 
-            <div class="video-actions text-center">
+            <div class="video-actions text-center my-4">
                 <a href="{{ route('comentarios.listado', ['id' => $video->id]) }}" class="btn btn-primary">
                     <i class="fas fa-comments"></i> Comentarios
                 </a>
@@ -96,8 +96,18 @@
                 <a href="#" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#confirmDeleteModal">
                     <i class="fas fa-trash-alt"></i> Eliminar
                 </a>
+                <button class="btn {{ $video->bloqueado ? 'btn-secondary' : 'btn-warning' }}" data-bs-toggle="modal"
+                    data-bs-target="#confirmBlockModalVideo{{ $video->id }}" data-id="{{ $video->id }}">
+                    <i class="fas fa-ban"></i> {{ $video->bloqueado ? 'Desbloquear' : 'Bloquear' }}
+                </button>
             </div>
             @include('modals.delete-video-modal', ['video' => $video])
+            @include('modals.blockModalVideo', ['video' => $video])
         </div>
+        @if (session('success'))
+        <div class="alert alert-success text-center mx-auto" style="max-width: 500px; margin-top: 0 !important;">
+            {{ session('success') }}
+        </div>
+    @endif
     </div>
 @endsection

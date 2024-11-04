@@ -1,2 +1,3 @@
 clave_plantilla,asunto,cuerpo
 canal_baja,"Notificación de Baja de Canal","Estimado/a {{ nombre_usuario }}, Le informamos que su canal {{ nombre_canal }} ha sido dado de baja debido a {{ motivo_baja }}.\n\nSi considera que esto es un error o desea más información, no dude en ponerse en contacto con el equipo de soporte de BlitzVideo. \n\nAtentamente,\nEl equipo de BlitzVideo."
+video_bloqueo,"Notificación de Bloqueo de Video","Estimado/a {{ nombre_usuario }}, Le informamos que su video titulado '{{ titulo_video }}' ha sido bloqueado debido a {{ motivo_bloqueo }}.\n\nSi considera que esto es un error o desea más información, no dude en ponerse en contacto con el equipo de soporte de BlitzVideo. \n\nAtentamente,\nEl equipo de BlitzVideo."

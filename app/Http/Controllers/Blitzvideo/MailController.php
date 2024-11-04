@@ -60,4 +60,17 @@ class MailController extends Controller
         $this->enviarCorreo($destinatario, $template->asunto, $cuerpo);
         return response()->json(['success' => 'Correo enviado exitosamente.']);
     }
+
+    public function correoBloqueoDeVideo($destinatario, $nombre_usuario, $titulo_video, $motivo_bloqueo)
+    {
+        $template = EmailTemplate::where('clave_plantilla', 'video_bloqueo')->first();
+        if (!$template) {
+            return response()->json(['error' => 'Plantilla de correo no encontrada.'], 404);
+        }
+        $cuerpo = str_replace('{{ nombre_usuario }}', $nombre_usuario, $template->cuerpo);
+        $cuerpo = str_replace('{{ titulo_video }}', $titulo_video, $cuerpo);
+        $cuerpo = str_replace('{{ motivo_bloqueo }}', $motivo_bloqueo, $cuerpo);
+        $this->enviarCorreo($destinatario, $template->asunto, $cuerpo);
+        return response()->json(['success' => 'Correo de bloqueo de video enviado exitosamente.']);
+    }
 }

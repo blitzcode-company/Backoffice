@@ -1970,6 +1970,25 @@ input:checked + .slider:before {
   margin-right: auto;
 }
 
+.playlist-container .video-title {
+  margin: 0;
+  background-color: transparent;
+}
+.playlist-container .card-header {
+  background-color: rgba(0, 0, 0, 0.03);
+}
+
+[data-theme=dark] .playlist-container .video-title {
+  margin: 0;
+  background-color: transparent;
+}
+[data-theme=dark] .playlist-container .card-header {
+  background-color: #3a424d !important;
+}
+[data-theme=dark] .playlist-container .card-body {
+  background-color: #313841 !important;
+}
+
 .publicidad-container {
   max-width: 1200px;
   margin: 0 auto;

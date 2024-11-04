@@ -72,6 +72,10 @@ Route::middleware(['auth'])->group(function () {
         Route::get('/{id}/detalle', [VideoController::class, 'MostrarInformacionVideo'])->name('detalle');
         Route::get('/{id}', [VideoController::class, 'MostrarFormularioEditar'])->name('editar.formulario');
         Route::put('/{id}', [VideoController::class, 'EditarVideo'])->name('editar');
+
+        Route::patch('/{id}/bloquear', [VideoController::class, 'bloquearVideo'])->name('bloquear');
+        Route::patch('/{id}/desbloquear', [VideoController::class, 'desbloquearVideo'])->name('desbloquear');
+
         Route::delete('/{id}', [VideoController::class, 'BajaVideo'])->name('eliminar');
         Route::get('/canal/{id}', [VideoController::class, 'ListarVideosPorCanal'])->name('canal');
     });
