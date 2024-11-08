@@ -2,8 +2,11 @@
 
 namespace Tests\Feature;
 
+use App\Events\ActividadRegistrada;
 use App\Models\Blitzvideo\User;
 use Illuminate\Http\Response;
+use Illuminate\Support\Facades\Event;
+use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Storage;
 use Tests\TestCase;
 
@@ -131,4 +134,45 @@ class UserControllerTest extends TestCase
         $this->assertSoftDeleted('users', ['id' => $user->id]);
         Storage::disk('s3')->assertMissing('foto.jpg');
     }
+
+    /** @test */
+    public function puede_bloquear_usuario()
+    {
+        Mail::fake();
+        Event::fake();
+
+        $user = User::first();
+        $this->actingAs($user);
+
+        $usuarioABloquear = User::findOrFail(2);
+        $response = $this->post(route('usuario.bloquear', ['id' => $usuarioABloquear->id]), [
+            'motivo' => 'Incumplimiento de políticas',
+        ]);
+        $response->assertStatus(302);
+        $usuarioABloquear->refresh();
+        $this->assertEquals(1, $usuarioABloquear->bloqueado);
+        Mail::assertNothingSent();
+        Event::assertDispatched(ActividadRegistrada::class, function ($event) use ($usuarioABloquear) {
+            return $event->detalles === "Se bloqueó el usuario con ID: {$usuarioABloquear->id}";
+        });
+    }
+
+/** @test */
+    public function puede_desbloquear_usuario()
+    {
+        Event::fake();
+        $user = User::first();
+        $this->actingAs($user);
+
+        $usuarioADesbloquear = User::findOrFail(2);
+        $response = $this->post(route('usuario.desbloquear', ['id' => $usuarioADesbloquear->id]));
+
+        $response->assertStatus(302);
+        $usuarioADesbloquear->refresh();
+        $this->assertEquals(0, $usuarioADesbloquear->bloqueado);
+        Event::assertDispatched(ActividadRegistrada::class, function ($event) use ($usuarioADesbloquear) {
+            return $event->detalles === "Se desbloqueó el usuario con ID: {$usuarioADesbloquear->id}";
+        });
+    }
+
 }

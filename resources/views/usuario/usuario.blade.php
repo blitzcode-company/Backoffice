@@ -71,9 +71,14 @@
                     data-bs-target="#confirmDeleteModal">
                     <i class="fas fa-trash-alt"></i> Eliminar
                 </a>
+
                 <a href="{{ route('usuario.editar.formulario', ['id' => $user->id]) }}"
                     class="btn btn-warning btn-sm w-40">
                     <i class="fas fa-edit"></i> Editar
+                </a>
+                <a class="btn {{ $user->bloqueado ? 'btn-secondary' : 'btn-warning' }} btn-sm w-40" data-bs-toggle="modal"
+                    data-bs-target="#confirmBlockModalUser{{ $user->id }}">
+                    <i class="fas fa-ban"></i> {{ $user->bloqueado ? 'Desbloquear' : 'Bloquear' }}
                 </a>
 
                 <a href="{{ route('playlists.usuario.listar', ['id' => $user->id]) }}" class="btn btn-dark btn-sm w-40">
@@ -94,5 +99,6 @@
         'user' => $user,
         'ruta' => route('usuario.detalle', ['id' => $user->id]),
     ])
+    @include('modals.blockModalUser', ['user' => $user])
     <script src="{{ asset('js/copyButton.js') }}"></script>
 @endsection

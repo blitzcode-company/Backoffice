@@ -8,6 +8,7 @@ use App\Models\Blitzvideo\User;
 use App\Traits\Paginable;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Facades\Log;
 
 class UserController extends Controller
 {
@@ -296,4 +297,50 @@ class UserController extends Controller
         return view('usuario.usuarios', compact('users'));
     }
 
+    public function bloquearUsuario($id, Request $request)
+    {
+        try {
+            $motivo = $request->input('motivo');
+            $usuario = User::find($id);
+
+            if (!$usuario) {
+                abort(404, 'Usuario no encontrado');
+            }
+
+            $usuario->bloqueado = true;
+            $usuario->save();
+
+            event(new ActividadRegistrada('Bloqueo de usuario', 'Se bloqueó el usuario con ID: ' . $usuario->id));
+            $mailController = new MailController();
+            $mailController->correoBloqueoDeUsuario($usuario->email, $usuario->name, $motivo);
+            return redirect()->route(self::ROUTE_LISTAR_USUARIOS)->with('success', 'Usuario bloqueado correctamente');
+        } catch (\Exception $exception) {
+            Log::error('Error al bloquear el usuario: ' . $exception->getMessage(), [
+                'exception' => $exception
+            ]);
+            return back()->withErrors(['error' => 'Error al bloquear el usuario']);
+        }
+        
+    }
+
+    public function desbloquearUsuario($id)
+    {
+        try {
+            $usuario = User::find($id);
+
+            if (!$usuario) {
+                abort(404, 'Usuario no encontrado');
+            }
+
+            $usuario->bloqueado = false;
+            $usuario->save();
+
+            event(new ActividadRegistrada('Desbloqueo de usuario', 'Se desbloqueó el usuario con ID: ' . $usuario->id));
+            return redirect()->route(self::ROUTE_LISTAR_USUARIOS)->with('success', 'Usuario desbloqueado correctamente');
+        } catch (\Exception $exception) {
+            return back()->withErrors(['error' => 'Error al desbloquear el usuario']);
+        }
+    }
+
+    
 }

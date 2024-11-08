@@ -59,13 +59,21 @@
                                     <span class="copy-status text-muted ml-2">Copiar</span>
                                 </p>
                             </div>
-                            <p><strong>Premium:</strong>
+                            <p>
+                                <strong>Premium:</strong>
                                 @if ($user->premium)
                                     <i class="fas fa-check" style="color: green;"></i>
                                 @else
                                     <i class="fas fa-times" style="color: red;"></i>
                                 @endif
+                            
+                                @if ($user->bloqueado)
+                                <span style="color: red; margin-left: 10px;">
+                                        <i class="fas fa-ban"></i> Bloqueado
+                                    </span>
+                                @endif
                             </p>
+                            
 
                             @if ($user->canales->isNotEmpty())
                                 <div class="user-canales">

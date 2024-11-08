@@ -38,6 +38,8 @@ Route::middleware(['auth'])->group(function () {
         Route::get('/{id}/formulario', [UserController::class, 'MostrarFormularioActualizarUsuario'])->name('editar.formulario');
         Route::put('/{id}', [UserController::class, 'ActualizarUsuario'])->name('editar');
         Route::delete('/{id}', [UserController::class, 'EliminarUsuario'])->name('eliminar');
+        Route::post('/{id}/bloquear', [UserController::class, 'bloquearUsuario'])->name('bloquear');
+        Route::post('/{id}/desbloquear', [UserController::class, 'desbloquearUsuario'])->name('desbloquear');
     });
 
     Route::prefix('transaccion')->name('transaccion.')->group(function () {
