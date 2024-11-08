@@ -61,6 +61,13 @@
                         </p>
                     @endif
                 </div>
+                <p><strong>Acceso:</strong>
+                    @if ($video->acceso == 'publico')
+                        <i class="fas fa-globe-americas" style="color: green;" title="Público"></i> Público
+                    @else
+                        <i class="fas fa-lock" style="color: red;" title="Privado"></i> Privado
+                    @endif
+                </p>
                 <p class="text-justify m-2">{!! nl2br(e($video->descripcion)) !!}</p>
 
                 <div class="video-ratings">
@@ -85,7 +92,6 @@
                     <p><strong>Promedio de Puntuaciones:</strong> {{ $video->promedio_puntuaciones }}</p>
                 </div>
             </div>
-
             <div class="video-actions text-center my-4">
                 <a href="{{ route('comentarios.listado', ['id' => $video->id]) }}" class="btn btn-primary">
                     <i class="fas fa-comments"></i> Comentarios

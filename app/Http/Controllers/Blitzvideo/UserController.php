@@ -8,7 +8,6 @@ use App\Models\Blitzvideo\User;
 use App\Traits\Paginable;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
-use Illuminate\Support\Facades\Log;
 
 class UserController extends Controller
 {
@@ -315,12 +314,9 @@ class UserController extends Controller
             $mailController->correoBloqueoDeUsuario($usuario->email, $usuario->name, $motivo);
             return redirect()->route(self::ROUTE_LISTAR_USUARIOS)->with('success', 'Usuario bloqueado correctamente');
         } catch (\Exception $exception) {
-            Log::error('Error al bloquear el usuario: ' . $exception->getMessage(), [
-                'exception' => $exception
-            ]);
             return back()->withErrors(['error' => 'Error al bloquear el usuario']);
         }
-        
+
     }
 
     public function desbloquearUsuario($id)
@@ -342,5 +338,4 @@ class UserController extends Controller
         }
     }
 
-    
 }

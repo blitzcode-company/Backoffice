@@ -7,7 +7,7 @@
                 <i class="fas fa-arrow-left"></i>
             </a>
         </div>
-        <span>Subir nuevo del Video</span>
+        <span>Subir nuevo Video</span>
     </div>
     <div class="container-card-video">
         <div class="row justify-content-center">
@@ -56,6 +56,17 @@
                                         <label for="video">Video</label>
                                         <input type="file" name="video" id="video" class="form-control-file"
                                             required>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="acceso">Acceso</label>
+                                        <select name="acceso" id="acceso" class="form-control custom-input" required>
+                                            <option value="publico">
+                                                <i class="fas fa-globe"></i> Público
+                                            </option>
+                                            <option value="privado">
+                                                <i class="fas fa-lock"></i> Privado
+                                            </option>
+                                        </select>
                                     </div>
                                 </div>
 
@@ -116,4 +127,5 @@
             }
         }
     </script>
+    
 @endsection

@@ -7,7 +7,7 @@
                 <i class="fas fa-arrow-left"></i>
             </a>
         </div>
-        <span>Actualziar información del Video</span>
+        <span>Actualizar información del Video</span>
     </div>
     <div class="container-card-video">
         <div class="row justify-content-center">
@@ -50,6 +50,15 @@
                                     <div class="form-group">
                                         <label for="video">Video</label>
                                         <input type="file" name="video" id="video" class="form-control-file">
+                                    </div>
+
+                                    <!-- Campo de acceso del video -->
+                                    <div class="form-group">
+                                        <label for="acceso">Acceso del Video</label>
+                                        <select name="acceso" id="acceso" class="form-control" required>
+                                            <option value="publico" @if($video->acceso == 'publico') selected @endif>Público</option>
+                                            <option value="privado" @if($video->acceso == 'privado') selected @endif>Privado</option>
+                                        </select>
                                     </div>
                                 </div>
 

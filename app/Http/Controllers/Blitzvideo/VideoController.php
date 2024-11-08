@@ -162,6 +162,7 @@ class VideoController extends Controller
             $cambios = array_merge($cambios, $this->actualizarDescripcion($request, $video));
             $cambios = array_merge($cambios, $this->actualizarVideo($request, $video));
             $cambios = array_merge($cambios, $this->actualizarMiniatura($request, $video));
+            $cambios = array_merge($cambios, $this->actualizarAcceso($request, $video));
 
             $video->save();
 
@@ -245,16 +246,33 @@ class VideoController extends Controller
         return $cambios;
     }
 
+    private function actualizarAcceso(Request $request, Video $video)
+    {
+        $cambios = [];
+
+        if ($request->has('acceso') && $request->input('acceso') != $video->acceso) {
+            $cambios['acceso'] = [
+                'anterior' => $video->acceso,
+                'nuevo' => $request->input('acceso'),
+            ];
+            $video->acceso = $request->input('acceso');
+        }
+
+        return $cambios;
+    }
+
     private function registrarActividadActualizarVideo(array $cambios, $videoId, $canalId)
     {
         $detalles = "ID video: $videoId; ID Canal: $canalId;";
-
+    
         foreach ($cambios as $campo => $valor) {
             if ($campo === 'titulo') {
                 $detalles .= "{$valor['anterior']} -> {$valor['nuevo']}; ";
             } elseif ($campo === 'miniatura') {
                 $detalles .= "{$valor['anterior']} -> {$valor['nuevo']}; ";
             } elseif ($campo === 'video') {
+                $detalles .= "{$valor['anterior']} -> {$valor['nuevo']}; ";
+            } elseif ($campo === 'acceso') {
                 $detalles .= "{$valor['anterior']} -> {$valor['nuevo']}; ";
             } else {
                 $detalles .= ucfirst($campo) . ': ' . $valor . '; ';
@@ -270,8 +288,9 @@ class VideoController extends Controller
             'descripcion' => 'sometimes|string',
             'video' => 'sometimes|file|mimetypes:video/mp4,video/quicktime,video/x-msvideo,video/x-flv,video/webm|max:120000',
             'miniatura' => 'sometimes|image|max:2048',
+            'acceso' => 'sometimes|string|max:255',
         ];
-
+    
         $this->ValidarRequest($request, $rules);
     }
 
@@ -326,6 +345,7 @@ class VideoController extends Controller
             'descripcion' => 'required|string',
             'video' => 'required|file|mimetypes:video/mp4,video/quicktime,video/x-msvideo,video/x-flv,video/webm|max:120000',
             'miniatura' => 'required|image|max:2048',
+            'acceso' => 'required|in:publico,privado',
         ];
 
         $this->ValidarRequest($request, $rules);
@@ -366,6 +386,7 @@ class VideoController extends Controller
             'miniatura' => $videoData['urlMiniatura'],
             'canal_id' => $canal->id,
             'duracion' => $duracion,
+            'acceso' => $request->input('acceso', 'publico'),
         ]);
     }
 

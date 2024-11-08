@@ -101,6 +101,7 @@ class VideoControllerTest extends TestCase
             'canal_id' => $canalId,
             'etiquetas' => [4, 5],
             'duracion' => 120,
+            'acceso' => 'publico',
         ];
         $formData['video'] = UploadedFile::fake()->create('video.mp4', 1024, 'video/mp4');
         $formData['miniatura'] = UploadedFile::fake()->create('miniatura.jpg', 1024, 'image/jpeg');
@@ -123,6 +124,7 @@ class VideoControllerTest extends TestCase
             'titulo' => 'Nuevo Título',
             'descripcion' => 'Nueva Descripción',
             'etiquetas' => [2, 3],
+            'acceso' => 'privado',
         ];
         $response = $this->put(route('video.editar', ['id' => $video->id]), $formData);
         $response->assertStatus(Response::HTTP_FOUND);
