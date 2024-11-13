@@ -51,8 +51,6 @@
                                         <label for="video">Video</label>
                                         <input type="file" name="video" id="video" class="form-control-file">
                                     </div>
-
-                                    <!-- Campo de acceso del video -->
                                     <div class="form-group">
                                         <label for="acceso">Acceso del Video</label>
                                         <select name="acceso" id="acceso" class="form-control" required>

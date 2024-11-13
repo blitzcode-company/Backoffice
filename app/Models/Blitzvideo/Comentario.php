@@ -9,8 +9,6 @@ class Comentario extends Model
 {
     use SoftDeletes;
 
-    use SoftDeletes;
-
     protected $connection = 'blitzvideo';
     
     protected $fillable = [

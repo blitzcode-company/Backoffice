@@ -96,10 +96,10 @@ class ComentarioController extends Controller
         if ($resultado instanceof \Illuminate\Http\RedirectResponse) {
             return $resultado;
         }
-
         return redirect()->route('comentarios.listado', ['id' => $request->input('video_id')])
             ->with('success', 'Comentario creado exitosamente.');
     }
+
 
     public function responderComentario(Request $request)
     {
@@ -178,7 +178,6 @@ class ComentarioController extends Controller
             $mensajeAnterior,
             $comentario->mensaje
         );
-
         event(new ActividadRegistrada('Comentario actualizado', $detalles));
     }
 
@@ -193,8 +192,15 @@ class ComentarioController extends Controller
         $videoId = $comentario->video_id;
         $comentario->bloqueado = true;
         $comentario->save();
+        $this->notificacionBloquearComentario($comentario);
         $this->registrarActividadBloquearComentario($comentario_id, $usuarioId, $videoId);
         return redirect()->back()->with('success', 'Comentario bloqueado exitosamente.');
+    }
+
+    private function notificacionBloquearComentario($comentario)
+    {
+        $notificacionController = new NotificacionController();
+        $notificacionController->crearNotificacionDeBloqueoDeComentario($comentario);
     }
 
     private function registrarActividadBloquearComentario($comentario_id, $usuarioId, $videoId)

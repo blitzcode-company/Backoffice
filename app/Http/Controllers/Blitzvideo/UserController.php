@@ -305,13 +305,12 @@ class UserController extends Controller
             if (!$usuario) {
                 abort(404, 'Usuario no encontrado');
             }
-
             $usuario->bloqueado = true;
             $usuario->save();
-
             event(new ActividadRegistrada('Bloqueo de usuario', 'Se bloqueó el usuario con ID: ' . $usuario->id));
             $mailController = new MailController();
             $mailController->correoBloqueoDeUsuario($usuario->email, $usuario->name, $motivo);
+            $this->notificacionBloqueoUsuario($motivo, $usuario);
             return redirect()->route(self::ROUTE_LISTAR_USUARIOS)->with('success', 'Usuario bloqueado correctamente');
         } catch (\Exception $exception) {
             return back()->withErrors(['error' => 'Error al bloquear el usuario']);
@@ -319,23 +318,32 @@ class UserController extends Controller
 
     }
 
+    private function notificacionBloqueoUsuario($motivo, $usuario)
+    {
+        $notificacionController = new NotificacionController();
+        $notificacionController->crearNotificacionDeBloqueoDeUsuario($usuario->id, $motivo);
+    }
+
     public function desbloquearUsuario($id)
     {
         try {
             $usuario = User::find($id);
-
             if (!$usuario) {
                 abort(404, 'Usuario no encontrado');
             }
-
             $usuario->bloqueado = false;
             $usuario->save();
-
             event(new ActividadRegistrada('Desbloqueo de usuario', 'Se desbloqueó el usuario con ID: ' . $usuario->id));
+            $this->notificacionDesbloqueoUsuario($usuario);
             return redirect()->route(self::ROUTE_LISTAR_USUARIOS)->with('success', 'Usuario desbloqueado correctamente');
         } catch (\Exception $exception) {
             return back()->withErrors(['error' => 'Error al desbloquear el usuario']);
         }
     }
 
+    private function notificacionDesbloqueoUsuario($usuario)
+    {
+        $notificacionController = new NotificacionController();
+        $notificacionController->crearNotificacionDeDesbloqueoDeUsuario($usuario->id);
+    }
 }

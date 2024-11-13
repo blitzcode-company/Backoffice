@@ -264,7 +264,7 @@ class VideoController extends Controller
     private function registrarActividadActualizarVideo(array $cambios, $videoId, $canalId)
     {
         $detalles = "ID video: $videoId; ID Canal: $canalId;";
-    
+
         foreach ($cambios as $campo => $valor) {
             if ($campo === 'titulo') {
                 $detalles .= "{$valor['anterior']} -> {$valor['nuevo']}; ";
@@ -290,7 +290,7 @@ class VideoController extends Controller
             'miniatura' => 'sometimes|image|max:2048',
             'acceso' => 'sometimes|string|max:255',
         ];
-    
+
         $this->ValidarRequest($request, $rules);
     }
 
@@ -495,7 +495,7 @@ class VideoController extends Controller
         $video = $this->cambiarEstadoVideo($id, true);
         $motivo = $request->input('motivo');
         $this->registrarYEnviarCorreoDeBloqueo($video, 'Bloqueo de video', $motivo);
-
+        $this->notificacionBloqueoVideo($video, $motivo);
         return redirect()->route('video.detalle', ['id' => $id])->with('success', 'El video ha sido bloqueado exitosamente.');
     }
 
@@ -503,7 +503,7 @@ class VideoController extends Controller
     {
         $video = $this->cambiarEstadoVideo($id, false);
         $this->registrarActividadBloqueoDesbloqueo($video, 'Desbloqueo de video');
-
+        $this->notificacionDesbloqueoVideo($video);
         return redirect()->route('video.detalle', ['id' => $id])->with('success', 'El video ha sido desbloqueado exitosamente.');
     }
 
@@ -526,10 +526,22 @@ class VideoController extends Controller
         $mailController->correoBloqueoDeVideo($usuario->email, $usuario->name, $titulo_video, $motivo);
     }
 
+    private function notificacionBloqueoVideo($video, $motivo)
+    {
+        $notificacionController = new NotificacionController();
+        $notificacionController->crearNotificacionDeBloqueoDeVideo($video, $motivo);
+    }
+
     private function registrarActividadBloqueoDesbloqueo($video, $tipoActividad)
     {
         $detalles = "ID video: $video->id; Título: $video->titulo";
         event(new ActividadRegistrada($tipoActividad, $detalles));
+    }
+
+    private function notificacionDesbloqueoVideo($video)
+    {
+        $notificacionController = new NotificacionController();
+        $notificacionController->crearNotificacionDeDesbloqueoDeVideo($video);
     }
 
 }
