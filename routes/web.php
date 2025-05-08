@@ -12,8 +12,10 @@ use App\Http\Controllers\Blitzvideo\SuscriptoresController;
 use App\Http\Controllers\Blitzvideo\TransaccionController;
 use App\Http\Controllers\Blitzvideo\UserController;
 use App\Http\Controllers\Blitzvideo\VideoController;
+use App\Http\Controllers\Blitzvideo\StreamController;
 use App\Http\Controllers\Chart\UserChartController;
 use App\Http\Controllers\Chart\VideoChartController;
+
 use Illuminate\Support\Facades\Route;
 
 Route::get('login', [LoginController::class, 'showLoginForm'])->name('login');
@@ -133,4 +135,16 @@ Route::middleware(['auth'])->group(function () {
         Route::get('/', [AdminController::class, 'listarUsuarios'])->name('usuarios');
         Route::get('/usuario/{id}/actividades', [AdminController::class, 'listarActividadesPorUsuario'])->name('actividades');
     });
+
+    Route::prefix('stream')->name('stream.')->group(function () {
+        Route::get('/', [StreamController::class, 'ListarStreams'])->name('streams');
+        Route::get('/{id}/live', [StreamController::class, 'MostrarStream'])->name('detalle');
+        Route::post('/', [StreamController::class, 'ListarStreamsPorNombre'])->name('nombre');
+        Route::get('/crear', [StreamController::class, 'MostrarFormularioSubidaStream'])->name('crear.formulario');
+        Route::get('/{id}/editar', [StreamController::class, 'MostrarFormularioEditarStream'])->name('editar.formulario');
+        Route::put('/{id}', [StreamController::class, 'EditarStream'])->name('editar');
+        Route::post('/crear', [StreamController::class, 'CrearStream'])->name('crear');
+        Route::delete('/{id}', [StreamController::class, 'EliminarStream'])->name('eliminar');
+    });
+
 });

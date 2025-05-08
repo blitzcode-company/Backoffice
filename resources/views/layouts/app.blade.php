@@ -44,7 +44,7 @@
                                     <a href="{{ route('video.etiquetas') }}" class="dropdown-item">Por etiquetas</a>
                                 </div>
                             </div>
-
+                            <a href="{{ route('stream.streams') }}" class="dropdown-item">Stream</a>
                             <a href="{{ route('playlists.listar') }}" class="dropdown-item">Playlist</a>
                             <a href="{{ route('etiquetas.listar') }}" class="dropdown-item">Etiquetas</a>
                             <a href="{{ route('estadisticas') }}" class="dropdown-item">Estadísticas</a>
@@ -114,6 +114,7 @@
                         </div>
                     </div>
                 </div>
+                <a href="{{ route('stream.streams') }}" class="list-group-item list-group-item-action">Stream</a>
                 <a href="{{ route('playlists.listar') }}" class="list-group-item list-group-item-action">Playlist</a>
                 <a href="{{ route('etiquetas.listar') }}"
                     class="list-group-item list-group-item-action">Etiquetas</a>

@@ -43,19 +43,16 @@
                     @endif
                 </p>
 
-                @if ($user->canales->isNotEmpty())
-                    @foreach ($user->canales as $canal)
-                        <p>
-                            <strong>Canal:</strong>
-                            <a class="custom-link" href="{{ route('canal.detalle', ['id' => $canal->id]) }}">
-                                {{ $canal->nombre }} <i class="fas fa-link"></i>
-                            </a>
-                        </p>
-                        <div class="user-canal-info-box">
-                            <p class="text-justify">{!! nl2br(e($canal->descripcion)) !!}</p>
-                        </div>
-                        <br>
-                    @endforeach
+                @if ($user->canal)
+                    <p>
+                        <strong>Canal:</strong>
+                        <a class="custom-link" href="{{ route('canal.detalle', ['id' => $user->canal->id]) }}">
+                            {{ $user->canal->nombre }} <i class="fas fa-link"></i>
+                        </a>
+                    </p>
+                    <div class="user-canal-info-box">
+                        <p class="text-justify">{!! nl2br(e($user->canal->descripcion)) !!}</p>
+                    </div>
                 @else
                     <p>No tiene canal asociado.</p>
                 @endif

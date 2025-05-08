@@ -50,11 +50,11 @@
         {{ $videos->links('vendor.pagination.pagination') }}
     </div>
 
-    <div class="video-list-container">
-        <div class="video-list">
-            @if ($videos->isEmpty())
-                <p>No hay videos disponibles.</p>
-            @else
+    @if ($videos->isEmpty())
+        <p>No hay videos disponibles.</p>
+    @else
+        <div class="video-list-container">
+            <div class="video-list">
                 @foreach ($videos as $video)
                     <div class="card mb-3 video-card">
                         <div class="video-thumbnail position-relative">
@@ -74,9 +74,9 @@
                         </div>
                     </div>
                 @endforeach
-            @endif
+            </div>
         </div>
-    </div>
+    @endif
 
     <div class="d-flex justify-content-center">
         {{ $videos->links('vendor.pagination.pagination') }}

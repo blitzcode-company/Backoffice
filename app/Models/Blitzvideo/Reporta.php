@@ -13,8 +13,10 @@ class Reporta extends Model
     protected $connection = 'blitzvideo';
 
     protected $table = 'reporta';
-    
      
+    const ESTADO_RESUELTO = 'resuelto';
+    const ESTADO_PENDIENTE = 'pendiente';
+
     protected $fillable = [
         'user_id',
         'video_id',

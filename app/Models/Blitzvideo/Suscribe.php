@@ -16,9 +16,11 @@ class Suscribe extends Model
     protected $table = 'suscribe';
 
     protected $fillable = [
-        'user_id', 'canal_id',
+        'user_id',
+        'canal_id',
+        'notificaciones',
     ];
-
+    
     public function user()
     {
         return $this->belongsTo(User::class);

@@ -13,12 +13,13 @@ class Canal extends Model
 
     protected $table = 'canals';
     protected $fillable = [
-        'nombre', 'descripcion', 'portada', 'user_id',
+        'nombre', 'descripcion', 'portada', 'user_id','stream_key',
     ];
+
 
     public function user()
     {
-        return $this->belongsTo(User::class);
+        return $this->belongsTo(User::class, 'user_id');
     }
     public function videos()
     {
@@ -27,6 +28,14 @@ class Canal extends Model
 
     public function suscriptores()
     {
-        return $this->belongsToMany(User::class, 'suscribe')->withTimestamps()->withTrashed();
+        return $this->belongsToMany(User::class, 'suscribe')
+                    ->withPivot('notificaciones')
+                    ->withTimestamps()
+                    ->withTrashed();
+    }
+
+    public function streams()
+    {
+        return $this->hasOne(Stream::class);
     }
 }

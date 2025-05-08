@@ -57,7 +57,8 @@ $border-radius: 5px;
         width: 250px;
         min-height: 200px;
         overflow: hidden;
-        margin: 0 auto;
+    
+        margin: auto;
 
         .card-header {
             background-color: #f8f9fa;
@@ -232,7 +233,6 @@ input:checked+.slider:before {
 .playlist-info{
     max-width: 280px;
     padding: 20px;
-    border: 1px solid v.$color-border;
     border-radius: $border-radius;
     margin-right: auto;
 }

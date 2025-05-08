@@ -13,6 +13,9 @@ class ReportaComentario extends Model
 
     protected $table = 'reporta_comentario';
 
+    const ESTADO_RESUELTO = 'resuelto';
+    const ESTADO_PENDIENTE = 'pendiente';
+
     protected $fillable = [
         'user_id',
         'comentario_id',
@@ -28,7 +31,7 @@ class ReportaComentario extends Model
 
     public function user()
     {
-        return $this->belongsTo(User::class);
+        return $this->belongsTo(User::class, 'user_id');
     }
 
     public function comentario()

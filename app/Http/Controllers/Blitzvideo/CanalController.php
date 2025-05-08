@@ -140,6 +140,7 @@ class CanalController extends Controller
             'nombre' => $datosValidados['nombre'],
             'descripcion' => $datosValidados['descripcion'] ?? null,
             'user_id' => $userId,
+            'stream_key'  => bin2hex(random_bytes(16)),
         ]);
     }
 

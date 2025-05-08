@@ -56,7 +56,7 @@ class Video extends Model
 
     public function playlists()
     {
-        return $this->belongsToMany(Playlist::class);
+        return $this->belongsToMany(Playlist::class, 'video_lista');
     }
 
     public function publicidad()

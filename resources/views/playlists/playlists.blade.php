@@ -20,36 +20,36 @@
     </div>
     <div class="playlist-container mx-auto">
         @if ($playlists->isEmpty())
-                <p class="text-muted mx-auto">No hay playlists disponibles.</p>
+            <p class="text-muted mx-auto">No hay playlists disponibles.</p>
         @else
-            <div class="row">
-                @foreach ($playlists as $playlist)
-                    <div class="col-md-4 mb-4">
-                        <div class="card">
-                            <div class="card-header">
-                                <h2 class="video-title">{{ $playlist['nombre'] }}</h2>
-                            </div>
-                            <div class="card-body">
-                                <p class="card-text text-start">
-                                    <i class="fas {{ $playlist['acceso'] == 1 ? 'fa-globe' : 'fa-lock' }} text-muted"></i>
-                                    <span class="text-muted">Acceso:</span>
-                                    <span class="{{ $playlist['acceso'] == 1 ? 'text-success' : 'text-danger' }}">
-                                        {{ $playlist['acceso'] == 1 ? 'Público' : 'Privado' }}
-                                    </span>
-                                    <br>
-                                    <i class="fas fa-video text-muted"></i>
-                                    <span class="text-muted">Videos:</span> {{ $playlist['cantidad_videos'] }} <br>
-                                    <i class="fas fa-user text-muted"></i>
-                                    <span class="text-muted">Propietario:</span> {{ $playlist['propietario'] }}
-                                </p>
-                                <a href="{{ route('playlists.videos', ['id' => $playlist['id']]) }}" class="btn btn-primary">
-                                    Ver Videos
-                                </a>
-                            </div>
+        <div class="row d-flex justify-content-between">
+            @foreach ($playlists as $playlist)
+                <div class="col-md-4 mb-4">
+                    <div class="card">
+                        <div class="card-header">
+                            <h2 class="video-title">{{ $playlist['nombre'] }}</h2>
+                        </div>
+                        <div class="card-body">
+                            <p class="card-text text-start">
+                                <i class="fas {{ $playlist['acceso'] == 1 ? 'fa-globe' : 'fa-lock' }} text-muted"></i>
+                                <span class="text-muted">Acceso:</span>
+                                <span class="{{ $playlist['acceso'] == 1 ? 'text-success' : 'text-danger' }}">
+                                    {{ $playlist['acceso'] == 1 ? 'Público' : 'Privado' }}
+                                </span>
+                                <br>
+                                <i class="fas fa-video text-muted"></i>
+                                <span class="text-muted">Videos:</span> {{ $playlist['cantidad_videos'] }} <br>
+                                <i class="fas fa-user text-muted"></i>
+                                <span class="text-muted">Propietario:</span> {{ $playlist['propietario'] }}
+                            </p>
+                            <a href="{{ route('playlists.videos', ['id' => $playlist['id']]) }}" class="btn btn-primary">
+                                Ver Videos
+                            </a>
                         </div>
                     </div>
-                @endforeach
-            </div>
+                </div>
+            @endforeach
+        </div>
         @endif
     </div>
     <div class="d-flex justify-content-center">

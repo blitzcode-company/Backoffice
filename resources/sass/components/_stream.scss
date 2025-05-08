@@ -1,0 +1,26 @@
+@use '../partials/variables' as v;
+
+.video-duration .live-status{
+    background-color: rgba(255, 0, 0, 0.6);
+}
+
+.card-stream{
+    width: 800px;
+}
+
+.stream-key-input {
+    margin: 0 !important;
+    width: 265px !important;
+    padding: 0 !important;
+    padding-left: 10px !important;
+    font-size: 14px !important;
+    font-weight: 400 !important;
+    line-height: 1.5 !important;  
+    background-color: rgba(0, 0, 0, 0) !important;
+    box-shadow: none !important;
+}
+    .btn-stream-key {
+        margin: 0 !important;
+        outline: none !important;
+        box-shadow: none !important;
+    }

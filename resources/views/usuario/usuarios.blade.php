@@ -40,14 +40,9 @@
                                 <a href="{{ route('usuario.detalle', ['id' => $user->id]) }}">
                                     {{ $user->name }}
                                 </a>
-
                             </h2>
-
-
                             <div class="email-container">
-
                                 <p class="d-flex align-items-center">
-                             
                                     <span class="h4 m-0 button-separator">#{{ $user->id }}</span>
                                     <a href="{{ route('usuario.detalle', ['id' => $user->id]) }}" class="button-info"
                                         title="Ver Usuario">
@@ -73,19 +68,16 @@
                                     </span>
                                 @endif
                             </p>
-                            
 
-                            @if ($user->canales->isNotEmpty())
-                                <div class="user-canales">
-                                    @foreach ($user->canales as $canal)
-                                        <p>
-                                            <a class="custom-link"
-                                                href="{{ route('canal.detalle', ['id' => $canal->id]) }}">
-                                                {{ $canal->nombre }}
-                                                <i class="fas fa-link"></i>
-                                            </a>
-                                        </p>
-                                    @endforeach
+                            @if ($user->canal)
+                                <div class="user-canal">
+                                    <p>
+                                        <a class="custom-link"
+                                            href="{{ route('canal.detalle', ['id' => $user->canal->id]) }}">
+                                            {{ $user->canal->nombre }}
+                                            <i class="fas fa-link"></i>
+                                        </a>
+                                    </p>
                                 </div>
                             @else
                                 <p>No tiene canal asociado.</p>
