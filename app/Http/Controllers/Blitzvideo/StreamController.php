@@ -80,9 +80,7 @@ class StreamController extends Controller
     private function SubirAMinio($archvio, $ruta)
     {
         $ruta = $this->GuardarArchivo($archvio, $ruta);
-        return [
-            'url' => $this->GenerarUrl($ruta),
-        ];
+        return $ruta;
     }
 
     private function GuardarArchivo($archivo, $ruta)
@@ -90,10 +88,6 @@ class StreamController extends Controller
         return $archivo->store($ruta, 's3');
     }
 
-    private function GenerarUrl($ruta)
-    {
-        return str_replace('minio', env('BLITZVIDEO_HOST'), Storage::disk('s3')->url($ruta));
-    }
     public function EliminarStream($id)
     {
         $stream  = Stream::findOrFail($id);

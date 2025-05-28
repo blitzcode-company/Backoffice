@@ -1,5 +1,4 @@
 <?php
-
 namespace App\Http\Controllers\Blitzvideo;
 
 use App\Events\ActividadRegistrada;
@@ -10,7 +9,6 @@ use App\Models\Blitzvideo\Etiqueta;
 use App\Models\Blitzvideo\Video;
 use App\Traits\Paginable;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Storage;
 
 class VideoController extends Controller
 {
@@ -18,8 +16,14 @@ class VideoController extends Controller
 
     public function MostrarTodosLosVideos(Request $request)
     {
+        $host   = $this->obtenerHostMinio();
+        $bucket = $this->obtenerBucket();
         $videos = $this->obtenerVideosConRelaciones();
-        $page = $request->input('page', 1);
+        foreach ($videos as $video) {
+            $video->miniatura = $this->obtenerUrlArchivo($video->miniatura, $host, $bucket);
+            $video->link      = $this->obtenerUrlArchivo($video->link, $host, $bucket);
+        }
+        $page   = $request->input('page', 1);
         $videos = $this->paginateCollection($videos, 9, $page);
         return view('video.videos', compact('videos'));
     }
@@ -60,8 +64,14 @@ class VideoController extends Controller
     public function ListarVideosPorNombre(Request $request)
     {
         $nombre = $request->input('nombre');
-        $page = $request->input('page', 1);
+        $page   = $request->input('page', 1);
+        $host   = $this->obtenerHostMinio();
+        $bucket = $this->obtenerBucket();
         $videos = $this->obtenerVideosPorNombre($nombre);
+        foreach ($videos as $video) {
+            $video->miniatura = $this->obtenerUrlArchivo($video->miniatura, $host, $bucket);
+            $video->link      = $this->obtenerUrlArchivo($video->link, $host, $bucket);
+        }
         $videos = $this->paginateCollection($videos, 9, $page);
         return view('video.videos', compact('videos'));
     }
@@ -100,7 +110,14 @@ class VideoController extends Controller
 
     public function MostrarInformacionVideo($idVideo)
     {
-        $video = $this->obtenerVideoPorId($idVideo);
+        $video            = $this->obtenerVideoPorId($idVideo);
+        $host             = $this->obtenerHostMinio();
+        $bucket           = $this->obtenerBucket();
+        $video->miniatura = $this->obtenerUrlArchivo($video->miniatura, $host, $bucket);
+        $video->link      = $this->obtenerUrlArchivo($video->link, $host, $bucket);
+        if ($video->canal && $video->canal->user) {
+            $video->canal->user->foto = $this->obtenerUrlArchivo($video->canal->user->foto, $host, $bucket);
+        }
         return view('video.video', compact('video'));
     }
 
@@ -135,18 +152,49 @@ class VideoController extends Controller
         return $video;
     }
 
+    private function obtenerHostMinio()
+    {
+        return str_replace('minio', env('BLITZVIDEO_HOST'), env('AWS_ENDPOINT')) . '/';
+    }
+
+    private function obtenerBucket()
+    {
+        return env('AWS_BUCKET') . '/';
+    }
+
+    private function obtenerUrlArchivo($rutaRelativa, $host, $bucket)
+    {
+        if (! $rutaRelativa) {
+            return null;
+        }
+        if (str_starts_with($rutaRelativa, $host . $bucket)) {
+            return $rutaRelativa;
+        }
+        if (filter_var($rutaRelativa, FILTER_VALIDATE_URL)) {
+            return $rutaRelativa;
+        }
+        return $host . $bucket . $rutaRelativa;
+    }
+
     public function MostrarFormularioSubida()
     {
         $etiquetasController = new EtiquetaController();
-        $etiquetas = $etiquetasController->ListarEtiquetas();
+        $etiquetas           = $etiquetasController->ListarEtiquetas();
         return view('video.subir-video', compact('etiquetas'));
     }
 
     public function MostrarFormularioEditar($idVideo)
     {
         $etiquetasController = new EtiquetaController();
-        $etiquetas = $etiquetasController->ListarEtiquetas();
-        $video = $this->obtenerVideoPorId($idVideo);
+        $etiquetas           = $etiquetasController->ListarEtiquetas();
+        $video               = $this->obtenerVideoPorId($idVideo);
+        $host                = $this->obtenerHostMinio();
+        $bucket              = $this->obtenerBucket();
+        $video->miniatura    = $this->obtenerUrlArchivo($video->miniatura, $host, $bucket);
+        $video->link         = $this->obtenerUrlArchivo($video->link, $host, $bucket);
+        if ($video->canal && $video->canal->user) {
+            $video->canal->user->foto = $this->obtenerUrlArchivo($video->canal->user->foto, $host, $bucket);
+        }
         return view('video.editar-video', compact('etiquetas', 'video'));
     }
 
@@ -154,7 +202,7 @@ class VideoController extends Controller
     {
         $this->ValidarEdicionDeVideo($request);
 
-        $video = Video::findOrFail($idVideo);
+        $video   = Video::findOrFail($idVideo);
         $cambios = [];
 
         try {
@@ -185,7 +233,7 @@ class VideoController extends Controller
         if ($request->has('titulo') && $request->input('titulo') != $video->titulo) {
             $cambios['titulo'] = [
                 'anterior' => $video->titulo,
-                'nuevo' => $request->input('titulo'),
+                'nuevo'    => $request->input('titulo'),
             ];
             $video->titulo = $request->input('titulo');
         }
@@ -199,7 +247,7 @@ class VideoController extends Controller
 
         if ($request->has('descripcion') && $request->input('descripcion') != $video->descripcion) {
             $cambios['descripcion'] = 'cambiado';
-            $video->descripcion = $request->input('descripcion');
+            $video->descripcion     = $request->input('descripcion');
         }
 
         return $cambios;
@@ -211,18 +259,18 @@ class VideoController extends Controller
 
         if ($request->hasFile('video')) {
             $rutaAnterior = $video->link;
-            $rutaVideo = $this->GuardarArchivo($request->file('video'), 'videos/' . $video->canal_id);
-            $video->link = $this->GenerarUrl($rutaVideo);
+            $rutaVideo    = $this->GuardarArchivo($request->file('video'), 'videos/' . $video->canal_id);
+            $video->link  = $this->GenerarUrl($rutaVideo);
             if ($request->has('duracion')) {
                 $video->duracion = $request->input('duracion');
             } else {
-                $duracion = $this->obtenerDuracionDeVideo($request->file('video'));
+                $duracion        = $this->obtenerDuracionDeVideo($request->file('video'));
                 $video->duracion = $duracion;
             }
-            $video->duracion = $duracion;
+            $video->duracion  = $duracion;
             $cambios['video'] = [
                 'anterior' => $rutaAnterior,
-                'nuevo' => $video->link,
+                'nuevo'    => $video->link,
             ];
         }
 
@@ -234,11 +282,11 @@ class VideoController extends Controller
         $cambios = [];
 
         if ($request->hasFile('miniatura')) {
-            $rutaAnterior = $video->miniatura;
-            $rutaMiniatura = $this->GuardarArchivo($request->file('miniatura'), 'miniaturas/' . $video->canal_id);
+            $rutaAnterior         = $video->miniatura;
+            $rutaMiniatura        = $this->GuardarArchivo($request->file('miniatura'), 'miniaturas/' . $video->canal_id);
             $cambios['miniatura'] = [
                 'anterior' => $rutaAnterior,
-                'nuevo' => $this->GenerarUrl($rutaMiniatura),
+                'nuevo'    => $this->GenerarUrl($rutaMiniatura),
             ];
             $video->miniatura = $this->GenerarUrl($rutaMiniatura);
         }
@@ -253,7 +301,7 @@ class VideoController extends Controller
         if ($request->has('acceso') && $request->input('acceso') != $video->acceso) {
             $cambios['acceso'] = [
                 'anterior' => $video->acceso,
-                'nuevo' => $request->input('acceso'),
+                'nuevo'    => $request->input('acceso'),
             ];
             $video->acceso = $request->input('acceso');
         }
@@ -284,11 +332,11 @@ class VideoController extends Controller
     private function ValidarEdicionDeVideo($request)
     {
         $rules = [
-            'titulo' => 'sometimes|string|max:255',
+            'titulo'      => 'sometimes|string|max:255',
             'descripcion' => 'sometimes|string',
-            'video' => 'sometimes|file|mimetypes:video/mp4,video/quicktime,video/x-msvideo,video/x-flv,video/webm|max:120000',
-            'miniatura' => 'sometimes|image|max:2048',
-            'acceso' => 'sometimes|string|max:255',
+            'video'       => 'sometimes|file|mimetypes:video/mp4,video/quicktime,video/x-msvideo,video/x-flv,video/webm|max:120000',
+            'miniatura'   => 'sometimes|image|max:2048',
+            'acceso'      => 'sometimes|string|max:255',
         ];
 
         $this->ValidarRequest($request, $rules);
@@ -299,13 +347,13 @@ class VideoController extends Controller
         $this->ValidarSubidaDeVideo($request);
 
         $canalId = $request->input('canal_id');
-        if (!$request->hasFile('video') || !$request->hasFile('miniatura')) {
+        if (! $request->hasFile('video') || ! $request->hasFile('miniatura')) {
             return redirect()->back()->with('error', 'Debe proporcionar tanto el archivo de video como la miniatura');
         }
 
-        $canal = Canal::findOrFail($canalId);
+        $canal     = Canal::findOrFail($canalId);
         $videoData = $this->ProcesarVideo($request->file('video'), $request->file('miniatura'), $canalId);
-        $duracion = $request->input('duracion', null);
+        $duracion  = $request->input('duracion', null);
         if (is_null($duracion)) {
             $duracion = $this->obtenerDuracionDeVideo($request->file('video'));
         }
@@ -320,8 +368,8 @@ class VideoController extends Controller
 
     private function obtenerDuracionDeVideo($videoFile)
     {
-        $ffmpeg = FFMpegHelper::crearFFMpeg();
-        $video = $ffmpeg->open($videoFile->getRealPath());
+        $ffmpeg                = FFMpegHelper::crearFFMpeg();
+        $video                 = $ffmpeg->open($videoFile->getRealPath());
         $duracionTotalDelVideo = $video->getStreams()->videos()->first()->get('duration');
 
         return $duracionTotalDelVideo;
@@ -341,11 +389,11 @@ class VideoController extends Controller
     private function ValidarSubidaDeVideo($request)
     {
         $rules = [
-            'titulo' => 'required|string|max:255',
+            'titulo'      => 'required|string|max:255',
             'descripcion' => 'required|string',
-            'video' => 'required|file|mimetypes:video/mp4,video/quicktime,video/x-msvideo,video/x-flv,video/webm|max:120000',
-            'miniatura' => 'required|image|max:2048',
-            'acceso' => 'required|in:publico,privado',
+            'video'       => 'required|file|mimetypes:video/mp4,video/quicktime,video/x-msvideo,video/x-flv,video/webm|max:120000',
+            'miniatura'   => 'required|image|max:2048',
+            'acceso'      => 'required|in:publico,privado',
         ];
 
         $this->ValidarRequest($request, $rules);
@@ -358,12 +406,11 @@ class VideoController extends Controller
 
     private function ProcesarVideo($videoFile, $miniaturaFile, $canalId)
     {
-        $rutaVideo = $this->GuardarArchivo($videoFile, 'videos/' . $canalId);
+        $rutaVideo     = $this->GuardarArchivo($videoFile, 'videos/' . $canalId);
         $rutaMiniatura = $this->GuardarArchivo($miniaturaFile, 'miniaturas/' . $canalId);
-
         return [
-            'urlVideo' => $this->GenerarUrl($rutaVideo),
-            'urlMiniatura' => $this->GenerarUrl($rutaMiniatura),
+            'urlVideo'     => $rutaVideo,
+            'urlMiniatura' => $rutaMiniatura,
         ];
     }
 
@@ -372,21 +419,16 @@ class VideoController extends Controller
         return $archivo->store($ruta, 's3');
     }
 
-    private function GenerarUrl($ruta)
-    {
-        return str_replace('minio', env('BLITZVIDEO_HOST'), Storage::disk('s3')->url($ruta));
-    }
-
     private function CrearNuevoVideo(Request $request, Canal $canal, array $videoData, $duracion)
     {
         return Video::create([
-            'titulo' => $request->input('titulo'),
+            'titulo'      => $request->input('titulo'),
             'descripcion' => $request->input('descripcion'),
-            'link' => $videoData['urlVideo'],
-            'miniatura' => $videoData['urlMiniatura'],
-            'canal_id' => $canal->id,
-            'duracion' => $duracion,
-            'acceso' => $request->input('acceso', 'publico'),
+            'link'        => $videoData['urlVideo'],
+            'miniatura'   => $videoData['urlMiniatura'],
+            'canal_id'    => $canal->id,
+            'duracion'    => $duracion,
+            'acceso'      => $request->input('acceso', 'publico'),
         ]);
     }
 
@@ -399,7 +441,7 @@ class VideoController extends Controller
     public function BajaVideo($idVideo)
     {
         try {
-            $video = Video::findOrFail($idVideo);
+            $video       = Video::findOrFail($idVideo);
             $tituloVideo = $video->titulo;
             $video->delete();
             $this->registrarActividadBajaVideo($idVideo, $tituloVideo);
@@ -433,13 +475,21 @@ class VideoController extends Controller
     {
         try {
             $etiqueta = Etiqueta::findOrFail($id);
-
-            $videos = $etiqueta->videos()
+            $videos   = $etiqueta->videos()
                 ->whereDoesntHave('canal.user', function ($query) {
                     $query->where('name', 'Invitado');
                 })
+                ->with(['canal.user'])
                 ->paginate(9);
-
+            $host   = $this->obtenerHostMinio();
+            $bucket = $this->obtenerBucket();
+            foreach ($videos as $video) {
+                $video->miniatura = $this->obtenerUrlArchivo($video->miniatura, $host, $bucket);
+                $video->link      = $this->obtenerUrlArchivo($video->link, $host, $bucket);
+                if ($video->canal && $video->canal->user) {
+                    $video->canal->user->foto = $this->obtenerUrlArchivo($video->canal->user->foto, $host, $bucket);
+                }
+            }
             return view('video.listar-por-etiqueta', compact('videos', 'etiqueta'));
         } catch (\Exception $e) {
             return redirect()->route('video.etiquetas')->with('error', 'No se pudieron listar los videos.');
@@ -448,7 +498,7 @@ class VideoController extends Controller
 
     public function ListarVideosPorCanal($canalId, Request $request)
     {
-        $page = $request->input('page', 1);
+        $page   = $request->input('page', 1);
         $titulo = $request->input('titulo');
         $videos = $this->obtenerVideosPorCanal($canalId, $titulo);
         $videos = $this->paginateCollection($videos, 9, $page);
@@ -481,7 +531,7 @@ class VideoController extends Controller
                 },
                 'visitas',
             ]);
-        if (!empty($titulo)) {
+        if (! empty($titulo)) {
             $query->where('titulo', 'like', '%' . $titulo . '%');
         }
 
@@ -492,7 +542,7 @@ class VideoController extends Controller
 
     public function bloquearVideo(Request $request, $id)
     {
-        $video = $this->cambiarEstadoVideo($id, true);
+        $video  = $this->cambiarEstadoVideo($id, true);
         $motivo = $request->input('motivo');
         $this->registrarYEnviarCorreoDeBloqueo($video, 'Bloqueo de video', $motivo);
         $this->notificacionBloqueoVideo($video, $motivo);
@@ -509,7 +559,7 @@ class VideoController extends Controller
 
     private function cambiarEstadoVideo($id, $estado)
     {
-        $video = Video::findOrFail($id);
+        $video            = Video::findOrFail($id);
         $video->bloqueado = $estado;
         $video->save();
 
@@ -520,8 +570,8 @@ class VideoController extends Controller
     {
         $this->registrarActividadBloqueoDesbloqueo($video, $tipoActividad);
 
-        $usuario = $video->canal->user;
-        $titulo_video = $video->titulo;
+        $usuario        = $video->canal->user;
+        $titulo_video   = $video->titulo;
         $mailController = new MailController();
         $mailController->correoBloqueoDeVideo($usuario->email, $usuario->name, $titulo_video, $motivo);
     }

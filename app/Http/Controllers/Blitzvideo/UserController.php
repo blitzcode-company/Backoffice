@@ -1,5 +1,4 @@
 <?php
-
 namespace App\Http\Controllers\Blitzvideo;
 
 use App\Events\ActividadRegistrada;
@@ -11,9 +10,9 @@ use Illuminate\Support\Facades\Storage;
 
 class UserController extends Controller
 {
-    private const ROUTE_CREAR_USUARIO = 'usuario.crear.formulario';
+    private const ROUTE_CREAR_USUARIO   = 'usuario.crear.formulario';
     private const ROUTE_LISTAR_USUARIOS = 'usuario.listar';
-    private const ROUTE_EDITAR_USUARIO = 'usuario.editar.formulario';
+    private const ROUTE_EDITAR_USUARIO  = 'usuario.editar.formulario';
 
     use Paginable;
 
@@ -25,7 +24,7 @@ class UserController extends Controller
     public function MostrarFormularioActualizarUsuario($id)
     {
         $user = User::with('canales')->find($id);
-        if (!$user) {
+        if (! $user) {
             abort(404, 'Usuario no encontrado');
         }
         return view('usuario.editar-usuario', compact('user'));
@@ -34,10 +33,10 @@ class UserController extends Controller
     public function CrearUsuario(Request $request)
     {
         $request->validate([
-            'name' => 'required|string',
-            'email' => 'required|email|unique:users,email',
-            'password' => 'required|min:6',
-            'foto' => 'image|mimes:jpeg,png,jpg,gif,avif|max:2048',
+            'name'                => 'required|string',
+            'email'               => 'required|email|unique:users,email',
+            'password'            => 'required|min:6',
+            'foto'                => 'image|mimes:jpeg,png,jpg,gif,avif|max:2048',
             'fecha_de_nacimiento' => 'required|date',
         ]);
 
@@ -58,12 +57,12 @@ class UserController extends Controller
 
     private function crearNuevoUsuario(Request $request)
     {
-        $usuario = new User();
-        $usuario->name = $request->input('name');
-        $usuario->email = $request->input('email');
-        $usuario->password = bcrypt($request->input('password'));
+        $usuario                      = new User();
+        $usuario->name                = $request->input('name');
+        $usuario->email               = $request->input('email');
+        $usuario->password            = bcrypt($request->input('password'));
         $usuario->fecha_de_nacimiento = $request->input('fecha_de_nacimiento');
-        $usuario->premium = $request->has('premium');
+        $usuario->premium             = $request->has('premium');
         $usuario->save();
         return $usuario;
     }
@@ -71,11 +70,10 @@ class UserController extends Controller
     private function subirFoto(Request $request, User $usuario)
     {
         if ($request->hasFile('foto')) {
-            $folderPath = 'perfil/' . $usuario->id;
-            $foto = $request->file('foto');
-            $rutaFoto = $foto->store($folderPath, 's3');
-            $urlFoto = str_replace('minio', env('BLITZVIDEO_HOST'), Storage::disk('s3')->url($rutaFoto));
-            $usuario->foto = $urlFoto;
+            $folderPath    = 'perfil/' . $usuario->id;
+            $foto          = $request->file('foto');
+            $rutaFoto      = $foto->store($folderPath, 's3');
+            $usuario->foto = $rutaFoto;
             $usuario->save();
         }
     }
@@ -98,7 +96,7 @@ class UserController extends Controller
         try {
             $usuario = User::find($id);
 
-            if (!$usuario) {
+            if (! $usuario) {
                 abort(404, 'Usuario no encontrado');
             }
             if ($usuario->foto) {
@@ -120,7 +118,7 @@ class UserController extends Controller
     {
         $usuario = User::find($id);
 
-        if (!$usuario) {
+        if (! $usuario) {
             abort(404, 'Usuario no encontrado');
         }
 
@@ -149,12 +147,12 @@ class UserController extends Controller
     private function validarDatos($id)
     {
         return [
-            'name' => 'sometimes|required|string',
-            'email' => 'sometimes|required|email|unique:users,email,' . $id,
-            'password' => 'nullable|min:6',
-            'foto' => 'nullable|image|mimes:jpeg,png,jpg,gif,avif|max:2048',
+            'name'                => 'sometimes|required|string',
+            'email'               => 'sometimes|required|email|unique:users,email,' . $id,
+            'password'            => 'nullable|min:6',
+            'foto'                => 'nullable|image|mimes:jpeg,png,jpg,gif,avif|max:2048',
             'fecha_de_nacimiento' => 'nullable|date',
-            'premium' => 'nullable|boolean',
+            'premium'             => 'nullable|boolean',
         ];
     }
 
@@ -165,7 +163,7 @@ class UserController extends Controller
         if ($request->has('name') && $request->input('name') != $usuario->name) {
             $cambios['Nombre'] = [
                 'anterior' => $usuario->name,
-                'nuevo' => $request->input('name'),
+                'nuevo'    => $request->input('name'),
             ];
             $usuario->name = $request->input('name');
         }
@@ -180,7 +178,7 @@ class UserController extends Controller
         if ($request->has('email') && $request->input('email') != $usuario->email) {
             $cambios['Email'] = [
                 'anterior' => $usuario->email,
-                'nuevo' => $request->input('email'),
+                'nuevo'    => $request->input('email'),
             ];
             $usuario->email = $request->input('email');
         }
@@ -194,7 +192,7 @@ class UserController extends Controller
 
         if ($request->filled('password')) {
             $cambios['Password'] = 'cambiado';
-            $usuario->password = bcrypt($request->input('password'));
+            $usuario->password   = bcrypt($request->input('password'));
         }
 
         return $cambios;
@@ -206,7 +204,7 @@ class UserController extends Controller
         if ($request->has('fecha_de_nacimiento') && $request->input('fecha_de_nacimiento') != $usuario->fecha_de_nacimiento) {
             $cambios['Fecha de Nacimiento'] = [
                 'anterior' => $usuario->fecha_de_nacimiento,
-                'nuevo' => $request->input('fecha_de_nacimiento'),
+                'nuevo'    => $request->input('fecha_de_nacimiento'),
             ];
             $usuario->fecha_de_nacimiento = $request->input('fecha_de_nacimiento');
         }
@@ -221,7 +219,7 @@ class UserController extends Controller
         if ($request->has('premium') && $request->input('premium') != $usuario->premium) {
             $cambios['Premium'] = [
                 'anterior' => $usuario->premium ? 'Sí' : 'No',
-                'nuevo' => $request->input('premium') ? 'Sí' : 'No',
+                'nuevo'    => $request->input('premium') ? 'Sí' : 'No',
             ];
             $usuario->premium = $request->input('premium');
         }
@@ -242,15 +240,14 @@ class UserController extends Controller
                 }
             }
 
-            $folderPath = 'perfil/' . $usuario->id;
-            $foto = $request->file('foto');
-            $rutaFoto = $foto->store($folderPath, 's3');
-            $urlFoto = str_replace('minio', env('BLITZVIDEO_HOST'), Storage::disk('s3')->url($rutaFoto));
+            $folderPath      = 'perfil/' . $usuario->id;
+            $foto            = $request->file('foto');
+            $rutaFoto        = $foto->store($folderPath, 's3');
             $cambios['Foto'] = [
                 'anterior' => $usuario->foto,
-                'nuevo' => $urlFoto,
+                'nuevo'    => $rutaFoto,
             ];
-            $usuario->foto = $urlFoto;
+            $usuario->foto = $rutaFoto;
         }
 
         return $cambios;
@@ -270,39 +267,102 @@ class UserController extends Controller
         $usersQuery = User::with('canales')
             ->where('name', '!=', 'Invitado')
             ->orderBy('id', 'desc');
-        $users = $this->paginateBuilder($usersQuery, 6, $request->input('page', 1));
+
+        $users  = $this->paginateBuilder($usersQuery, 6, $request->input('page', 1));
+        $host   = $this->obtenerHostMinio();
+        $bucket = $this->obtenerBucket();
+        foreach ($users as $user) {
+            if (! empty($user->foto)) {
+                $user->foto = $this->obtenerUrlArchivo($user->foto, $host, $bucket);
+            }
+            if ($user->canales) {
+                foreach ($user->canales as $canal) {
+                    if (! empty($canal->portada)) {
+                        $canal->portada = $this->obtenerUrlArchivo($canal->portada, $host, $bucket);
+                    }
+                }
+            }
+        }
         return view('usuario.usuarios', compact('users'));
     }
 
     public function MostrarUsuarioPorId($id)
     {
         $user = User::with('canales')->find($id);
-        if (!$user) {
+        if (! $user) {
             abort(404, 'Usuario no encontrado');
         }
-
+        $host   = $this->obtenerHostMinio();
+        $bucket = $this->obtenerBucket();
+        if (! empty($user->foto)) {
+            $user->foto = $this->obtenerUrlArchivo($user->foto, $host, $bucket);
+        }
+        if ($user->canales) {
+            foreach ($user->canales as $canal) {
+                if (! empty($canal->portada)) {
+                    $canal->portada = $this->obtenerUrlArchivo($canal->portada, $host, $bucket);
+                }
+            }
+        }
         return view('usuario.usuario', compact('user'));
     }
 
     public function ListarUsuariosPorNombre(Request $request)
     {
         $nombre = $request->query('nombre');
-        $query = User::with('canales')->where('name', '!=', 'Invitado');
-
+        $query  = User::with('canales')->where('name', '!=', 'Invitado');
         if ($nombre) {
             $query->where('name', 'like', '%' . $nombre . '%');
         }
-        $users = $this->paginateBuilder($query, 6, $request->input('page', 1));
+        $users  = $this->paginateBuilder($query, 6, $request->input('page', 1));
+        $host   = $this->obtenerHostMinio();
+        $bucket = $this->obtenerBucket();
+        foreach ($users as $user) {
+            if (! empty($user->foto)) {
+                $user->foto = $this->obtenerUrlArchivo($user->foto, $host, $bucket);
+            }
+            if ($user->canales) {
+                foreach ($user->canales as $canal) {
+                    if (! empty($canal->portada)) {
+                        $canal->portada = $this->obtenerUrlArchivo($canal->portada, $host, $bucket);
+                    }
+                }
+            }
+        }
         return view('usuario.usuarios', compact('users'));
+    }
+
+    private function obtenerHostMinio()
+    {
+        return str_replace('minio', env('BLITZVIDEO_HOST'), env('AWS_ENDPOINT')) . '/';
+    }
+
+    private function obtenerBucket()
+    {
+        return env('AWS_BUCKET') . '/';
+    }
+
+    private function obtenerUrlArchivo($rutaRelativa, $host, $bucket)
+    {
+        if (! $rutaRelativa) {
+            return null;
+        }
+        if (str_starts_with($rutaRelativa, $host . $bucket)) {
+            return $rutaRelativa;
+        }
+        if (filter_var($rutaRelativa, FILTER_VALIDATE_URL)) {
+            return $rutaRelativa;
+        }
+        return $host . $bucket . $rutaRelativa;
     }
 
     public function bloquearUsuario($id, Request $request)
     {
         try {
-            $motivo = $request->input('motivo');
+            $motivo  = $request->input('motivo');
             $usuario = User::find($id);
 
-            if (!$usuario) {
+            if (! $usuario) {
                 abort(404, 'Usuario no encontrado');
             }
             $usuario->bloqueado = true;
@@ -328,7 +388,7 @@ class UserController extends Controller
     {
         try {
             $usuario = User::find($id);
-            if (!$usuario) {
+            if (! $usuario) {
                 abort(404, 'Usuario no encontrado');
             }
             $usuario->bloqueado = false;
