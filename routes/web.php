@@ -8,14 +8,15 @@ use App\Http\Controllers\Blitzvideo\EtiquetaController;
 use App\Http\Controllers\Blitzvideo\MailController;
 use App\Http\Controllers\Blitzvideo\PlaylistController;
 use App\Http\Controllers\Blitzvideo\PublicidadController;
+use App\Http\Controllers\Blitzvideo\StreamController;
 use App\Http\Controllers\Blitzvideo\SuscriptoresController;
 use App\Http\Controllers\Blitzvideo\TransaccionController;
 use App\Http\Controllers\Blitzvideo\UserController;
 use App\Http\Controllers\Blitzvideo\VideoController;
-use App\Http\Controllers\Blitzvideo\StreamController;
 use App\Http\Controllers\Chart\UserChartController;
 use App\Http\Controllers\Chart\VideoChartController;
-
+use App\Http\Controllers\Chart\CanalChartController;
+use App\Http\Controllers\Chart\OtherChartController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('login', [LoginController::class, 'showLoginForm'])->name('login');
@@ -127,8 +128,23 @@ Route::middleware(['auth'])->group(function () {
         Route::get('/usuarios-premium', [UserChartController::class, 'UsuariosPremium'])->name('premium_users');
         Route::get('/usuarios-activos', [UserChartController::class, 'UsuarioActivoInactivo'])->name('active_users');
         Route::get('/usuarios-creadores', [UserChartController::class, 'UsuarioConCanal'])->name('user_channel');
+        Route::get('/usuarios-comentarios-me-gusta', [UserChartController::class, 'UsuariosInteraccionGeneral'])->name('commenting_liking_users');
+        Route::get('/usuarios-registrados-por-mes', [UserChartController::class, 'UsuariosRegistradosPorMes'])->name('monthly_registrations');
+        Route::get('/usuarios-bloqueados-activos', [UserChartController::class, 'UsuariosBloqueadosActivos'])->name('blocked_active_users');
         Route::get('/videos-por-etiqueta', [VideoChartController::class, 'VideosPorEtiqueta'])->name('videos_por_etiqueta');
         Route::get('/videos-mas-vistados-por-mes', [VideoChartController::class, 'VideosMasVistadosElUltimoMes'])->name('mas_visitados_por_mes');
+        Route::get('/videos-activos-bloqueados', [VideoChartController::class, 'VideosActivosBloqueados'])->name('video_status');
+        Route::get('/videos-nivel-acceso', [VideoChartController::class, 'VideosPorNivelDeAcceso'])->name('video_access_level');
+        Route::get('/videos-mas-comentados', [VideoChartController::class, 'VideosConMasComentarios'])->name('top_commented_videos');
+        Route::get('/videos-distribucion-puntuaciones', [VideoChartController::class, 'DistribucionPuntuacionesVideos'])->name('video_rating_distribution');
+        Route::get('/videos-publicidad', [VideoChartController::class, 'PublicidadVideos'])->name('video_ads');
+        Route::get('/canales-mas-seguidos', [CanalChartController::class, 'TopCanalesSeguidos'])->name('top_followed_channels');
+        Route::get('/canales-por-videos', [CanalChartController::class, 'CanalesPorCantidadVideos'])->name('channels_by_video_count');
+        Route::get('/canales-streams-estado', [CanalChartController::class, 'CanalesStreamsActivosInactivos'])->name('channel_stream_status');
+        Route::get('/canales-antiguedad', [CanalChartController::class, 'CanalesPorAntiguedad'])->name('channel_creation_date');
+
+        Route::get('/reportes-contenido', [OtherChartController::class, 'ReportesContenidoPorCategoria'])->name('content_reports');
+        Route::get('/uso-notificaciones', [OtherChartController::class, 'UsoNotificaciones'])->name('notification_status');
     });
 
     Route::prefix('admin')->name('admin.')->group(function () {
