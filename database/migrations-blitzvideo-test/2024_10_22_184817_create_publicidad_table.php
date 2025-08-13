@@ -21,6 +21,6 @@ class CreatePublicidadTable extends Migration
 
     public function down()
     {
-        Schema::dropIfExists('publicidad');
+        Schema::connection('blitzvideo')->dropIfExists('publicidad');
     }
 }

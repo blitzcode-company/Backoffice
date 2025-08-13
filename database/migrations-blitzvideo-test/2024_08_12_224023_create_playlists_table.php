@@ -20,6 +20,6 @@ class CreatePlaylistsTable extends Migration
 
     public function down()
     {
-        Schema::dropIfExists('playlists');
+        Schema::connection('blitzvideo')->dropIfExists('playlists');
     }
 }

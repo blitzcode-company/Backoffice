@@ -22,6 +22,6 @@ class CreateCanalsTable extends Migration
 
     public function down()
     {
-        Schema::dropIfExists('canals');
+        Schema::connection('blitzvideo')->dropIfExists('canals');
     }
 }

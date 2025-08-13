@@ -18,6 +18,6 @@ class CreateVideoListaTable extends Migration
 
     public function down()
     {
-        Schema::dropIfExists('video_lista');
+        Schema::connection('blitzvideo')->dropIfExists('video_lista');
     }
 }

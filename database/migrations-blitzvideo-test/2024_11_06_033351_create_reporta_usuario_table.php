@@ -29,6 +29,6 @@ class CreateReportaUsuarioTable extends Migration
 
     public function down()
     {
-        Schema::dropIfExists('reporta_usuario');
+        Schema::connection('blitzvideo')->dropIfExists('reporta_usuario');
     }
 }

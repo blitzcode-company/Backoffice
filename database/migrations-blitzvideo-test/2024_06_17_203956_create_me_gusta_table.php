@@ -19,6 +19,6 @@ class CreateMeGustaTable extends Migration
 
     public function down()
     {
-        Schema::dropIfExists('me_gusta');
+        Schema::connection('blitzvideo')->dropIfExists('me_gusta');
     }
 }

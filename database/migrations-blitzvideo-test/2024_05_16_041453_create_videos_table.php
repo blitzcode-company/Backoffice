@@ -25,8 +25,6 @@ return new class extends Migration
 
     public function down(): void
     {
-        Schema::table('videos', function (Blueprint $table) {
-            $table->dropSoftDeletes();
-        });
+        Schema::connection('blitzvideo')->dropIfExists('videos');
     }
 };

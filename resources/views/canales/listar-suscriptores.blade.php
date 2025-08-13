@@ -73,10 +73,22 @@
                                     <i class="fas fa-times" style="color: red;"></i>
                                 @endif
                             </p>
+                            @php
+                                $rawChannels = $suscriptor->canales;
+                                $channelsToDisplay = collect();
+                                if ($rawChannels instanceof \Illuminate\Database\Eloquent\Collection) {
+                                    $channelsToDisplay = $rawChannels->filter(function ($item) {
+                                        return $item instanceof \App\Models\Blitzvideo\Canal;
+                                    });
+                                } 
+                                elseif ($rawChannels instanceof \App\Models\Blitzvideo\Canal) {
+                                    $channelsToDisplay->push($rawChannels);
+                                }
+                            @endphp
 
-                            @if ($suscriptor->canales->isNotEmpty())
+                            @if ($channelsToDisplay->isNotEmpty())
                                 <div class="user-canales">
-                                    @foreach ($suscriptor->canales as $canalSuscrito)
+                                    @foreach ($channelsToDisplay as $canalSuscrito)
                                         <p>
                                             <a class="custom-link"
                                                 href="{{ route('canal.detalle', ['id' => $canalSuscrito->id]) }}">
@@ -89,8 +101,6 @@
                             @else
                                 <p>No tiene canal asociado.</p>
                             @endif
-
-
                             @include('modals.desuscribe-modal', ['suscriptor' => $suscriptor])
                         </div>
                     </li>

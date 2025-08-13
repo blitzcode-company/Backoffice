@@ -1,24 +1,24 @@
-<?php
+    <?php
 
-use Illuminate\Database\Migrations\Migration;
-use Illuminate\Database\Schema\Blueprint;
-use Illuminate\Support\Facades\Schema;
+    use Illuminate\Database\Migrations\Migration;
+    use Illuminate\Database\Schema\Blueprint;
+    use Illuminate\Support\Facades\Schema;
 
-class CreateNotificaTable extends Migration
-{
-    public function up()
+    class CreateNotificaTable extends Migration
     {
-        Schema::connection('blitzvideo')->create('notifica', function (Blueprint $table) {
-            $table->bigIncrements('id');
-            $table->foreignId('usuario_id')->constrained('users')->onDelete('cascade');
-            $table->foreignId('notificacion_id')->constrained('notificacion')->onDelete('cascade');
-            $table->boolean('leido')->default(false);
-            $table->timestamps();
-        });
-    }
+        public function up()
+        {
+            Schema::connection('blitzvideo')->create('notifica', function (Blueprint $table) {
+                $table->bigIncrements('id');
+                $table->foreignId('usuario_id')->constrained('users')->onDelete('cascade');
+                $table->foreignId('notificacion_id')->constrained('notificacion')->onDelete('cascade');
+                $table->boolean('leido')->default(false);
+                $table->timestamps();
+            });
+        }
 
-    public function down()
-    {
-        Schema::dropIfExists('notifica');
+        public function down()
+        {
+            Schema::connection('blitzvideo')->dropIfExists('notifica');
+        }
     }
-}

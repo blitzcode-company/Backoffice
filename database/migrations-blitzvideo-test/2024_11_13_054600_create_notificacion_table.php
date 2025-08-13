@@ -28,6 +28,6 @@ class CreateNotificacionTable extends Migration
     }
     public function down()
     {
-        Schema::dropIfExists('notificacion');
+        Schema::connection('blitzvideo')->dropIfExists('notificacion');
     }
 }

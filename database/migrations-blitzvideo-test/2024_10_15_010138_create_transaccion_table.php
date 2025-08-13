@@ -21,6 +21,6 @@ class CreateTransaccionTable extends Migration
 
     public function down()
     {
-        Schema::dropIfExists('transaccion');
+        Schema::connection('blitzvideo')->dropIfExists('transaccion');
     }
 }

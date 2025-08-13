@@ -18,6 +18,6 @@ class CreateVisitasTable extends Migration
 
     public function down()
     {
-        Schema::dropIfExists('visitas');
+        Schema::connection('blitzvideo')->dropIfExists('visitas');
     }
 }

@@ -18,6 +18,6 @@ class CreateEtiquetaVideoTable extends Migration
 
     public function down()
     {
-        Schema::dropIfExists('etiqueta_video');
+        Schema::connection('blitzvideo')->dropIfExists('etiqueta_video');
     }
 }

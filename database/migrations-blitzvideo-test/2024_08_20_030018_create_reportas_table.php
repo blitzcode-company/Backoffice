@@ -29,6 +29,6 @@ class CreateReportasTable extends Migration
 
     public function down()
     {
-        Schema::dropIfExists('reporta');
+        Schema::connection('blitzvideo')->dropIfExists('reporta');
     }
 }

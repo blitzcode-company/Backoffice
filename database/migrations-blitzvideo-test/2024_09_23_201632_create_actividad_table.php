@@ -19,6 +19,6 @@ class CreateActividadTable extends Migration
 
     public function down()
     {
-        Schema::dropIfExists('actividad');
+        Schema::connection('blitzvideo')->dropIfExists('actividad');
     }
 }

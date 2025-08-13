@@ -31,6 +31,6 @@ class CreateJobsTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('jobs');
+        Schema::connection('blitzvideo')->dropIfExists('jobs');
     }
 }

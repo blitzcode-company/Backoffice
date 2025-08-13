@@ -31,6 +31,6 @@ class CreateStreamsTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('streams');
+        Schema::connection('blitzvideo')->dropIfExists('streams');
     }
 }

@@ -27,6 +27,6 @@ class CreatePasswordResetsTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('password_resets');
+        Schema::connection('blitzvideo')->dropIfExists('password_resets');
     }
 }

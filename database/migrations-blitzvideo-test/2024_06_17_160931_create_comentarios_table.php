@@ -23,6 +23,6 @@ class CreateComentariosTable extends Migration
 
     public function down()
     {
-        Schema::dropIfExists('comentarios');
+        Schema::connection('blitzvideo')->dropIfExists('comentarios');
     }
 }

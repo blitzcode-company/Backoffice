@@ -29,6 +29,6 @@ class CreateReportaComentarioTable extends Migration
 
     public function down()
     {
-        Schema::dropIfExists('reporta_comentario');
+        Schema::connection('blitzvideo')->dropIfExists('reporta_comentario');
     }
 }
