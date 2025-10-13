@@ -17,6 +17,7 @@ use App\Http\Controllers\Chart\UserChartController;
 use App\Http\Controllers\Chart\VideoChartController;
 use App\Http\Controllers\Chart\CanalChartController;
 use App\Http\Controllers\Chart\OtherChartController;
+use App\Http\Controllers\Chart\StatsSummaryController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('login', [LoginController::class, 'showLoginForm'])->name('login');
@@ -26,7 +27,7 @@ Route::middleware(['auth'])->group(function () {
 
     Route::get('logout', [LoginController::class, 'logout'])->name('logout');
     Route::get('/', function () {return view('inicio');})->name('inicio');
-    Route::get('/estadisticas', function () {return view('estadisticas');})->name('estadisticas');
+    Route::get('/estadisticas', [StatsSummaryController::class, 'showSummary'])->name('estadisticas');
     Route::get('/anuncios', function () {return view('anuncios');})->name('anuncios');
     Route::get('/perfil', function () {return view('perfil');})->name('perfil');
     Route::get('/ajustes', function () {return view('ajustes');})->name('ajustes');

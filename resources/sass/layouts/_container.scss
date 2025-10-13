@@ -72,6 +72,7 @@ h3.login-text {
     min-height: 600px;
     margin: 50px auto;
     padding: 20px;
+    border: 1px solid v.$color-border;
     border-radius: 8px;
     background-color: v.$color-background;
     text-align: center;
@@ -173,7 +174,7 @@ h3.login-text {
 
     .container-transaccion {
         background-color: v.$color-background-dark;
-        border: 1px solid #2c323a;
+        border: 1px solid v.$color-border;
         color: v.$color-white;
 
         .table {

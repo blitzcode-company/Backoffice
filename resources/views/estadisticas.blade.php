@@ -2,6 +2,30 @@
 
 @section('content')
     <div class="titulo">Administración de Estadísticas</div>
+
+    <div class="summary-stats-container">
+        <div class="summary-card">
+            <i class="fas fa-users fa-2x"></i>
+            <h3>Usuarios Totales</h3>
+            <p>{{ $totalUsers }}</p>
+        </div>
+        <div class="summary-card">
+            <i class="fas fa-tv fa-2x"></i>
+            <h3>Canales Totales</h3>
+            <p>{{ $totalCanals }}</p>
+        </div>
+        <div class="summary-card">
+            <i class="fas fa-video fa-2x"></i>
+            <h3>Videos Totales</h3>
+            <p>{{ $totalVideos }}</p>
+        </div>
+        <div class="summary-card">
+            <i class="fas fa-tags fa-2x"></i>
+            <h3>Etiquetas Totales</h3>
+            <p>{{ $totalEtiquetas }}</p>
+        </div>
+    </div>
+
     <div class="stats-container">
         <div class="stats-section">
             <div class="stats-box">

@@ -1,0 +1,109 @@
+@use '../partials/variables' as v;
+
+.chartBorder {
+    border: 1px solid v.$color-border;
+    padding: 10px;
+}
+
+.chart-reference-box {
+    padding: 1rem;
+    margin: 2.5rem auto 1.5rem auto;
+    background-color: v.$chart-ref-bg-light;
+    border: 1px solid v.$color-border;
+    border-radius: 0.5rem;
+    box-shadow: 0 1px 3px 0 v.$chart-ref-shadow-light, 0 1px 2px 0 rgba(0, 0, 0, 0.06);
+    text-align: center;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 1rem;
+
+    h3 {
+        font-size: 1.125rem;
+        font-weight: 600;
+        margin-right: 1rem;
+        margin-bottom: 0;
+    }
+}
+
+.chart-emoji-item {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+
+    img {
+        width: 24px;
+        height: 24px;
+        display: inline-block;
+    }
+
+    span {
+        color: v.$color-chart-emoji-text-light;
+        font-size: 0.875rem;
+        font-weight: 500;
+    }
+}
+
+[data-theme='dark'] {
+    .apexcharts-canvas {
+        background-color: v.$color-background-dark !important;
+        color: v.$color-white !important;
+
+        .apexcharts-plot-series,
+        .apexcharts-tooltip {
+            background-color: v.$color-background-dark !important;
+            color: v.$color-white !important;
+            border-color: v.$chart-tooltip-border-dark !important;
+        }
+
+        .apexcharts-xaxis-label,
+        .apexcharts-yaxis-label {
+            fill: v.$color-white !important;
+        }
+
+        .apexcharts-title-text,
+        .apexcharts-subtitle-text {
+            fill: v.$color-white !important;
+        }
+
+        .apexcharts-legend-text {
+            color: v.$color-white !important;
+        }
+
+        .apexcharts-xaxis-tick,
+        .apexcharts-yaxis-tick,
+        .apexcharts-gridline {
+            stroke: v.$chart-grid-line-dark !important;
+        }
+
+        .apexcharts-inner-fill {
+            fill: v.$color-background-dark !important;
+        }
+
+        .apexcharts-tooltip {
+            background: v.$chart-tooltip-background-dark !important;
+            color: v.$chart-tooltip-text-dark !important;
+            border: 1px solid v.$chart-tooltip-border-dark !important;
+
+            .apexcharts-tooltip-title {
+                background: v.$chart-tooltip-title-background-dark !important;
+                border-bottom: 1px solid v.$chart-tooltip-border-dark !important;
+                color: v.$chart-tooltip-title-text-dark !important;
+            }
+        }
+    }
+
+    .chart-reference-box {
+        background-color: v.$color-background-dark !important;
+        box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.4), 0 1px 2px 0 rgba(0, 0, 0, 0.2);
+        border: 1px solid v.$color-border-dark;
+
+        h3 {
+            color: v.$color-white !important;
+        }
+
+        .chart-emoji-item span {
+            color: v.$color-white !important;
+        }
+    }
+}

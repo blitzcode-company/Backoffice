@@ -22,5 +22,15 @@ $color-background-dark: #313841;
 $color-sidebar-hover-dark: #3a424d;
 $color-border-dark: #1f2327;
 $color-background-dark-search: #3a424d;
-$color-white : #ffffff;
+$color-white: #ffffff;
 
+$chart-grid-line-dark: darken($color-sidebar-hover-dark, 5%);
+$chart-tooltip-background-dark: $color-background-dark;
+$chart-tooltip-text-dark: $color-white;
+$chart-tooltip-border-dark: $color-sidebar-hover-dark;
+$chart-tooltip-title-background-dark: $color-sidebar-hover-dark;
+$chart-tooltip-title-text-dark: $color-white;
+
+$chart-ref-bg-light: $color-background;
+$chart-ref-shadow-light: $shadow-color;
+$color-chart-emoji-text-light: #4A5568;
