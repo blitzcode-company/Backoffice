@@ -25,7 +25,7 @@ class CustomMail extends Mailable
     {
         return $this->to($this->destinatario)
             ->subject($this->asunto)
-            ->view('emails.custom')
+            ->view('emails.plantilla')
             ->with('mensaje', $this->mensaje);
     }
 }
