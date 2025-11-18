@@ -280,10 +280,15 @@ input[type="file"] {
     a.custom-link:hover {
         color: v.$color-white !important;
     }
+
+    .summary-card, .stats-box {
+        border: none;
+    }
 }
 
 @media (max-width: 768px) {
     .dropdown-submenu .dropdown-menu {
         display: block;
     }
+
 }
