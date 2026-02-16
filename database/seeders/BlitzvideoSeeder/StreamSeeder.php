@@ -35,9 +35,18 @@ class StreamSeeder extends Seeder
                 if (Schema::hasColumn('streams', 'canal_id')) {
                     $streamLive->canal_id = $canal->id;
                 }
-                $streamLive->stream_programado = now();
-                $streamLive->max_viewers = rand(100, 5000);
-                $streamLive->total_viewers = rand(5000, 20000);
+                if (Schema::hasColumn('streams', 'stream_programado')) {
+                    $streamLive->stream_programado = now();
+                }
+                if (Schema::hasColumn('streams', 'max_viewers')) {
+                    $streamLive->max_viewers = rand(100, 5000);
+                }
+                if (Schema::hasColumn('streams', 'total_viewers')) {
+                    $streamLive->total_viewers = rand(5000, 20000);
+                }
+                if (Schema::hasColumn('streams', 'titulo')) {
+                    $streamLive->titulo = $videoLive->titulo;
+                }
                 $streamLive->activo = true;
                 $streamLive->save();
             }
@@ -60,9 +69,18 @@ class StreamSeeder extends Seeder
             if (Schema::hasColumn('streams', 'canal_id')) {
                 $streamProgramado->canal_id = $canal->id;
             }
-            $streamProgramado->stream_programado = now()->addDays(rand(1, 3));
-            $streamProgramado->max_viewers = 0;
-            $streamProgramado->total_viewers = 0;
+            if (Schema::hasColumn('streams', 'stream_programado')) {
+                $streamProgramado->stream_programado = now()->addDays(rand(1, 3));
+            }
+            if (Schema::hasColumn('streams', 'max_viewers')) {
+                $streamProgramado->max_viewers = 0;
+            }
+            if (Schema::hasColumn('streams', 'total_viewers')) {
+                $streamProgramado->total_viewers = 0;
+            }
+            if (Schema::hasColumn('streams', 'titulo')) {
+                $streamProgramado->titulo = $videoProgramado->titulo;
+            }
             $streamProgramado->activo = false;
             $streamProgramado->save();
         }
