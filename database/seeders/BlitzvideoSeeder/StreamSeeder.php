@@ -6,84 +6,65 @@ use Illuminate\Database\Seeder;
 use App\Models\Blitzvideo\Canal;
 use App\Models\Blitzvideo\Video;
 use App\Models\Blitzvideo\Stream;
+use App\Models\Blitzvideo\Etiqueta;
 use Illuminate\Support\Facades\Schema;
 
 class StreamSeeder extends Seeder
 {
     public function run()
     {
-        $canales = Canal::with('user')->get();
+        $canales = Canal::take(5)->get();
 
-        foreach ($canales as $index => $canal) {
-            if ($index % 2 == 0) {
-                $videoLive = Video::create([
-                    'canal_id'    => $canal->id,
-                    'titulo'      => '🔴 EN VIVO: ' . $canal->nombre,
-                    'descripcion' => 'Transmisión en directo de ' . $canal->user->name,
-                    'link'        => 'stream_live_' . uniqid(),
-                    'miniatura'   => 'https://via.placeholder.com/640x360.png?text=Live+Stream',
-                    'duracion'    => 0,
-                    'bloqueado'   => false,
-                    'acceso'      => 'publico',
-                    'estado'      => 'VIDEO',
-                ]);
+        if ($canales->isEmpty()) {
+            $this->command->error('No se encontraron canales suficientes en la base de datos.');
+            return;
+        }
 
-                $streamLive = new Stream();
-                if (Schema::hasColumn('streams', 'video_id')) {
-                    $streamLive->video_id = $videoLive->id;
-                }
-                if (Schema::hasColumn('streams', 'canal_id')) {
-                    $streamLive->canal_id = $canal->id;
-                }
-                if (Schema::hasColumn('streams', 'stream_programado')) {
-                    $streamLive->stream_programado = now();
-                }
-                if (Schema::hasColumn('streams', 'max_viewers')) {
-                    $streamLive->max_viewers = rand(100, 5000);
-                }
-                if (Schema::hasColumn('streams', 'total_viewers')) {
-                    $streamLive->total_viewers = rand(5000, 20000);
-                }
-                if (Schema::hasColumn('streams', 'titulo')) {
-                    $streamLive->titulo = $videoLive->titulo;
-                }
-                $streamLive->activo = true;
-                $streamLive->save();
-            } else {
-            $videoProgramado = Video::create([
+        $etiquetasStream = Etiqueta::whereIn('nombre', ['Stream', 'Live', 'Upcoming'])
+            ->pluck('id', 'nombre')
+            ->toArray();
+
+        if (! isset($etiquetasStream['Stream']) || ! isset($etiquetasStream['Live']) || ! isset($etiquetasStream['Upcoming'])) {
+            $this->command->error('Faltan las etiquetas "Stream", "Live" o "Upcoming". Asegúrate de ejecutar EtiquetaSeeder primero.');
+            return;
+        }
+
+        foreach ($canales as $canal) {
+            $streamTitle       = 'Transmisión del canal ' . $canal->nombre;
+            $streamDescription = 'Esta es una transmisión en vivo del canal ' . $canal->nombre;
+
+            $video = Video::create([
+                'titulo'      => $streamTitle,
+                'descripcion' => $streamDescription,
+                'link'        => 'http://ejemplo.com/stream-link-' . $canal->id,
                 'canal_id'    => $canal->id,
-                'titulo'      => 'Próximo Stream: Evento Especial',
-                'descripcion' => 'No te pierdas el próximo evento en el canal de ' . $canal->user->name,
-                'link'        => 'stream_scheduled_' . uniqid(),
-                'miniatura'   => 'https://via.placeholder.com/640x360.png?text=Scheduled+Stream',
+                'miniatura'   => 'default_stream_miniatura.png',
                 'duracion'    => 0,
                 'bloqueado'   => false,
                 'acceso'      => 'publico',
-                'estado'      => 'PROGRAMADO',
             ]);
 
-            $streamProgramado = new Stream();
-            if (Schema::hasColumn('streams', 'video_id')) {
-                $streamProgramado->video_id = $videoProgramado->id;
+            $activo = (bool) rand(0, 1);
+
+            $stream = Stream::create([
+                'video_id'          => $video->id,
+                'stream_programado' => now()->addMinutes(rand(10, 60)),
+                'max_viewers'       => rand(50, 500),
+                'total_viewers'     => rand(500, 5000),
+                'activo'            => $activo,
+            ]);
+
+            $tagsToAttach = [$etiquetasStream['Stream']];
+
+            if ($activo) {
+                $tagsToAttach[] = $etiquetasStream['Live'];
+            } else {
+                $tagsToAttach[] = $etiquetasStream['Upcoming'];
             }
-            if (Schema::hasColumn('streams', 'canal_id')) {
-                $streamProgramado->canal_id = $canal->id;
-            }
-            if (Schema::hasColumn('streams', 'stream_programado')) {
-                $streamProgramado->stream_programado = now()->addDays(rand(1, 3));
-            }
-            if (Schema::hasColumn('streams', 'max_viewers')) {
-                $streamProgramado->max_viewers = 0;
-            }
-            if (Schema::hasColumn('streams', 'total_viewers')) {
-                $streamProgramado->total_viewers = 0;
-            }
-            if (Schema::hasColumn('streams', 'titulo')) {
-                $streamProgramado->titulo = $videoProgramado->titulo;
-            }
-            $streamProgramado->activo = false;
-            $streamProgramado->save();
-            }
+
+            $video->etiquetas()->attach($tagsToAttach);
+
+            $stream->canales()->attach($canal->id);
         }
     }
 }
