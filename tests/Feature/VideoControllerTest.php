@@ -19,6 +19,7 @@ class VideoControllerTest extends TestCase
     {
         parent::setUp();
         config(['database.default' => 'blitzvideo']);
+        Event::fake();
     }
 
     /** @test */
@@ -111,6 +112,10 @@ class VideoControllerTest extends TestCase
         Storage::disk('s3')->assertExists('miniaturas/' . $canalId . '/' . $formData['miniatura']->hashName());
         $response->assertRedirect(route('video.crear.formulario'));
         $response->assertSessionHas('success', 'Video subido exitosamente');
+        $this->assertDatabaseHas('videos', [
+            'titulo' => 'Título del Video',
+            'estado' => 'VIDEO',
+        ]);
     }
 
 /** @test */
@@ -131,15 +136,15 @@ class VideoControllerTest extends TestCase
         $video = $video->fresh();
         $this->assertEquals('Nuevo Título', $video->titulo);
         $this->assertEquals('Nueva Descripción', $video->descripcion);
+        $formData['duracion'] = 120;
         $formData['video'] = UploadedFile::fake()->create('video_editado.mp4', 2048, 'video/mp4');
         $formData['miniatura'] = UploadedFile::fake()->image('miniatura_editada.jpg', 1024, 1024);
-        $formData['video']->store('videos', 's3');
-        $formData['miniatura']->store('miniaturas', 's3');
         $response = $this->put(route('video.editar', ['id' => $video->id]), $formData);
         $response->assertStatus(Response::HTTP_FOUND);
+        $response->assertSessionHas('success', 'Video editado exitosamente');
         $video = $video->fresh();
-        Storage::disk('s3')->assertExists('videos/' . $formData['video']->hashName());
-        Storage::disk('s3')->assertExists('miniaturas/' . $formData['miniatura']->hashName());
+        Storage::disk('s3')->assertExists($video->link);
+        Storage::disk('s3')->assertExists($video->miniatura);
     }
 
     /** @test */

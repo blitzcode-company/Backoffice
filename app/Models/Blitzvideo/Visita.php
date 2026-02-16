@@ -9,9 +9,13 @@ class Visita extends Model
 
     protected $connection = 'blitzvideo';
 
-    protected $fillable = [
+      protected $fillable = [
         'user_id',
         'video_id',
+        'ultima_visualizacion',
+        'progreso_segundos',
+        'completado',
+        'veces_visto',
     ];
 
     public function user()
@@ -24,3 +28,4 @@ class Visita extends Model
         return $this->belongsTo(Video::class);
     }
 }
+

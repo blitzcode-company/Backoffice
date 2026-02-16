@@ -1,5 +1,4 @@
 <?php
-
 namespace App\Models\Blitzvideo;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -32,7 +31,6 @@ class User extends Authenticatable
         'email_verified_at' => 'datetime',
     ];
 
-
     public function canales()
     {
         return $this->hasOne(Canal::class);
@@ -61,7 +59,16 @@ class User extends Authenticatable
     public function notificaciones()
     {
         return $this->belongsToMany(Notificacion::class, 'notifica', 'usuario_id', 'notificacion_id')
-                    ->withPivot('leido')
-                    ->withTimestamps();
+            ->withPivot('leido')
+            ->withTimestamps();
+    }
+    public function playlistsGuardadas()
+    {
+        return $this->belongsToMany(
+            Playlist::class,
+            'playlist_guardadas',
+            'user_id',
+            'playlist_id'
+        )->withPivot('orden')->withTimestamps();
     }
 }

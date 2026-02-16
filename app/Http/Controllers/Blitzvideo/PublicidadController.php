@@ -68,7 +68,18 @@ class PublicidadController extends Controller
         $page = $request->input('page', 1);
         $publicidades = $this->obtenerPublicidadesPorNombre($nombre);
         $publicidades = $this->paginateCollection($publicidades, 6, $page);
-        return view('publicidad.publicidades', compact('publicidades'));
+
+        $host   = $this->obtenerHostMinio();
+        $bucket = $this->obtenerBucket();
+
+        foreach ($publicidades as $publicidad) {
+            foreach ($publicidad->video as $video) {
+                $video->miniatura = $this->obtenerUrlArchivo($video->miniatura, $host, $bucket);
+                $video->link      = $this->obtenerUrlArchivo($video->link, $host, $bucket);
+            }
+        }
+        $video = null;
+        return view('publicidad.publicidades', compact('publicidades', 'video'));
     }
 
     private function obtenerPublicidadesPorNombre($nombre)
@@ -79,6 +90,30 @@ class PublicidadController extends Controller
                 ->get();
         }
         return Publicidad::with('video')->get();
+    }
+
+    private function obtenerHostMinio()
+    {
+        return str_replace('minio', env('BLITZVIDEO_HOST'), env('AWS_ENDPOINT')) . '/';
+    }
+
+    private function obtenerBucket()
+    {
+        return env('AWS_BUCKET') . '/';
+    }
+
+    private function obtenerUrlArchivo($rutaRelativa, $host, $bucket)
+    {
+        if (! $rutaRelativa) {
+            return null;
+        }
+        if (str_starts_with($rutaRelativa, $host . $bucket)) {
+            return $rutaRelativa;
+        }
+        if (filter_var($rutaRelativa, FILTER_VALIDATE_URL)) {
+            return $rutaRelativa;
+        }
+        return $host . $bucket . $rutaRelativa;
     }
 
 }

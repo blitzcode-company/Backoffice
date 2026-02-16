@@ -42,16 +42,20 @@
                                     <img src="{{ asset('img/video-default.png') }}" alt="Miniatura por defecto">
                                 @endif
                             </a>
-                            <div class="video-duration live-status">
-                                @if ($stream->activo)
-                                    <i class="fas fa-circle text-success"></i> Live
-                                @else
-                                    <i class="fas fa-circle text-danger"></i> Offline
-                                @endif
+                            <div class="video-duration">
+                                <div class="live-status">
+                                    @if ($stream->activo)
+                                        <i class="fas fa-circle text-success"></i> Live
+                                    @else
+                                        <i class="fas fa-circle text-danger"></i> Offline
+                                    @endif
+                                </div>
                             </div>
                         </div>
                         <div class="video-info">
                             <h2 class="video-title">{{ $stream->titulo }}</h2>
+                            <p class="m-0 text-muted small">{{ $stream->canal->user->name ?? 'Usuario Desconocido' }}</p>
+                            <p class="m-0 text-muted small">Key: {{ $stream->canal->stream_key ?? 'N/A' }}</p>
                         </div>
                     </div>
                 @endforeach

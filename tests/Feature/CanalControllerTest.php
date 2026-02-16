@@ -36,7 +36,10 @@ class CanalControllerTest extends TestCase
         $user = User::first();
         $this->actingAs($user);
 
-        $response = $this->get(route('canal.detalle', ['id' => 3]));
+        $canal = Canal::whereHas('user', function ($query) {
+            $query->where('name', '!=', 'Invitado');
+        })->first();
+        $response = $this->get(route('canal.detalle', ['id' => $canal->id]));
         $response->assertStatus(Response::HTTP_OK);
         $response->assertViewHas('canal');
     }
@@ -73,7 +76,10 @@ class CanalControllerTest extends TestCase
         $user = User::first();
         $this->actingAs($user);
 
-        $response = $this->get(route('canal.editar.formulario', ['id' => 3]));
+        $canal = Canal::whereHas('user', function ($query) {
+            $query->where('name', '!=', 'Invitado');
+        })->first();
+        $response = $this->get(route('canal.editar.formulario', ['id' => $canal->id]));
         $response->assertStatus(Response::HTTP_OK);
         $response->assertViewHas('canal');
     }
@@ -106,9 +112,10 @@ class CanalControllerTest extends TestCase
         $user = User::first();
         $this->actingAs($user);
 
+        $email = 'usuario' . uniqid() . '.prueba@gmail.com';
         $this->user = User::create([
             'name' => 'prueba',
-            'email' => 'usuario99.prueba@gmail.com',
+            'email' => $email,
             'password' => bcrypt('contraseña123'),
         ]);
 
@@ -123,6 +130,8 @@ class CanalControllerTest extends TestCase
             'nombre' => 'Nuevo Canal',
             'user_id' => $this->user->id,
         ]);
+        $canal = Canal::where('nombre', 'Nuevo Canal')->first();
+        $this->assertNotNull($canal->stream_key);
     }
 
 /** @test */
@@ -143,7 +152,10 @@ class CanalControllerTest extends TestCase
         $user = User::first();
         $this->actingAs($user);
 
-        $response = $this->delete(route('canal.eliminar', ['id' => 6]));
-        $this->assertSoftDeleted('canals', ['id' => 6]);
+        $canal = Canal::latest()->first();
+        $response = $this->delete(route('canal.eliminar', ['id' => $canal->id]), [
+            'motivo' => 'Eliminación de prueba',
+        ]);
+        $this->assertSoftDeleted('canals', ['id' => $canal->id]);
     }
 }

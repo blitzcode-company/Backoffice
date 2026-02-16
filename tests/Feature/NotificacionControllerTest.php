@@ -2,6 +2,7 @@
 
 namespace Tests\Feature;
 
+use App\Models\Blitzvideo\Canal;
 use App\Models\Blitzvideo\User;
 use App\Models\Blitzvideo\Notificacion;
 use App\Models\Blitzvideo\Video;
@@ -11,19 +12,54 @@ use Tests\TestCase;
 
 class NotificacionControllerTest extends TestCase
 {
+    protected $user;
+    protected $video;
+    protected $comentario;
+
     protected function setUp(): void
     {
         parent::setUp();
         config(['database.default' => 'blitzvideo']);
+        $this->user = User::where('name', '!=', 'Invitado')->first();
+        if (!$this->user) {
+             $this->user = User::create([
+                'name' => 'TestUserNotif',
+                'email' => 'testnotif_' . uniqid() . '@user.com',
+                'password' => bcrypt('123456')
+            ]);
+        }
+        $canal = Canal::where('user_id', $this->user->id)->first();
+        if (!$canal) {
+            $canal = Canal::create([
+                'user_id' => $this->user->id,
+                'nombre' => 'Canal Test Notif',
+                'stream_key' => 'key_' . uniqid()
+            ]);
+        }
+        $this->video = Video::create([
+            'canal_id' => $canal->id,
+            'titulo' => 'Video Test Notif ' . uniqid(),
+            'descripcion' => 'Descripción test',
+            'link' => 'http://video.com/test_notif_' . uniqid() . '.mp4',
+            'miniatura' => 'http://img.com/test_notif_' . uniqid() . '.jpg',
+            'estado' => 'VIDEO',
+            'acceso' => 'publico',
+            'duracion' => 120
+        ]);
+        $this->comentario = Comentario::create([
+            'usuario_id' => $this->user->id,
+            'video_id' => $this->video->id,
+            'mensaje' => 'Comentario Test Notif',
+            'bloqueado' => false
+        ]);
     }
 
     /** @test */
     public function debe_crear_notificacion_de_bloqueo_de_usuario()
     {
-        $user = User::first();
-        $this->actingAs($user);
+        $this->actingAs($this->user);
 
-        $usuario = User::find(2);
+        $usuario = $this->user;
         $motivo = "violación de términos";
         $controller = new NotificacionController();
         $notificacion = $controller->crearNotificacionDeBloqueoDeUsuario($usuario->id, $motivo);
@@ -41,11 +77,9 @@ class NotificacionControllerTest extends TestCase
     /** @test */
     public function debe_crear_notificacion_de_desbloqueo_de_usuario()
     {
+        $this->actingAs($this->user);
 
-        $user = User::first();
-        $this->actingAs($user);
-
-        $usuario = User::find(2);
+        $usuario = $this->user;
         $controller = new NotificacionController();
         $notificacion = $controller->crearNotificacionDeDesbloqueoDeUsuario($usuario->id);
         $this->assertInstanceOf(Notificacion::class, $notificacion);
@@ -62,10 +96,9 @@ class NotificacionControllerTest extends TestCase
     /** @test */
     public function debe_crear_notificacion_de_bloqueo_de_video()
     {
-        $user = User::first();
-        $this->actingAs($user);
+        $this->actingAs($this->user);
 
-        $video = Video::first();
+        $video = $this->video;
         $motivo = "contenido inapropiado";
         $controller = new NotificacionController();
         $notificacion = $controller->crearNotificacionDeBloqueoDeVideo($video, $motivo);
@@ -83,10 +116,9 @@ class NotificacionControllerTest extends TestCase
     /** @test */
     public function debe_crear_notificacion_de_desbloqueo_de_video()
     {
-        $user = User::first();
-        $this->actingAs($user);
+        $this->actingAs($this->user);
 
-        $video = Video::first();
+        $video = $this->video;
         $controller = new NotificacionController();
         $notificacion = $controller->crearNotificacionDeDesbloqueoDeVideo($video);
         $this->assertInstanceOf(Notificacion::class, $notificacion);
@@ -103,9 +135,8 @@ class NotificacionControllerTest extends TestCase
     /** @test */
     public function debe_crear_notificacion_de_bloqueo_de_comentario()
     {
-        $user = User::first();
-        $this->actingAs($user);
-        $comentario = Comentario::first();
+        $this->actingAs($this->user);
+        $comentario = $this->comentario;
         $controller = new NotificacionController();
         $notificacion = $controller->crearNotificacionDeBloqueoDeComentario($comentario);
         $this->assertInstanceOf(Notificacion::class, $notificacion);

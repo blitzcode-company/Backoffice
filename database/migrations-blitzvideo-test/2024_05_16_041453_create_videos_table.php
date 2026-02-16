@@ -9,7 +9,7 @@ return new class extends Migration
     public function up(): void
     {
         Schema::connection('blitzvideo')->create('videos', function (Blueprint $table) {
-            $table->id();
+        $table->id();
             $table->foreignId('canal_id')->constrained()->onDelete('cascade');
             $table->string('titulo');
             $table->text('descripcion');
@@ -18,6 +18,7 @@ return new class extends Migration
             $table->boolean('bloqueado')->default(false);
             $table->enum('acceso', ['publico', 'privado'])->default('publico');
             $table->string('link')->unique();
+            $table->enum('estado', ['VIDEO', 'DIRECTO', 'PROGRAMADO', 'FINALIZADO'])->default('VIDEO');
             $table->timestamps();
             $table->softDeletes();
         });

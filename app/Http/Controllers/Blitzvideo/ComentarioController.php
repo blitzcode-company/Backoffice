@@ -6,22 +6,42 @@ use App\Events\ActividadRegistrada;
 use App\Http\Controllers\Controller;
 use App\Models\Blitzvideo\Comentario;
 use App\Models\Blitzvideo\Video;
+use App\Traits\Paginable;
 use Illuminate\Http\Request;
 
 class ComentarioController extends Controller
 {
+    use Paginable;
 
-    public function ListarComentarios($video_id)
+    public function ListarComentarios(Request $request, $video_id)
     {
         $video = Video::findOrFail($video_id);
-        $comentarios = Comentario::withTrashed()
+        $comentariosQuery = Comentario::withTrashed()
             ->where('video_id', $video_id)
             ->whereNull('respuesta_id')
             ->with(['user', 'respuestas' => function ($query) {
                 $query->withTrashed()->with('user');
             }])
-            ->orderBy('created_at', 'desc')
-            ->get();
+            ->orderBy('created_at', 'desc');
+
+        $comentarios = $this->paginateBuilder($comentariosQuery, 10, $request->input('page', 1));
+
+        $host   = $this->obtenerHostMinio();
+        $bucket = $this->obtenerBucket();
+
+        $video->miniatura = $this->obtenerUrlArchivo($video->miniatura, $host, $bucket);
+        $video->link      = $this->obtenerUrlArchivo($video->link, $host, $bucket);
+
+        foreach ($comentarios as $comentario) {
+            if ($comentario->user && $comentario->user->foto) {
+                $comentario->user->foto = $this->obtenerUrlArchivo($comentario->user->foto, $host, $bucket);
+            }
+            foreach ($comentario->respuestas as $respuesta) {
+                if ($respuesta->user && $respuesta->user->foto) {
+                    $respuesta->user->foto = $this->obtenerUrlArchivo($respuesta->user->foto, $host, $bucket);
+                }
+            }
+        }
 
         return view('comentarios.listado', compact('video', 'comentarios'));
     }
@@ -36,6 +56,23 @@ class ComentarioController extends Controller
             ->firstOrFail();
 
         $video = $comentario->video;
+        
+        $host   = $this->obtenerHostMinio();
+        $bucket = $this->obtenerBucket();
+
+        $video->miniatura = $this->obtenerUrlArchivo($video->miniatura, $host, $bucket);
+        $video->link      = $this->obtenerUrlArchivo($video->link, $host, $bucket);
+
+        if ($comentario->user && $comentario->user->foto) {
+            $comentario->user->foto = $this->obtenerUrlArchivo($comentario->user->foto, $host, $bucket);
+        }
+
+        foreach ($comentario->respuestas as $respuesta) {
+            if ($respuesta->user && $respuesta->user->foto) {
+                $respuesta->user->foto = $this->obtenerUrlArchivo($respuesta->user->foto, $host, $bucket);
+            }
+        }
+
         return view('comentarios.ver', compact('comentario', 'video'));
     }
 
@@ -239,6 +276,30 @@ class ComentarioController extends Controller
             $videoId
         );
         event(new ActividadRegistrada('Comentario desbloqueado', $detalles));
+    }
+
+    private function obtenerHostMinio()
+    {
+        return str_replace('minio', env('BLITZVIDEO_HOST'), env('AWS_ENDPOINT')) . '/';
+    }
+
+    private function obtenerBucket()
+    {
+        return env('AWS_BUCKET') . '/';
+    }
+
+    private function obtenerUrlArchivo($rutaRelativa, $host, $bucket)
+    {
+        if (! $rutaRelativa) {
+            return null;
+        }
+        if (str_starts_with($rutaRelativa, $host . $bucket)) {
+            return $rutaRelativa;
+        }
+        if (filter_var($rutaRelativa, FILTER_VALIDATE_URL)) {
+            return $rutaRelativa;
+        }
+        return $host . $bucket . $rutaRelativa;
     }
 
 }

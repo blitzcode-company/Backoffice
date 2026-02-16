@@ -34,7 +34,7 @@
                 </div>
                 <div class="uploader-name">
                     <p class="m-0"><strong>Subido por:</strong> {{ $stream->canal->user->name }}
-                        ({{ $stream->canal->user->email }})
+                        ({{ $stream->canal->user->email }})</p>
                     <div class="live-status">
                         @if ($stream->activo)
                             <i class="fas fa-circle text-success"></i> Live
@@ -42,7 +42,6 @@
                             <i class="fas fa-circle text-danger"></i> Offline
                         @endif
                     </div>
-                    </p>
                 </div>
             </div>
             <div class="video-info">

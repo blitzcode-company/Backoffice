@@ -14,9 +14,11 @@ class CanalSeeder extends Seeder
 
         foreach ($users as $user) {
             Canal::create([
-                'nombre' => 'Canal de ' . $user->name,
+                'nombre'      => 'Canal de ' . $user->name,
                 'descripcion' => 'Descripción del canal de ' . $user->name,
-                'user_id' => $user->id,
+                'user_id'     => $user->id,
+                'stream_key'  => bin2hex(random_bytes(16)),
+                'portada'     => null,
             ]);
         }
     }

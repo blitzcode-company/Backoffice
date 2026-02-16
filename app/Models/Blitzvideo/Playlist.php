@@ -17,6 +17,11 @@ class Playlist extends Model
         'user_id',
     ];
 
+ public function playlist()
+    {
+        return $this;
+    }
+
     public function user()
     {
         return $this->belongsTo(User::class);
@@ -24,6 +29,23 @@ class Playlist extends Model
 
     public function videos()
     {
-        return $this->belongsToMany(Video::class, 'video_lista');
+        return $this->belongsToMany(Video::class, 'video_lista')
+                    ->withPivot('orden')
+                    ->withTimestamps();
+    }
+
+    public function usuariosQueLaGuardaron()
+    {
+        return $this->belongsToMany(
+            User::class,
+            'playlist_guardadas',
+            'playlist_id',
+            'user_id'
+        )->withPivot('orden')->withTimestamps();
+    }
+
+    public function guardadaPor()
+    {
+        return $this->usuariosQueLaGuardaron();
     }
 }

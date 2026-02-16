@@ -4,6 +4,7 @@ namespace Tests\Feature;
 
 use App\Models\Blitzvideo\Etiqueta;
 use App\Models\Blitzvideo\User;
+use Illuminate\Support\Facades\Event;
 use Tests\TestCase;
 
 class EtiquetaControllerTest extends TestCase
@@ -13,6 +14,7 @@ class EtiquetaControllerTest extends TestCase
     {
         parent::setUp();
         config(['database.default' => 'blitzvideo']);
+        Event::fake();
     }
 
 /** @test */

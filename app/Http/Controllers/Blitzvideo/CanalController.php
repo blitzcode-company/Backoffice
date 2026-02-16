@@ -26,7 +26,9 @@ class CanalController extends Controller
             ->whereHas('user', function ($query) {
                 $query->where('name', '!=', self::USUARIO_EXCLUIDO);
             })
-            ->withCount(['videos', 'suscriptores' => function ($query) {
+            ->withCount(['videos' => function ($query) {
+                $query->whereIn('estado', ['VIDEO', 'FINALIZADO']);
+            }, 'suscriptores' => function ($query) {
                 $query->whereNull('suscribe.deleted_at');
             }])
             ->orderBy('id', 'desc');
@@ -73,7 +75,9 @@ class CanalController extends Controller
             ->whereHas('user', function ($query) {
                 $query->where('name', '!=', self::USUARIO_EXCLUIDO);
             })
-            ->withCount(['videos', 'suscriptores' => function ($query) {
+            ->withCount(['videos' => function ($query) {
+                $query->whereIn('estado', ['VIDEO', 'FINALIZADO']);
+            }, 'suscriptores' => function ($query) {
                 $query->whereNull('suscribe.deleted_at');
             }])
             ->firstOrFail();
@@ -96,7 +100,9 @@ class CanalController extends Controller
             ->whereHas('user', function ($query) {
                 $query->where('name', '!=', self::USUARIO_EXCLUIDO);
             })
-            ->withCount(['videos', 'suscriptores' => function ($query) {
+            ->withCount(['videos' => function ($query) {
+                $query->whereIn('estado', ['VIDEO', 'FINALIZADO']);
+            }, 'suscriptores' => function ($query) {
                 $query->whereNull('suscribe.deleted_at');
             }]);
         if ($nombre) {
@@ -115,9 +121,13 @@ class CanalController extends Controller
     }
     
 
-    public function ListarVideosDeCanal($canalId)
+    public function ListarVideosDeCanal(Request $request, $canalId)
     {
-        $videos = Video::where('canal_id', $canalId)->get();
+        $page = $request->input('page', 1);
+        $videosQuery = Video::where('canal_id', $canalId)
+            ->whereIn('estado', ['VIDEO', 'FINALIZADO']);
+        
+        $videos = $this->paginateBuilder($videosQuery, 9, $page);
         $host   = $this->obtenerHostMinio();
         $bucket = $this->obtenerBucket();
         foreach ($videos as $video) {
@@ -138,7 +148,9 @@ class CanalController extends Controller
             ->whereHas('user', function ($query) {
                 $query->where('name', '!=', self::USUARIO_EXCLUIDO);
             })
-            ->withCount('videos')
+            ->withCount(['videos' => function ($query) {
+                $query->whereIn('estado', ['VIDEO', 'FINALIZADO']);
+            }])
             ->firstOrFail();
 
         return view('canales.editar-canal', compact('canal'));

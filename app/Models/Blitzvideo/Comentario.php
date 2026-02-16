@@ -18,13 +18,15 @@ class Comentario extends Model
         'mensaje',
         'bloqueado',
     ];
+
     
     protected $casts = [
         'created_at' => 'datetime',
         'updated_at' => 'datetime',
-        'deleted_at' => 'datetime',
         'bloqueado' => 'boolean',
     ];
+
+    protected $appends = ['contadorDeLikes'];
 
     public function user()
     {
@@ -59,5 +61,10 @@ class Comentario extends Model
     public function reportes()
     {
         return $this->hasMany(ReportaComentario::class);
+    }
+
+    public function getContadorDeLikesAttribute()
+    {
+        return $this->likes->count();
     }
 }

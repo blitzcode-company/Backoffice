@@ -1,5 +1,4 @@
 <?php
-
 namespace App\Models\Blitzvideo;
 
 use Illuminate\Database\Eloquent\Model;
@@ -8,14 +7,13 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 class Canal extends Model
 {
     use SoftDeletes;
-    
+
     protected $connection = 'blitzvideo';
 
-    protected $table = 'canals';
+    protected $table    = 'canals';
     protected $fillable = [
-        'nombre', 'descripcion', 'portada', 'user_id','stream_key',
+        'nombre', 'descripcion', 'portada', 'user_id', 'stream_key',
     ];
-
 
     public function user()
     {
@@ -29,13 +27,21 @@ class Canal extends Model
     public function suscriptores()
     {
         return $this->belongsToMany(User::class, 'suscribe')
-                    ->withPivot('notificaciones')
-                    ->withTimestamps()
-                    ->withTrashed();
+            ->withPivot('notificaciones')
+            ->withTimestamps()
+            ->withTrashed();
     }
 
     public function streams()
     {
-        return $this->hasOne(Stream::class);
+        return $this->belongsToMany(Stream::class, 'canal_stream');
     }
+
+    public function streamActual()
+    {
+        return $this->belongsToMany(Stream::class, 'canal_stream')
+            ->where('activo', true)
+            ->latest('id');
+    }
+
 }

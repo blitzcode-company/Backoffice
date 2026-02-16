@@ -18,13 +18,15 @@ class VideoController extends Controller
     {
         $host   = $this->obtenerHostMinio();
         $bucket = $this->obtenerBucket();
-        $videos = $this->obtenerVideosConRelaciones();
+        $videosQuery = $this->obtenerVideosConRelaciones();
+        $page   = $request->input('page', 1);
+        $videos = $this->paginateBuilder($videosQuery, 9, $page);
+
         foreach ($videos as $video) {
             $video->miniatura = $this->obtenerUrlArchivo($video->miniatura, $host, $bucket);
             $video->link      = $this->obtenerUrlArchivo($video->link, $host, $bucket);
+            $video->promedio_puntuaciones = round($video->puntuaciones_avg_valora ?? 0);
         }
-        $page   = $request->input('page', 1);
-        $videos = $this->paginateCollection($videos, 9, $page);
         return view('video.videos', compact('videos'));
     }
 
@@ -38,6 +40,7 @@ class VideoController extends Controller
             ->whereHas('canal.user', function ($query) {
                 $query->where('name', '<>', 'Invitado');
             })
+            ->whereIn('estado', ['VIDEO', 'FINALIZADO'])
             ->withCount([
                 'puntuaciones as puntuacion_1' => function ($query) {
                     $query->where('valora', 1);
@@ -56,9 +59,7 @@ class VideoController extends Controller
                 },
                 'visitas',
             ])
-            ->get()->each(function ($video) {
-            $video->promedio_puntuaciones = $video->puntuacion_promedio;
-        });
+            ->withAvg('puntuaciones', 'valora');
     }
 
     public function ListarVideosPorNombre(Request $request)
@@ -67,18 +68,20 @@ class VideoController extends Controller
         $page   = $request->input('page', 1);
         $host   = $this->obtenerHostMinio();
         $bucket = $this->obtenerBucket();
-        $videos = $this->obtenerVideosPorNombre($nombre);
+        $videosQuery = $this->obtenerVideosPorNombre($nombre);
+        $videos = $this->paginateBuilder($videosQuery, 9, $page);
+
         foreach ($videos as $video) {
             $video->miniatura = $this->obtenerUrlArchivo($video->miniatura, $host, $bucket);
             $video->link      = $this->obtenerUrlArchivo($video->link, $host, $bucket);
+            $video->promedio_puntuaciones = round($video->puntuaciones_avg_valora ?? 0);
         }
-        $videos = $this->paginateCollection($videos, 9, $page);
         return view('video.videos', compact('videos'));
     }
 
     private function obtenerVideosPorNombre($nombre)
     {
-        return Video::with([
+        $query = Video::with([
             'canal:id,nombre,descripcion,user_id',
             'canal.user:id,name,email',
             'etiquetas:id,nombre',
@@ -101,11 +104,12 @@ class VideoController extends Controller
                 },
                 'visitas',
             ])
-            ->where('titulo', 'LIKE', '%' . $nombre . '%')
-            ->get()
-            ->each(function ($video) {
-                $video->promedio_puntuaciones = $video->puntuacion_promedio;
-            });
+            ->withAvg('puntuaciones', 'valora')
+            ->whereIn('estado', ['VIDEO', 'FINALIZADO']);
+        if ($nombre) {
+            $query->where('titulo', 'LIKE', '%' . $nombre . '%');
+        }
+        return $query;
     }
 
     public function MostrarInformacionVideo($idVideo)
@@ -145,10 +149,11 @@ class VideoController extends Controller
                     $query->where('valora', 5);
                 },
                 'visitas',
-            ])->findOrFail($idVideo);
+            ])
+            ->withAvg('puntuaciones', 'valora')
+            ->findOrFail($idVideo);
 
-        $video->promedio_puntuaciones = $video->puntuacion_promedio;
-
+        $video->promedio_puntuaciones = round($video->puntuaciones_avg_valora ?? 0);
         return $video;
     }
 
@@ -178,15 +183,13 @@ class VideoController extends Controller
 
     public function MostrarFormularioSubida()
     {
-        $etiquetasController = new EtiquetaController();
-        $etiquetas           = $etiquetasController->ListarEtiquetas();
+        $etiquetas = Etiqueta::orderBy('nombre')->get();
         return view('video.subir-video', compact('etiquetas'));
     }
 
     public function MostrarFormularioEditar($idVideo)
     {
-        $etiquetasController = new EtiquetaController();
-        $etiquetas           = $etiquetasController->ListarEtiquetas();
+        $etiquetas           = Etiqueta::orderBy('nombre')->get();
         $video               = $this->obtenerVideoPorId($idVideo);
         $host                = $this->obtenerHostMinio();
         $bucket              = $this->obtenerBucket();
@@ -215,7 +218,7 @@ class VideoController extends Controller
             $video->save();
 
             if ($request->has('etiquetas')) {
-                $this->AsignarEtiquetas($request, $video->id);
+                $video->etiquetas()->sync($request->input('etiquetas'));
             }
 
             $this->registrarActividadActualizarVideo($cambios, $video->id, $video->canal_id);
@@ -260,17 +263,11 @@ class VideoController extends Controller
         if ($request->hasFile('video')) {
             $rutaAnterior = $video->link;
             $rutaVideo    = $this->GuardarArchivo($request->file('video'), 'videos/' . $video->canal_id);
-            $video->link  = $this->GenerarUrl($rutaVideo);
-            if ($request->has('duracion')) {
-                $video->duracion = $request->input('duracion');
-            } else {
-                $duracion        = $this->obtenerDuracionDeVideo($request->file('video'));
-                $video->duracion = $duracion;
-            }
-            $video->duracion  = $duracion;
+            $video->link  = $rutaVideo;
+            $video->duracion = $request->input('duracion') ?? $this->obtenerDuracionDeVideo($request->file('video'));
             $cambios['video'] = [
                 'anterior' => $rutaAnterior,
-                'nuevo'    => $video->link,
+                'nuevo'    => $rutaVideo,
             ];
         }
 
@@ -286,9 +283,9 @@ class VideoController extends Controller
             $rutaMiniatura        = $this->GuardarArchivo($request->file('miniatura'), 'miniaturas/' . $video->canal_id);
             $cambios['miniatura'] = [
                 'anterior' => $rutaAnterior,
-                'nuevo'    => $this->GenerarUrl($rutaMiniatura),
+                'nuevo'    => $rutaMiniatura,
             ];
-            $video->miniatura = $this->GenerarUrl($rutaMiniatura);
+            $video->miniatura = $rutaMiniatura;
         }
 
         return $cambios;
@@ -314,13 +311,7 @@ class VideoController extends Controller
         $detalles = "ID video: $videoId; ID Canal: $canalId;";
 
         foreach ($cambios as $campo => $valor) {
-            if ($campo === 'titulo') {
-                $detalles .= "{$valor['anterior']} -> {$valor['nuevo']}; ";
-            } elseif ($campo === 'miniatura') {
-                $detalles .= "{$valor['anterior']} -> {$valor['nuevo']}; ";
-            } elseif ($campo === 'video') {
-                $detalles .= "{$valor['anterior']} -> {$valor['nuevo']}; ";
-            } elseif ($campo === 'acceso') {
+            if (is_array($valor) && isset($valor['anterior'])) {
                 $detalles .= "{$valor['anterior']} -> {$valor['nuevo']}; ";
             } else {
                 $detalles .= ucfirst($campo) . ': ' . $valor . '; ';
@@ -359,7 +350,7 @@ class VideoController extends Controller
         }
         $video = $this->CrearNuevoVideo($request, $canal, $videoData, $duracion);
         if ($request->has('etiquetas')) {
-            $this->AsignarEtiquetas($request, $video->id);
+            $video->etiquetas()->sync($request->input('etiquetas'));
         }
         $this->registrarActividadSubirVideo($video);
 
@@ -428,14 +419,9 @@ class VideoController extends Controller
             'miniatura'   => $videoData['urlMiniatura'],
             'canal_id'    => $canal->id,
             'duracion'    => $duracion,
+            'estado'      => 'VIDEO',
             'acceso'      => $request->input('acceso', 'publico'),
         ]);
-    }
-
-    private function AsignarEtiquetas($request, $videoId)
-    {
-        $etiquetasController = new EtiquetaController();
-        $etiquetasController->AsignarEtiquetas($request, $videoId);
     }
 
     public function BajaVideo($idVideo)
@@ -500,8 +486,17 @@ class VideoController extends Controller
     {
         $page   = $request->input('page', 1);
         $titulo = $request->input('titulo');
-        $videos = $this->obtenerVideosPorCanal($canalId, $titulo);
-        $videos = $this->paginateCollection($videos, 9, $page);
+        $videosQuery = $this->obtenerVideosPorCanal($canalId, $titulo);
+        $videos = $this->paginateBuilder($videosQuery, 9, $page);
+
+        $host   = $this->obtenerHostMinio();
+        $bucket = $this->obtenerBucket();
+        foreach ($videos as $video) {
+            $video->miniatura = $this->obtenerUrlArchivo($video->miniatura, $host, $bucket);
+            $video->link      = $this->obtenerUrlArchivo($video->link, $host, $bucket);
+            $video->promedio_puntuaciones = round($video->puntuaciones_avg_valora ?? 0);
+        }
+
         return view('video.listar-por-canal', compact('videos', 'canalId'));
     }
 
@@ -513,6 +508,7 @@ class VideoController extends Controller
             'etiquetas:id,nombre',
         ])
             ->where('canal_id', $canalId)
+            ->whereIn('estado', ['VIDEO', 'FINALIZADO'])
             ->withCount([
                 'puntuaciones as puntuacion_1' => function ($query) {
                     $query->where('valora', 1);
@@ -530,14 +526,13 @@ class VideoController extends Controller
                     $query->where('valora', 5);
                 },
                 'visitas',
-            ]);
+            ])->withAvg('puntuaciones', 'valora');
+
         if (! empty($titulo)) {
             $query->where('titulo', 'like', '%' . $titulo . '%');
         }
 
-        return $query->get()->each(function ($video) {
-            $video->promedio_puntuaciones = $video->puntuacion_promedio;
-        });
+        return $query;
     }
 
     public function bloquearVideo(Request $request, $id)

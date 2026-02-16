@@ -12,11 +12,11 @@ class Stream extends Model
     protected $connection = 'blitzvideo';
 
     protected $fillable = [
-        'titulo',
-        'descripcion',
-        'miniatura',
+        'video_id',
+        'stream_programado',
+        'max_viewers',
+        'total_viewers',
         'activo',
-        'canal_id',
     ];
 
     public function canal()
