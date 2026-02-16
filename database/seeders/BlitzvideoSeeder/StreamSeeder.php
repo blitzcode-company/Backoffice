@@ -49,7 +49,7 @@ class StreamSeeder extends Seeder
                 }
                 $streamLive->activo = true;
                 $streamLive->save();
-            }
+            } else {
             $videoProgramado = Video::create([
                 'canal_id'    => $canal->id,
                 'titulo'      => 'Próximo Stream: Evento Especial',
@@ -83,6 +83,7 @@ class StreamSeeder extends Seeder
             }
             $streamProgramado->activo = false;
             $streamProgramado->save();
+            }
         }
     }
 }
