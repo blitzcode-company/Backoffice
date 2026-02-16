@@ -6,6 +6,7 @@ use Illuminate\Database\Seeder;
 use App\Models\Blitzvideo\Canal;
 use App\Models\Blitzvideo\Video;
 use App\Models\Blitzvideo\Stream;
+use Illuminate\Support\Facades\Schema;
 
 class StreamSeeder extends Seeder
 {
@@ -28,7 +29,12 @@ class StreamSeeder extends Seeder
                 ]);
 
                 $streamLive = new Stream();
-                $streamLive->video_id = $videoLive->id;
+                if (Schema::hasColumn('streams', 'video_id')) {
+                    $streamLive->video_id = $videoLive->id;
+                }
+                if (Schema::hasColumn('streams', 'canal_id')) {
+                    $streamLive->canal_id = $canal->id;
+                }
                 $streamLive->stream_programado = now();
                 $streamLive->max_viewers = rand(100, 5000);
                 $streamLive->total_viewers = rand(5000, 20000);
@@ -48,7 +54,12 @@ class StreamSeeder extends Seeder
             ]);
 
             $streamProgramado = new Stream();
-            $streamProgramado->video_id = $videoProgramado->id;
+            if (Schema::hasColumn('streams', 'video_id')) {
+                $streamProgramado->video_id = $videoProgramado->id;
+            }
+            if (Schema::hasColumn('streams', 'canal_id')) {
+                $streamProgramado->canal_id = $canal->id;
+            }
             $streamProgramado->stream_programado = now()->addDays(rand(1, 3));
             $streamProgramado->max_viewers = 0;
             $streamProgramado->total_viewers = 0;
