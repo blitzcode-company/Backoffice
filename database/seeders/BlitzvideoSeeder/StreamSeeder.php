@@ -14,18 +14,17 @@ class StreamSeeder extends Seeder
         $canales = Canal::with('user')->get();
 
         foreach ($canales as $index => $canal) {
-            // Crear un stream activo (Live) para algunos canales (pares)
             if ($index % 2 == 0) {
                 $videoLive = Video::create([
                     'canal_id'    => $canal->id,
                     'titulo'      => '🔴 EN VIVO: ' . $canal->nombre,
                     'descripcion' => 'Transmisión en directo de ' . $canal->user->name,
                     'link'        => 'stream_live_' . uniqid(),
-                    'miniatura'   => null,
+                    'miniatura'   => 'https://via.placeholder.com/640x360.png?text=Live+Stream',
                     'duracion'    => 0,
                     'bloqueado'   => false,
                     'acceso'      => 'publico',
-                    'estado'      => 'VIDEO', // Estado para que sea visible si se busca como video
+                    'estado'      => 'VIDEO',
                 ]);
 
                 $streamLive = new Stream();
@@ -36,14 +35,12 @@ class StreamSeeder extends Seeder
                 $streamLive->activo = true;
                 $streamLive->save();
             }
-
-            // Crear un stream programado (Offline) para todos
             $videoProgramado = Video::create([
                 'canal_id'    => $canal->id,
                 'titulo'      => 'Próximo Stream: Evento Especial',
                 'descripcion' => 'No te pierdas el próximo evento en el canal de ' . $canal->user->name,
                 'link'        => 'stream_scheduled_' . uniqid(),
-                'miniatura'   => null,
+                'miniatura'   => 'https://via.placeholder.com/640x360.png?text=Scheduled+Stream',
                 'duracion'    => 0,
                 'bloqueado'   => false,
                 'acceso'      => 'publico',
