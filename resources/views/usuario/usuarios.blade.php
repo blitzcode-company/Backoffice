@@ -99,12 +99,14 @@
                                 </div>
 
                                 <div class="channel-info d-flex align-items-center flex-wrap gap-2">
-                                    @if ($user->canales)
-                                        <a href="{{ route('canal.detalle', ['id' => $user->canales->id]) }}" class="btn btn-sm btn-outline-primary rounded-pill d-flex align-items-center gap-2">
-                                            <i class="fab fa-youtube"></i> 
-                                            <span>{{ $user->canales->nombre }}</span>
-                                            <i class="fas fa-chevron-right small opacity-50"></i>
-                                        </a>
+                                    @if ($user->canales->isNotEmpty())
+                                        @foreach ($user->canales as $canal)
+                                            <a href="{{ route('canal.detalle', ['id' => $canal->id]) }}" class="btn btn-sm btn-outline-primary rounded-pill d-flex align-items-center gap-2">
+                                                <i class="fab fa-youtube"></i> 
+                                                <span>{{ $canal->nombre }}</span>
+                                                <i class="fas fa-chevron-right small opacity-50"></i>
+                                            </a>
+                                        @endforeach
                                     @else
                                         <span class="text-muted small fst-italic">Sin canal</span>
                                     @endif

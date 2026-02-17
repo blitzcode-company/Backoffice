@@ -238,3 +238,37 @@
 .copy-status {
     color: #6c757d;
 }
+
+.profile-card, .info-card {
+    background-color: #ffffff;
+    transition: transform 0.2s ease;
+}
+
+[data-theme='dark'] {
+    .profile-card, .info-card {
+        background-color: v.$color-sidebar-hover-dark;
+        border: 1px solid v.$color-border-dark !important;
+        
+        .card-header {
+            border-bottom-color: v.$color-border-dark !important;
+        }
+        
+        h3, h4, h5, .fw-bold {
+            color: v.$color-white !important;
+        }
+        
+        .text-muted {
+            color: #adb5bd !important;
+        }
+        
+        .btn-outline-dark {
+            color: v.$color-white;
+            border-color: v.$color-white;
+            
+            &:hover {
+                background-color: v.$color-white;
+                color: v.$color-black;
+            }
+        }
+    }
+}
