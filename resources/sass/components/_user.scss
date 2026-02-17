@@ -10,10 +10,11 @@
 
 .user-item {
     display: flex;
-    align-items: center;
+    align-items: flex-start;
     border-bottom: 1px solid v.$color-border;
-    padding: 10px;
+    padding: 20px;
     position: relative;
+    transition: background-color 0.2s ease;
 }
 
 .user-item:hover {
@@ -43,6 +44,14 @@
     margin: 0 0 10px;
     font-size: 1.5em;
     color: v.$color-primary-dark;
+
+    a {
+        color: inherit;
+        
+        &:hover {
+            color: v.$color-primary-hover;
+        }
+    }
 }
 
 .user-info p {
@@ -97,6 +106,19 @@
     }
     .user-canal-info-box {
         background-color: v.$color-sidebar-hover-dark;
+    }
+
+    .user-id-container {
+        background-color: v.$color-sidebar-hover-dark;
+        border-color: v.$color-border-dark !important;
+    }
+
+    .id-label {
+        color: v.$color-white;
+    }
+
+    .copy-status {
+        color: v.$color-white;
     }
     
 }
@@ -184,4 +206,35 @@
     border-right: 1px solid v.$color-border;
     margin-right: 2px;
     padding-right: 5px;
+}
+
+.status-badges {
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+    
+    .badge {
+        font-size: 0.85rem;
+        padding: 0.5em 0.75em;
+        display: inline-flex;
+        align-items: center;
+        gap: 5px;
+    }
+}
+
+.channel-info {
+    display: flex;
+    align-items: center;
+}
+
+.user-id-container {
+    background-color: #f8f9fa;
+}
+
+.id-label {
+    color: #6c757d;
+}
+
+.copy-status {
+    color: #6c757d;
 }

@@ -2,18 +2,28 @@
 
 @section('content')
     <div class="titulo">Videos de Blitzvideo</div>
-    <div class="search-container">
-        <form action="{{ route('video.nombre') }}" method="POST">
-            @csrf
-            <input type="search" name="nombre" placeholder="Buscar video por nombre" class="search-bar" required>
-            <button type="submit" class="btn-info"><i class="fas fa-search"></i></button>
-        </form>
-    </div>
 
-    <div class="text-center my-4">
-        <a href="{{ route('video.crear.formulario') }}" class="btn btn-primary">
-            <i class="fas fa-plus"></i> Nuevo Video
-        </a>
+    <div class="row align-items-center mb-4 g-3">
+        <div class="col-md-3 d-none d-md-block"></div> 
+        
+        <div class="col-12 col-md-6 d-flex justify-content-center">
+            <form action="{{ route('video.nombre') }}" method="POST" class="w-100" style="max-width: 600px;">
+                @csrf
+                <div class="input-group shadow-sm">
+                    <input type="search" name="nombre" placeholder="Buscar video por nombre..." class="form-control search-bar border-end-0"
+                        required aria-label="Buscar video">
+                    <button type="submit" class="btn btn-info border-start-0" style="max-width: 60px;">
+                        <i class="fas fa-search text-white"></i>
+                    </button>
+                </div>
+            </form>
+        </div>
+
+        <div class="col-12 col-md-3 d-flex justify-content-center">
+            <a href="{{ route('video.crear.formulario') }}" class="btn btn-primary shadow-sm d-flex align-items-center gap-2" style="width: auto; padding: 10px 20px;">
+                <i class="fas fa-plus"></i> <span>Nuevo Video</span>
+            </a>
+        </div>
     </div>
 
     @if (session('success'))

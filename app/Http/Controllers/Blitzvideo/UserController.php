@@ -268,7 +268,7 @@ class UserController extends Controller
             ->where('name', '!=', 'Invitado')
             ->orderBy('id', 'desc');
 
-        $users  = $this->paginateBuilder($usersQuery, 6, $request->input('page', 1));
+        $users  = $this->paginateBuilder($usersQuery, 10, $request->input('page', 1));
         $host   = $this->obtenerHostMinio();
         $bucket = $this->obtenerBucket();
         foreach ($users as $user) {

@@ -468,10 +468,11 @@ label {
 
 .user-item {
   display: flex;
-  align-items: center;
+  align-items: flex-start;
   border-bottom: 1px solid #ccc;
-  padding: 10px;
+  padding: 20px;
   position: relative;
+  transition: background-color 0.2s ease;
 }
 
 .user-item:hover {
@@ -502,6 +503,12 @@ label {
   margin: 0 0 10px;
   font-size: 1.5em;
   color: #042234;
+}
+.user-info h2 a {
+  color: inherit;
+}
+.user-info h2 a:hover {
+  color: #0077cc;
 }
 
 .user-info p {
@@ -551,6 +558,16 @@ label {
 }
 [data-theme=dark] .user-canal-info-box {
   background-color: #1b1b1b;
+}
+[data-theme=dark] .user-id-container {
+  background-color: #1b1b1b;
+  border-color: #1f2327 !important;
+}
+[data-theme=dark] .id-label {
+  color: #ffffff;
+}
+[data-theme=dark] .copy-status {
+  color: #ffffff;
 }
 
 .user-info-box {
@@ -633,6 +650,36 @@ label {
   border-right: 1px solid #ccc;
   margin-right: 2px;
   padding-right: 5px;
+}
+
+.status-badges {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+.status-badges .badge {
+  font-size: 0.85rem;
+  padding: 0.5em 0.75em;
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+}
+
+.channel-info {
+  display: flex;
+  align-items: center;
+}
+
+.user-id-container {
+  background-color: #f8f9fa;
+}
+
+.id-label {
+  color: #6c757d;
+}
+
+.copy-status {
+  color: #6c757d;
 }
 
 .canal-portada {
@@ -1719,12 +1766,16 @@ body * {
 .btn-info {
   background-color: #0d6efd !important;
   color: #ffffff !important;
-  border: 1px solid #ccc !important;
+  border: 1px solid #ccc;
   padding: 10px 15px;
-  font-size: 16px;
-  border-radius: 0 4px 4px 0;
+  font-size: 1rem;
   cursor: pointer;
   outline: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+  margin: 0;
 }
 
 .btn-info:hover {
@@ -1734,7 +1785,7 @@ body * {
 [data-theme=dark] .btn-info {
   background-color: #042234 !important;
   color: #ffffff !important;
-  border: 1px solid #1f2327 !important;
+  border: 1px solid #1f2327;
 }
 [data-theme=dark] .btn-info:hover {
   background-color: #083c5d !important;
@@ -1747,28 +1798,33 @@ body * {
 
 .search-container {
   margin-bottom: 20px;
-  text-align: center;
+  display: flex;
   justify-content: center;
-  align-items: center;
+  width: 100%;
 }
 
 .search-bar {
-  width: 80%;
-  max-width: 1000px;
   padding: 10px;
-  font-size: 16px;
+  font-size: 1rem;
   border: 1px solid #ccc;
-  border-radius: 4px 0 0 4px;
   box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
   outline: none;
-  margin-top: 50px;
-  margin-right: -5px;
+  background-clip: padding-box; /* Evita conflictos de bordes */
+  margin: 0 !important; /* Fuerza anular el margen de _forms.scss */
+  max-width: none; /* Permite que ocupe el espacio del input-group */
 }
 
+[data-theme=dark] {
+  /* Asegurar que el input no se ponga blanco al escribir en dark mode */
+}
 [data-theme=dark] .search-bar {
-  border: 1px solid #2c323a;
+  border: 1px solid #1f2327;
   box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
-  background-color: #1b1b1b;
+  background-color: #161616;
+  color: #ffffff;
+}
+[data-theme=dark] .search-bar:focus {
+  background-color: #161616;
   color: #ffffff;
 }
 

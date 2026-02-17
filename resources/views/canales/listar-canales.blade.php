@@ -2,18 +2,28 @@
 
 @section('content')
     <div class="titulo">Canales de Blitzvideo</div>
-    <div class="search-container">
-        <form action="{{ route('canal.nombre') }}" method="GET">
-            <input type="search" name="nombre" placeholder="Buscar canal por nombre" id="nombre" class="search-bar">
-            <button type="submit" class="btn-info"><i class="fas fa-search"></i></button>
-        </form>
+    <div class="row align-items-center mb-4 g-3">
+        <div class="col-md-3 d-none d-md-block"></div>
+        
+        <div class="col-12 col-md-6 d-flex justify-content-center">
+            <form action="{{ route('canal.nombre') }}" method="GET" class="w-100" style="max-width: 600px;">
+                <div class="input-group shadow-sm">
+                    <input type="search" name="nombre" placeholder="Buscar canal por nombre..." class="form-control search-bar border-end-0"
+                        value="{{ request('nombre') }}" id="nombre" aria-label="Buscar canal">
+                    <button type="submit" class="btn btn-info border-start-0" style="max-width: 60px;">
+                        <i class="fas fa-search text-white"></i>
+                    </button>
+                </div>
+            </form>
+        </div>
+
+        <div class="col-12 col-md-3 d-flex justify-content-center">
+            <a href="{{ route('canal.crear.formulario') }}" class="btn btn-primary shadow-sm d-flex align-items-center gap-2" style="width: auto; padding: 10px 20px;">
+                <i class="fas fa-plus"></i> <span>Nuevo Canal</span>
+            </a>
+        </div>
     </div>
 
-    <div class="text-center my-4">
-        <a href="{{ route('canal.crear.formulario') }}" class="btn btn-primary">
-            <i class="fas fa-plus"></i> Nuevo Canal
-        </a>
-    </div>
     @if (session('success'))
         <div class="alert alert-success text-center mx-auto mt-0" style="max-width: 800px; margin-top: 0 !important;">
             {{ session('success') }}

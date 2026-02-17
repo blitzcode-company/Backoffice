@@ -9,12 +9,19 @@
         </div>
         <span>Suscriptores del Canal: {{ $canal->nombre }}</span>
     </div>
-    <div class="search-container mb-5">
-        <form action="{{ route('suscriptores.nombre', ['id' => $canal->id]) }}" method="GET">
-            <input type="search" name="nombre" placeholder="Buscar suscriptor por nombre" class="search-bar"
-                value="{{ request('nombre') }}">
-            <button type="submit" class="btn-info"><i class="fas fa-search"></i></button>
-        </form>
+
+    <div class="row align-items-center mb-4 g-3">
+        <div class="col-12 d-flex justify-content-center">
+            <form action="{{ route('suscriptores.nombre', ['id' => $canal->id]) }}" method="GET" class="w-100" style="max-width: 600px;">
+                <div class="input-group shadow-sm">
+                    <input type="search" name="nombre" placeholder="Buscar suscriptor por nombre..." class="form-control search-bar border-end-0"
+                        value="{{ request('nombre') }}" aria-label="Buscar suscriptor">
+                    <button type="submit" class="btn btn-info border-start-0" style="max-width: 60px;">
+                        <i class="fas fa-search text-white"></i>
+                    </button>
+                </div>
+            </form>
+        </div>
     </div>
 
     @if (session('success'))

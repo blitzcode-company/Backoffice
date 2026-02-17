@@ -9,17 +9,27 @@
         </div>
         <span>Videos de "{{ $videos[0]->canal->nombre }}"</span>
     </div>
-    <div class="search-container">
-        <form action="{{ route('video.canal', ['id' => $canalId ?? '']) }}" method="GET">
-            <input type="search" name="titulo" placeholder="Buscar video por título" class="search-bar" required>
-            <button type="submit" class="btn-info"><i class="fas fa-search"></i></button>
-        </form>
-    </div>
 
-    <div class="text-center my-4">
-        <a href="{{ route('video.crear.formulario') }}" class="btn btn-primary">
-            <i class="fas fa-plus"></i> Nuevo Video
-        </a>
+    <div class="row align-items-center mb-4 g-3">
+        <div class="col-md-3 d-none d-md-block"></div>
+        
+        <div class="col-12 col-md-6 d-flex justify-content-center">
+            <form action="{{ route('video.canal', ['id' => $canalId ?? '']) }}" method="GET" class="w-100" style="max-width: 600px;">
+                <div class="input-group shadow-sm">
+                    <input type="search" name="titulo" placeholder="Buscar video por título..." class="form-control search-bar border-end-0"
+                        required aria-label="Buscar video">
+                    <button type="submit" class="btn btn-info border-start-0" style="max-width: 60px;">
+                        <i class="fas fa-search text-white"></i>
+                    </button>
+                </div>
+            </form>
+        </div>
+
+        <div class="col-12 col-md-3 d-flex justify-content-center">
+            <a href="{{ route('video.crear.formulario') }}" class="btn btn-primary shadow-sm d-flex align-items-center gap-2" style="width: auto; padding: 10px 20px;">
+                <i class="fas fa-plus"></i> <span>Nuevo Video</span>
+            </a>
+        </div>
     </div>
 
     @if (session('success'))
