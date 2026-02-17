@@ -6,9 +6,9 @@ use App\Models\Blitzvideo\Canal;
 use App\Models\Blitzvideo\Stream;
 use App\Models\Blitzvideo\User;
 use App\Models\Blitzvideo\Video;
+use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Http\Response;
 use Illuminate\Http\UploadedFile;
-use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Schema;
 use Illuminate\Support\Facades\Storage;
 use Tests\TestCase;
@@ -20,7 +20,9 @@ class StreamControllerTest extends TestCase
         parent::setUp();
         config(['database.default' => 'blitzvideo']);
         if (!Schema::hasColumn('streams', 'canal_id')) {
-            DB::statement('ALTER TABLE streams ADD COLUMN canal_id BIGINT UNSIGNED NULL');
+            Schema::table('streams', function (Blueprint $table) {
+                $table->foreignId('canal_id')->nullable()->constrained()->onDelete('cascade');
+            });
         }
     }
 
@@ -205,7 +207,7 @@ class StreamControllerTest extends TestCase
         $stream = new Stream();
         $stream->video_id = $video->id;
         $stream->activo = false;
-        $stream->forceFill(['canal_id' => $canal->id]);
+        $stream->canal_id = $canal->id;
         $stream->save();
 
         return $stream;
