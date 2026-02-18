@@ -1,119 +1,109 @@
 @extends('layouts.app')
 
 @section('content')
-    <div class="titulo">
-        <div class="navigation-buttons">
-            <a href="javascript:history.back()" class="btn btn-secondary btn-sm">
-                <i class="fas fa-arrow-left"></i>
-            </a>
-        </div>
-        <span>Información del Video</span>
-    </div>
-    <div class="video-page-container">
-
-        <div class="video-player-container">
-            <video controls autoplay class="video-player">
-                <source src="{{ $video->link }}" type="video/mp4">
-                Tu navegador no soporta la etiqueta de video.
-            </video>
-        </div>
-
-        <div class="video-details-container">
-            <div class="video-title">
-                <h5>{{ $video->titulo }}</h5>
-            </div>
-            <div class="uploader-info">
-                <div class="uploader-photo">
-                    @if ($video->canal->user && $video->canal->user->foto)
-                        <img src="{{ asset($video->canal->user->foto) }}"
-                            alt="Foto de perfil de {{ $video->canal->user->name }}" class="rounded-circle">
-                    @else
-                        <img src="{{ asset('img/default-user.png') }}" alt="Foto de perfil por defecto"
-                            class="rounded-circle">
-                    @endif
-                </div>
-                <div class="uploader-name">
-                    <p class="m-0"><strong>Subido por:</strong> {{ $video->canal->user->name }}
-                        ({{ $video->canal->user->email }}) </p>
-                </div>
-            </div>
-            <div class="video-info">
-                <p class="m-0"><strong>Canal:</strong> <a class="custom-link"
-                        href="{{ route('canal.detalle', ['id' => $video->canal->id]) }}">
-                        {{ $video->canal->nombre }} <i class="fas fa-link"></i>
-                    </a></p>
-                <p class="m-0"><strong>Duración:</strong>
-                    {{ floor($video->duracion / 60) }}:{{ str_pad($video->duracion % 60, 2, '0', STR_PAD_LEFT) }}
-                </p>
-                <p class="m-0"><strong>Visitas :</strong> {{ $video->visitas_count }}</p>
-
-                <div class="video-tags">
-                    @if ($video->etiquetas->isEmpty())
-                        <p class="m-0"><strong><i class="fas fa-tags"></i>Etiquetas:</strong> No tiene etiquetas.</p>
-                    @else
-                        <p class="m-0"><strong><i class="fas fa-tags"></i>Etiquetas:</strong>
-                            @foreach ($video->etiquetas as $etiqueta)
-                                {{ $etiqueta->nombre }}
-                                @if (!$loop->last)
-                                    ,
-                                @endif
-                            @endforeach
-                        </p>
-                    @endif
-                </div>
-                <p><strong>Acceso:</strong>
-                    @if ($video->acceso == 'publico')
-                        <i class="fas fa-globe-americas" style="color: green;" title="Público"></i> Público
-                    @else
-                        <i class="fas fa-lock" style="color: red;" title="Privado"></i> Privado
-                    @endif
-                </p>
-                <p class="text-justify m-2">{!! nl2br(e($video->descripcion)) !!}</p>
-
-                <div class="video-ratings">
-                    <h4>Puntuaciones</h4>
-                    <ul>
-                        <li class="rating-item"><img src="{{ asset('img/emojis/5.png') }}" alt="5"
-                                class="img-fluid emoji">
-                            {{ $video->puntuacion_5 }}</li>
-                        <li class="rating-item"><img src="{{ asset('img/emojis/4.png') }}" alt="4"
-                                class="img-fluid emoji">
-                            {{ $video->puntuacion_4 }}</li>
-                        <li class="rating-item"><img src="{{ asset('img/emojis/3.png') }}" alt="3"
-                                class="img-fluid emoji">
-                            {{ $video->puntuacion_3 }}</li>
-                        <li class="rating-item"><img src="{{ asset('img/emojis/2.png') }}" alt="2"
-                                class="img-fluid emoji">
-                            {{ $video->puntuacion_2 }}</li>
-                        <li class="rating-item"><img src="{{ asset('img/emojis/1.png') }}" alt="1"
-                                class="img-fluid emoji">
-                            {{ $video->puntuacion_1 }}</li>
-                    </ul>
-                    <p><strong>Promedio de Puntuaciones:</strong> {{ $video->promedio_puntuaciones }}</p>
-                </div>
-            </div>
-            <div class="video-actions text-center my-4">
-                <a href="{{ route('comentarios.listado', ['id' => $video->id]) }}" class="btn btn-primary">
-                    <i class="fas fa-comments"></i> Comentarios
+    <div class="admin-video-container">
+        {{-- Header --}}
+        <div class="page-header">
+            <div class="d-flex align-items-center gap-3">
+                <a href="javascript:history.back()" class="btn btn-outline-secondary btn-sm rounded-circle" style="width: 32px; height: 32px; display: flex; align-items: center; justify-content: center;">
+                    <i class="fas fa-arrow-left"></i>
                 </a>
-                <a href="{{ route('video.editar.formulario', ['id' => $video->id]) }}" class="btn btn-primary">
-                    <i class="fas fa-edit"></i> Editar
-                </a>
-                <a href="#" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#confirmDeleteModal">
-                    <i class="fas fa-trash-alt"></i> Eliminar
-                </a>
-                <button class="btn {{ $video->bloqueado ? 'btn-secondary' : 'btn-warning' }}" data-bs-toggle="modal"
-                    data-bs-target="#confirmBlockModalVideo{{ $video->id }}" data-id="{{ $video->id }}">
-                    <i class="fas fa-ban"></i> {{ $video->bloqueado ? 'Desbloquear' : 'Bloquear' }}
-                </button>
+                <div>
+                    <h2>Gestión de Video</h2>
+                    <span class="text-muted small">ID: {{ $video->id }}</span>
+                </div>
             </div>
-            @include('modals.delete-video-modal', ['video' => $video])
-            @include('modals.blockModalVideo', ['video' => $video])
+            <div class="d-flex gap-2 align-items-center">
+                @if ($video->bloqueado)
+                    <span class="badge bg-danger">Bloqueado</span>
+                @else
+                    <span class="badge bg-success">Activo</span>
+                @endif
+                
+                @if ($video->acceso == 'publico')
+                    <span class="badge bg-primary"><i class="fas fa-globe-americas me-1"></i> Público</span>
+                @else
+                    <span class="badge bg-secondary"><i class="fas fa-lock me-1"></i> Privado</span>
+                @endif
+            </div>
         </div>
+
+        {{-- Alertas --}}
         @if (session('success'))
-        <div class="alert alert-success text-center mx-auto" style="max-width: 500px; margin-top: 0 !important;">
-            {{ session('success') }}
+            <div class="alert alert-success alert-dismissible fade show" role="alert">
+                {{ session('success') }}
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            </div>
+        @endif
+
+        <div class="row">
+            {{-- Columna Principal: Video y Datos --}}
+            <div class="col-lg-8">
+                <div class="content-section p-0 overflow-hidden" style="background: #000;">
+                    <div class="ratio ratio-16x9">
+                        <video controls autoplay class="w-100 h-100">
+                            <source src="{{ $video->link }}" type="video/mp4">
+                            Tu navegador no soporta la etiqueta de video.
+                        </video>
+                    </div>
+                </div>
+
+                <div class="content-section">
+                    <h3 class="mb-3">{{ $video->titulo }}</h3>
+                    <div class="d-flex gap-4 text-muted mb-4 small">
+                        <span><i class="fas fa-eye me-1"></i> {{ number_format($video->visitas_count) }} visitas</span>
+                        <span><i class="fas fa-clock me-1"></i> {{ floor($video->duracion / 60) }}:{{ str_pad($video->duracion % 60, 2, '0', STR_PAD_LEFT) }} min</span>
+                        <span><i class="fas fa-calendar me-1"></i> {{ $video->created_at->format('d M, Y') }}</span>
+                    </div>
+                    
+                    <h5 class="text-muted mb-2" style="font-size: 0.9rem; text-transform: uppercase; letter-spacing: 0.5px;">Descripción</h5>
+                    <p class="mb-4" style="white-space: pre-line;">{{ $video->descripcion }}</p>
+
+                    <h5 class="text-muted mb-2" style="font-size: 0.9rem; text-transform: uppercase; letter-spacing: 0.5px;">Etiquetas</h5>
+                    <div>
+                        @forelse ($video->etiquetas as $etiqueta)
+                            <span class="tag-badge">{{ $etiqueta->nombre }}</span>
+                        @empty
+                            <span class="text-muted fst-italic">Sin etiquetas.</span>
+                        @endforelse
+                    </div>
+                </div>
+            </div>
+
+            {{-- Columna Lateral: Acciones y Autor --}}
+            <div class="col-lg-4">
+                <div class="content-section">
+                    <div class="d-grid gap-2">
+                        <a href="{{ route('video.editar.formulario', ['id' => $video->id]) }}" class="btn btn-primary fw-bold">
+                            <i class="fas fa-pen me-2"></i> Editar Video
+                        </a>
+                        <a href="{{ route('comentarios.listado', ['id' => $video->id]) }}" class="btn btn-outline-secondary">
+                            <i class="fas fa-comments me-2"></i> Comentarios
+                        </a>
+                        <button class="btn {{ $video->bloqueado ? 'btn-success' : 'btn-warning' }}" data-bs-toggle="modal" data-bs-target="#confirmBlockModalVideo{{ $video->id }}">
+                            <i class="fas {{ $video->bloqueado ? 'fa-unlock' : 'fa-ban' }} me-2"></i> {{ $video->bloqueado ? 'Desbloquear' : 'Bloquear' }}
+                        </button>
+                        <button class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#confirmDeleteModal">
+                            <i class="fas fa-trash me-2"></i> Eliminar
+                        </button>
+                    </div>
+                </div>
+
+                <div class="content-section">
+                    <h5 class="mb-3" style="font-size: 1rem;">Creador</h5>
+                    <div class="d-flex align-items-center">
+                        <img src="{{ $video->canal->user->foto ? asset($video->canal->user->foto) : asset('img/default-user.png') }}" 
+                             class="rounded-circle me-3" width="50" height="50" style="object-fit: cover;">
+                        <div>
+                            <div class="fw-bold">{{ $video->canal->user->name }}</div>
+                            <div class="text-muted small">{{ $video->canal->user->email }}</div>
+                            <a href="{{ route('canal.detalle', ['id' => $video->canal->id]) }}" class="small text-decoration-none">Ver Canal</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
-    @endif
+        @include('modals.delete-video-modal', ['video' => $video])
+        @include('modals.blockModalVideo', ['video' => $video])
     </div>
 @endsection

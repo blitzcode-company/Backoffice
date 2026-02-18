@@ -2,7 +2,6 @@
 
 @section('content')
     <div class="container-xl">
-        {{-- Header --}}
         <div class="d-flex align-items-center mb-4">
             <a href="javascript:history.back()" class="btn btn-outline-secondary btn-sm me-3 rounded-circle shadow-sm" style="width: 32px; height: 32px; display: flex; align-items: center; justify-content: center;">
                 <i class="fas fa-arrow-left"></i>
@@ -11,7 +10,6 @@
         </div>
 
         <div class="row g-4">
-            {{-- Left Column: Profile --}}
             <div class="col-lg-4 col-xl-3">
                 <div class="card border-0 shadow-sm h-100 profile-card">
                     <div class="card-body text-center p-4">
@@ -73,10 +71,7 @@
                     </div>
                 </div>
             </div>
-
-            {{-- Right Column: Details --}}
             <div class="col-lg-8 col-xl-9">
-                {{-- Personal Data --}}
                 <div class="card border-0 shadow-sm mb-4 info-card">
                     <div class="card-header bg-transparent border-bottom py-3">
                         <h5 class="mb-0 fw-bold"><i class="fas fa-user-circle me-2 text-primary"></i>Datos Personales</h5>
@@ -119,8 +114,6 @@
                         </div>
                     </div>
                 </div>
-
-                {{-- Channel Data --}}
                 <div class="card border-0 shadow-sm info-card">
                     <div class="card-header bg-transparent border-bottom py-3">
                         <h5 class="mb-0 fw-bold"><i class="fas fa-tv me-2 text-primary"></i>Información del Canal</h5>
