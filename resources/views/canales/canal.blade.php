@@ -9,12 +9,6 @@
             <h2 class="titulo mb-0 border-0 p-0" style="font-size: 1.75rem;">Información del Canal</h2>
         </div>
 
-        @if (session('warning'))
-            <div class="alert alert-warning text-center mb-4">
-                {{ session('warning') }}
-            </div>
-        @endif
-
         <div class="channel-card">
             <div class="channel-cover">
                 @if ($canal->portada)
@@ -92,6 +86,22 @@
                 </div>
             </div>
         </div>
+
+        @if (session('warning'))
+            <div class="alert alert-warning text-center mt-4">
+                {{ session('warning') }}
+            </div>
+        @endif
+
+        @if ($errors->any())
+            <div class="alert alert-danger text-center mt-4">
+                <ul class="mb-0 list-unstyled">
+                    @foreach ($errors->all() as $error)
+                        <li>{{ $error }}</li>
+                    @endforeach
+                </ul>
+            </div>
+        @endif
 
         @include('modals.deleteChannelModal', ['canal' => $canal])
         @include('modals.suscribe-modal', ['canal' => $canal])

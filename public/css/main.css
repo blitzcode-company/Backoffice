@@ -1103,6 +1103,11 @@ label {
   box-shadow: none;
 }
 
+.modal-footer .btn.btn-auto-width {
+  max-width: none;
+  width: auto;
+}
+
 .modal-footer .btn-primary .btn-si {
   background-color: #0baafe;
 }

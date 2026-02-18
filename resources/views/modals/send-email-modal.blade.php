@@ -1,20 +1,23 @@
 <div class="modal fade" id="sendEmailModal" tabindex="-1" aria-labelledby="sendEmailModalLabel" aria-hidden="true">
-    <div class="modal-dialog" role="document">
+    <div class="modal-dialog modal-dialog-centered" role="document">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title" id="sendEmailModalLabel">Enviar Correo a ({{ $user->email }})</h5>
-                <button type="button" class="close modal-close" data-bs-dismiss="modal" aria-label="Close"> <span
-                        aria-hidden="true">&times;</span></button>
+                <h5 class="modal-title" id="sendEmailModalLabel">
+                    <i class="fas fa-envelope me-2"></i> Enviar Correo a ({{ $user->email }})
+                </h5>
+                <button type="button" class="close modal-close" data-bs-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
             </div>
-            <div class="modal-body">
+            <div class="modal-body text-start">
                 <form id="sendEmailForm" action="{{ route('correo.enviar') }}" method="POST">
                     @csrf
-                    <div class="form-group">
-                        <label for="asunto">Asunto:</label>
+                    <div class="mb-3">
+                        <label for="asunto" class="form-label">Asunto:</label>
                         <input type="text" class="form-control" id="asunto" name="asunto" required>
                     </div>
-                    <div class="form-group">
-                        <label for="mensaje">Mensaje:</label>
+                    <div class="mb-3">
+                        <label for="mensaje" class="form-label">Mensaje:</label>
                         <textarea class="form-control" id="mensaje" name="mensaje" rows="5" required></textarea>
                     </div>
                     <input type="hidden" class="form-control" id="destinatario" name="destinatario"

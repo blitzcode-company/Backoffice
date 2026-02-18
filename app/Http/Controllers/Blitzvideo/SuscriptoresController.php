@@ -53,10 +53,21 @@ class SuscriptoresController extends Controller
     {
         $canal = Canal::findOrFail($canalId);
         $request->validate([
-            'usuario_id' => 'required|exists:users,id',
+            'usuario_id' => 'required|exists:App\Models\Blitzvideo\User,id',
         ]);
         $usuarioId = $request->input('usuario_id');
-        if ($canal->suscriptores()->where('users.id', $usuarioId)->exists()) {
+
+        $suscripcion = Suscribe::withTrashed()
+            ->where('canal_id', $canalId)
+            ->where('user_id', $usuarioId)
+            ->first();
+
+        if ($suscripcion) {
+            if ($suscripcion->trashed()) {
+                $suscripcion->restore();
+                return redirect()->route('suscriptores.listar', ['id' => $canalId])
+                    ->with('success', 'Usuario suscrito con éxito.');
+            }
             return redirect()->route('canal.detalle', ['id' => $canalId])
                 ->with('warning', 'El usuario ya está suscrito a este canal.');
         }

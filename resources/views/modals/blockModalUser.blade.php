@@ -4,6 +4,7 @@
        <div class="modal-content">
            <div class="modal-header">
                <h5 class="modal-title" id="confirmBlockModalLabelUser{{ $user->id }}">
+                   <i class="fas {{ $user->bloqueado ? 'fa-user-check' : 'fa-user-slash' }} me-2"></i>
                    Confirmar {{ $user->bloqueado ? 'Desbloqueo' : 'Bloqueo' }}
                </h5>
                <button type="button" class="close modal-close" data-bs-dismiss="modal" aria-label="Close">
@@ -12,7 +13,8 @@
            </div>
            <div class="modal-body">
                @if (!$user->bloqueado)
-                   <p>¿Con qué motivo deseas bloquear este usuario?</p>
+                   <div class="mb-3">
+                       <p class="mb-2">¿Con qué motivo deseas bloquear este usuario?</p>
                    <select id="block-reason-{{ $user->id }}" class="form-control" required>
                        <option value="">Selecciona un motivo</option>
                        <option value="Conducta inapropiada">Conducta inapropiada</option>
@@ -20,11 +22,14 @@
                        <option value="Petición de usuario">Petición de usuario</option>
                        <option value="Otro">Otro</option>
                    </select>
+                   </div>
                @endif
-               <p>Para confirmar, ingresa el ID del usuario:</p>
-               <p><strong>ID: #{{ $user->id }}</strong></p>
-               <input type="text" id="confirm-id-user-{{ $user->id }}" class="form-control"
-                      placeholder="Ingresa el ID del usuario" required>
+               <div class="mb-3">
+                   <p class="mb-2">Para confirmar, ingresa el ID del usuario:</p>
+                   <p class="mb-2 text-primary font-weight-bold">ID: #{{ $user->id }}</p>
+                   <input type="text" id="confirm-id-user-{{ $user->id }}" class="form-control"
+                          placeholder="Ingresa el ID del usuario" required>
+               </div>
            </div>
            <div class="modal-footer">
                <form action="{{ $user->bloqueado ? route('usuario.desbloquear', $user->id) : route('usuario.bloquear', $user->id) }}"
@@ -33,9 +38,9 @@
                    @method('POST')
                    <input type="hidden" name="motivo" id="hidden-reason-user-{{ $user->id }}">
                    
-                   <button type="submit" class="btn {{ $user->bloqueado ? 'btn-secondary' : 'btn-warning' }} btn-sm"
+                   <button type="submit" class="btn {{ $user->bloqueado ? 'btn-success' : 'btn-warning' }} btn-sm"
                            id="block-btn-{{ $user->id }}" disabled>
-                       <i class="fas fa-ban"></i> {{ $user->bloqueado ? 'Desbloquear' : 'Bloquear' }}
+                       <i class="fas {{ $user->bloqueado ? 'fa-unlock' : 'fa-ban' }}"></i> {{ $user->bloqueado ? 'Desbloquear' : 'Bloquear' }}
                    </button>
                    <button type="button" class="btn btn-secondary btn-sm" data-bs-dismiss="modal">
                        <i class="fas fa-times"></i> Cancelar

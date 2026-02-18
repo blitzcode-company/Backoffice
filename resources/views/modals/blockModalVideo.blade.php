@@ -4,27 +4,33 @@
         <div class="modal-content">
             <div class="modal-header">
                 <h5 class="modal-title" id="confirmBlockModalLabelVideo{{ $video->id }}">
+                    <i class="fas {{ $video->bloqueado ? 'fa-video' : 'fa-video-slash' }} me-2"></i>
                     Confirmar {{ $video->bloqueado ? 'Desbloqueo' : 'Bloqueo' }}
                 </h5>
                 <button type="button" class="close modal-close" data-bs-dismiss="modal" aria-label="Close"> <span
                         aria-hidden="true">&times;</span></button>
             </div>
             <div class="modal-body">
-                <p> {{ $video->bloqueado ? null : ' ¿Con qué motivo deseas bloquear este video?' }}</p>
+                @if(!$video->bloqueado)
+                <div class="mb-3">
+                    <p class="mb-2">¿Con qué motivo deseas bloquear este video?</p>
 
-                <select id="block-reason-{{ $video->id }}" class="form-control"
-                    {{ $video->bloqueado ? 'disabled style=display:none' : 'required' }}>
-                    <option value="">Selecciona un motivo</option>
-                    <option value="Contenido inapropiado">Contenido inapropiado</option>
-                    <option value="Incumplimiento de políticas">Incumplimiento de políticas</option>
-                    <option value="Petición de usuario">Petición de usuario</option>
-                    <option value="Otro">Otro</option>
-                </select>
+                    <select id="block-reason-{{ $video->id }}" class="form-control" required>
+                        <option value="">Selecciona un motivo</option>
+                        <option value="Contenido inapropiado">Contenido inapropiado</option>
+                        <option value="Incumplimiento de políticas">Incumplimiento de políticas</option>
+                        <option value="Petición de usuario">Petición de usuario</option>
+                        <option value="Otro">Otro</option>
+                    </select>
+                </div>
+                @endif
 
-                <p>Para confirmar, ingresa el ID del video:</p>
-                <p><strong>ID: #{{ $video->id }}</strong></p>
-                <input type="text" id="confirm-id-video-{{ $video->id }}" class="form-control"
-                    placeholder="Ingresa el ID del video" required>
+                <div class="mb-3">
+                    <p class="mb-2">Para confirmar, ingresa el ID del video:</p>
+                    <p class="mb-2 text-primary font-weight-bold">ID: #{{ $video->id }}</p>
+                    <input type="text" id="confirm-id-video-{{ $video->id }}" class="form-control"
+                        placeholder="Ingresa el ID del video" required>
+                </div>
             </div>
             <div class="modal-footer">
                 <form
@@ -34,9 +40,9 @@
                     @method('PATCH')
                     <input type="hidden" name="motivo" id="hidden-reason-video-{{ $video->id }}">
 
-                    <button type="submit" class="btn {{ $video->bloqueado ? 'btn-secondary' : 'btn-warning' }} btn-sm"
+                    <button type="submit" class="btn {{ $video->bloqueado ? 'btn-success' : 'btn-warning' }} btn-sm"
                         id="block-btn-{{ $video->id }}" disabled>
-                        <i class="fas fa-ban"></i> {{ $video->bloqueado ? 'Desbloquear' : 'Bloquear' }}
+                        <i class="fas {{ $video->bloqueado ? 'fa-unlock' : 'fa-ban' }}"></i> {{ $video->bloqueado ? 'Desbloquear' : 'Bloquear' }}
                     </button>
                     <button type="button" class="btn btn-secondary btn-sm" data-bs-dismiss="modal">
                         <i class="fas fa-times"></i> Cancelar
