@@ -7,24 +7,41 @@
                     aria-hidden="true">&times;</span></button>
             </div>
             <div class="modal-body">
-                <p>¿Estás seguro de que quieres eliminar este usuario?</p>
+                <p class="m-0">Para confirmar la eliminación, ingresa el ID del usuario en el siguiente campo:</p>
+                <br>
+                <p class="m-0"><strong>ID: #{{ $user->id }}</strong></p>
+                <input type="text" id="confirm-id-{{ $user->id }}" class="form-control"
+                    placeholder="Ingresa el ID del usuario" required>
             </div>
             <div class="modal-footer">
                 <form action="{{ route('usuario.eliminar', ['id' => $user->id]) }}" method="POST">
                     @csrf
                     @method('DELETE')
-                    <button type="submit" class="btn btn-danger">
+                    <button type="submit" class="btn btn-danger" id="delete-btn-{{ $user->id }}" disabled>
                         <i class="fas fa-trash-alt"></i> Eliminar
                     </button>
                 </form>
-                <button type="button" class="btn btn-primary" data-bs-dismiss="modal">No</button>
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
             </div>
         </div>
     </div>
 </div>
 
 <script>
-    document.getElementById('confirmDeleteModal').addEventListener('hidden.bs.modal', function () {
-        document.querySelector('.modal-backdrop').remove();
+    document.addEventListener('DOMContentLoaded', function() {
+        const modal = document.getElementById('confirmDeleteModal');
+        const input = modal.querySelector('input[type="text"]');
+        const button = modal.querySelector('button[type="submit"]');
+
+        function toggleDeleteButton() {
+            button.disabled = input.value !== '{{ $user->id }}';
+        }
+        input.addEventListener('input', toggleDeleteButton);
+
+        modal.addEventListener('hidden.bs.modal', function () {
+            if (document.querySelector('.modal-backdrop')) {
+                document.querySelector('.modal-backdrop').remove();
+            }
+        });
     });
 </script>

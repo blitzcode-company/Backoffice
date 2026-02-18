@@ -1,66 +1,68 @@
 @extends('layouts.app')
 
 @section('content')
-    <div class="titulo">
-        <div class="navigation-buttons">
-            <a href="javascript:history.back()" class="btn btn-secondary btn-sm">
-                <i class="fas fa-arrow-left"></i>
-            </a>
+    <div class="m-auto" style="max-width: 900px;">
+        <div class="d-flex align-items-center justify-content-between mb-4">
+            <div class="d-flex align-items-center">
+                <a href="javascript:history.back()" class="btn btn-outline-secondary btn-sm me-3" style="width: 32px; height: 32px; display: flex; align-items: center; justify-content: center; border-radius: 50%;">
+                    <i class="fas fa-arrow-left"></i>
+                </a>
+                <h2 class="titulo mb-0 border-0 p-0" style="font-size: 1.5rem; font-weight: 700;">Editar Canal</h2>
+            </div>
+            <span class="badge bg-secondary">ID: {{ $canal->id }}</span>
         </div>
-        <span>Editar infromación del Canal</span>
-    </div>
-    <div class="container container-card">
-        <div class="justify-content-center">
-            <div class="card">
-                <div class="card-header">
-                    Editar Canal - <span class="text-muted">Para cambiar la foto de portada, haz clic sobre la imagen.</span>
-                </div>
 
-                <div class="card-body" style="padding: 0;">
-                    <form action="{{ route('canal.editar', $canal->id) }}" method="POST" enctype="multipart/form-data">
-                        @csrf
-                        @method('PUT')
-                        <label for="portada">
-                            <div class="canal-photo-large text-center mb-3 position-relative">
-                                <img id="previewPortada"
-                                    src="{{ $canal->portada ? asset($canal->portada) : asset('img/cover-default.png') }}"
-                                    class="img-fluid">
-                                <img src="{{ asset('img/camara.png') }}" alt="Camara"
-                                    class="position-absolute camara-icon">
+        <div class="card border">
+            <div class="card-body p-0">
+                <form action="{{ route('canal.editar', $canal->id) }}" method="POST" enctype="multipart/form-data">
+                    @csrf
+                    @method('PUT')
+                    
+                    <div class="position-relative w-100 bg-light border-bottom" style="height: 220px; overflow: hidden;">
+                        <img id="previewPortada" src="{{ $canal->portada ? asset($canal->portada) : asset('img/cover-default.png') }}" class="w-100 h-100" style="object-fit: cover;">
+                        
+                        <label for="portada" class="position-absolute top-0 start-0 w-100 h-100 d-flex align-items-center justify-content-center" 
+                               style="background: rgba(0,0,0,0.4); opacity: 0; transition: opacity 0.2s; cursor: pointer;" 
+                               onmouseover="this.style.opacity=1" onmouseout="this.style.opacity=0">
+                            <div class="btn btn-light btn-sm fw-bold">
+                                <i class="fas fa-camera me-2"></i> Cambiar Portada
                             </div>
-                            <input type="file" name="portada" id="portada" class="form-control-file d-none"
-                                onchange="previewImage(this)">
                         </label>
+                        <input type="file" name="portada" id="portada" class="d-none" onchange="previewImage(this)">
+                    </div>
+                    <div class="px-4 py-2 banner-info border-bottom text-end">
+                        <small class="text-muted"><i class="fas fa-info-circle me-1"></i> Haz clic en la imagen para actualizar el banner</small>
+                    </div>
 
-                        <div class="form-group">
-                            <label for="nombre">Nombre del Canal</label>
-                            <input type="text" name="nombre" id="nombre" class="form-control custom-input" required
-                                placeholder="Ingrese nombre del canal" value="{{ $canal->nombre }}">
+                    <div class="p-4">
+                        <div class="mb-4">
+                            <label for="nombre" class="form-label fw-bold text-secondary small text-uppercase">Nombre del Canal</label>
+                            <input type="text" name="nombre" id="nombre" class="form-control" required value="{{ $canal->nombre }}">
                         </div>
 
-                        <div class="form-group">
-                            <label for="descripcion">Descripción del Canal</label>
-                            <textarea name="descripcion" id="descripcion" class="form-control custom-textarea" rows="6" required
-                                placeholder="Ingrese descripción del canal">{{ $canal->descripcion }}</textarea>
+                        <div class="mb-4">
+                            <label for="descripcion" class="form-label fw-bold text-secondary small text-uppercase">Descripción</label>
+                            <textarea name="descripcion" id="descripcion" class="form-control" rows="6" required>{{ $canal->descripcion }}</textarea>
                         </div>
 
-                        <button type="submit" class="btn btn-primary my-5">Actualizar Canal</button>
+                        <div class="d-flex justify-content-end pt-3 border-top">
+                            <a href="javascript:history.back()" class="btn btn-outline-secondary me-2 px-4">Cancelar</a>
+                            <button type="submit" class="btn btn-primary px-4 fw-bold">
+                                <i class="fas fa-save me-2"></i> Actualizar
+                            </button>
+                        </div>
+                    </div>
 
-                        @if ($errors->any())
-                            <div class="alert alert-danger w-50 mx-auto mb-10 mt-0">
+                    @if ($errors->any())
+                        <div class="alert alert-danger m-4 mt-0">
+                            <ul class="mb-0">
                                 @foreach ($errors->all() as $error)
-                                    {{ $error }}
+                                    <li>{{ $error }}</li>
                                 @endforeach
-                            </div>
-                        @endif
-
-                        @if (session('success'))
-                            <div class="alert alert-success w-50 mx-auto mb-10 mt-0">
-                                {{ session('success') }}
-                            </div>
-                        @endif
-                    </form>
-                </div>
+                            </ul>
+                        </div>
+                    @endif
+                </form>
             </div>
         </div>
     </div>

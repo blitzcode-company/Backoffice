@@ -1,109 +1,97 @@
 @extends('layouts.app')
 
 @section('content')
-    <div class="titulo">
-        <div class="navigation-buttons">
-            <a href="javascript:history.back()" class="btn btn-secondary btn-sm">
+    <div class="container-xl">
+        <div class="d-flex align-items-center mb-4">
+            <a href="javascript:history.back()" class="btn btn-outline-secondary btn-sm me-3 rounded-circle shadow-sm" style="width: 32px; height: 32px; display: flex; align-items: center; justify-content: center;">
                 <i class="fas fa-arrow-left"></i>
             </a>
+            <h2 class="titulo mb-0 border-0 p-0" style="font-size: 1.75rem;">Actualizar Usuario</h2>
         </div>
-        <span>Actualizar cuenta de Usuario</span>
-    </div>
-    <div class="container container-card">
-        <div class="justify-content-center">
-            <div class="col-md-10">
-                <div class="card">
-                    <div class="card-header">
-                        Editar Usuario - <span class="text-muted">Para cambiar la foto de perfil, haz clic sobre la
-                            imagen.</span>
-                    </div>
-                    <div class="card-body">
+
+        <div class="row justify-content-center">
+            <div class="col-lg-8">
+                <div class="card border-0 shadow-sm info-card">
+                    <div class="card-body p-4">
+                        <div class="text-center mb-4">
+                            <h5 class="card-title fw-bold">Editar Perfil</h5>
+                            <p class="text-muted small">Actualiza la información del usuario.</p>
+                        </div>
 
                         <form action="{{ route('usuario.editar', ['id' => $user->id]) }}" method="POST"
                             enctype="multipart/form-data">
                             @csrf
                             @method('PUT')
 
-                            <div class="row">
-                                <div class="mx-auto position-relative">
-                                    <label for="foto" style="cursor: pointer;">
-                                        <div class="user-photo text-center mb-3">
-                                            <img id="previewFoto"
-                                                src="{{ $user->foto ? $user->foto : asset('img/default-user.png') }}"
-                                                class="img-thumbnail" style="width: 200px; height: 200px;">
-                                            <span class="edit-icon">
-                                                <i class="fas fa-camera"></i>
-                                            </span>
+                            {{-- Foto de Perfil --}}
+                            <div class="d-flex justify-content-center mb-4">
+                                <div class="position-relative">
+                                    <label for="foto" class="cursor-pointer" style="cursor: pointer;" title="Cambiar foto de perfil">
+                                        <img id="previewFoto" src="{{ $user->foto ? $user->foto : asset('img/default-user.png') }}"
+                                            class="rounded-circle shadow-sm object-fit-cover" 
+                                            style="width: 150px; height: 150px; object-fit: cover;">
+                                        <div class="position-absolute bottom-0 end-0 bg-primary text-white rounded-circle p-2 shadow-sm d-flex align-items-center justify-content-center" style="width: 35px; height: 35px;">
+                                            <i class="fas fa-camera small"></i>
                                         </div>
-                                        <input type="file" name="foto" id="foto" class="form-control-file d-none"
-                                            onchange="previewImage(this)">
                                     </label>
+                                    <input type="file" name="foto" id="foto" class="d-none" onchange="previewImage(this)">
                                 </div>
                             </div>
 
-                            <div class="row">
+                            <div class="row g-3">
                                 <div class="col-md-6">
-                                    <div class="form-group">
-                                        <label for="name">Nombre</label>
-                                        <input type="text" name="name" id="name" class="form-control"
-                                            value="{{ $user->name }}" required>
-                                    </div>
-
-                                    <div class="form-group">
-                                        <label for="password">Nueva Contraseña</label>
-                                        <input type="password" name="password" id="password" class="form-control">
-                                    </div>
+                                    <label for="name" class="form-label fw-bold small text-uppercase text-muted">Nombre</label>
+                                    <input type="text" name="name" id="name" class="form-control" value="{{ $user->name }}" required>
                                 </div>
 
                                 <div class="col-md-6">
-                                    <div class="form-group">
-                                        <label for="email">Correo Electrónico</label>
-                                        <input type="email" name="email" id="email" class="form-control"
-                                            value="{{ $user->email }}" required>
-                                    </div>
-
-                                    <div class="form-group">
-                                        <label for="password_confirmation">Confirmar Nueva Contraseña</label>
-                                        <input type="password" name="password_confirmation" id="password_confirmation"
-                                            class="form-control">
-                                    </div>
+                                    <label for="email" class="form-label fw-bold small text-uppercase text-muted">Correo Electrónico</label>
+                                    <input type="email" name="email" id="email" class="form-control" value="{{ $user->email }}" required>
                                 </div>
-                            </div>
 
-                            <div class="row">
                                 <div class="col-md-6">
-                                    <div class="form-group">
-                                        <label for="fecha_de_nacimiento">Fecha de Nacimiento</label>
-                                        <input type="date" name="fecha_de_nacimiento" id="fecha_de_nacimiento"
-                                            class="form-control" value="{{ $user->fecha_de_nacimiento }}">
-                                    </div>
+                                    <label for="password" class="form-label fw-bold small text-uppercase text-muted">Nueva Contraseña</label>
+                                    <input type="password" name="password" id="password" class="form-control" placeholder="Dejar en blanco para mantener">
                                 </div>
 
-                                <div class="col-md-6 d-flex align-items-center">
-                                    <div class="form-check">
+                                <div class="col-md-6">
+                                    <label for="password_confirmation" class="form-label fw-bold small text-uppercase text-muted">Confirmar Nueva Contraseña</label>
+                                    <input type="password" name="password_confirmation" id="password_confirmation" class="form-control" placeholder="Repetir nueva contraseña">
+                                </div>
+
+                                <div class="col-md-6">
+                                    <label for="fecha_de_nacimiento" class="form-label fw-bold small text-uppercase text-muted">Fecha de Nacimiento</label>
+                                    <input type="date" name="fecha_de_nacimiento" id="fecha_de_nacimiento" class="form-control" value="{{ $user->fecha_de_nacimiento }}">
+                                </div>
+
+                                <div class="col-md-6 d-flex align-items-end">
+                                    <div class="form-check form-switch mb-2">
                                         <input type="hidden" name="premium" value="0">
-                                        <input class="form-check-input" type="checkbox" name="premium" id="premium"
-                                            value="1" {{ $user->premium ? 'checked' : '' }}>
-                                        <label class="form-check-label" for="premium">
-                                            Premium
-                                        </label>
+                                        <input class="form-check-input" type="checkbox" name="premium" id="premium" value="1" {{ $user->premium ? 'checked' : '' }}>
+                                        <label class="form-check-label fw-bold" for="premium">Usuario Premium</label>
                                     </div>
                                 </div>
                             </div>
 
-                            <button type="submit" class="btn btn-primary">Guardar Cambios</button>
+                            <div class="d-grid gap-2 mt-4">
+                                <button type="submit" class="btn btn-primary btn-lg shadow-sm">
+                                    <i class="fas fa-save me-2"></i> Guardar
+                                </button>
+                            </div>
 
                             @if ($errors->any())
-                                <div class="alert alert-danger">
-                                    @foreach ($errors->all() as $error)
-                                        {{ $error }}
-                                    @endforeach
+                                <div class="alert alert-danger mt-3 mb-0">
+                                    <ul class="mb-0 ps-3">
+                                        @foreach ($errors->all() as $error)
+                                            <li>{{ $error }}</li>
+                                        @endforeach
+                                    </ul>
                                 </div>
                             @endif
 
                             @if (session('success'))
-                                <div class="alert alert-success">
-                                    {{ session('success') }}
+                                <div class="alert alert-success mt-3 mb-0">
+                                    <i class="fas fa-check-circle me-2"></i> {{ session('success') }}
                                 </div>
                             @endif
                         </form>
@@ -114,10 +102,6 @@
     </div>
 
     <script>
-        $('#previewFoto').on('click', function() {
-            $('#foto').click();
-        });
-
         function previewImage(input) {
             if (input.files && input.files[0]) {
                 var reader = new FileReader();

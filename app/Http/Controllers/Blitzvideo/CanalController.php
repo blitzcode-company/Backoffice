@@ -33,8 +33,8 @@ class CanalController extends Controller
             }])
             ->orderBy('id', 'desc');
         $canales = $this->paginateBuilder($canalesQuery, 6, $request->input('page', 1));
-        $host   = $this->obtenerHostMinio();
-        $bucket = $this->obtenerBucket();
+        $host    = $this->obtenerHostMinio();
+        $bucket  = $this->obtenerBucket();
         foreach ($canales as $canal) {
             if ($canal->user) {
                 $canal->user->foto = $this->obtenerUrlArchivo($canal->user->foto, $host, $bucket);
@@ -96,7 +96,7 @@ class CanalController extends Controller
             'nombre' => 'nullable|string|max:100',
         ]);
         $nombre = $request->query('nombre');
-        $query = Canal::with('user:id,name,foto')
+        $query  = Canal::with('user:id,name,foto')
             ->whereHas('user', function ($query) {
                 $query->where('name', '!=', self::USUARIO_EXCLUIDO);
             })
@@ -109,8 +109,8 @@ class CanalController extends Controller
             $query->where('nombre', 'like', '%' . $nombre . '%');
         }
         $canales = $this->paginateBuilder($query, 10, $request->input('page', 1));
-        $host   = $this->obtenerHostMinio();
-        $bucket = $this->obtenerBucket();
+        $host    = $this->obtenerHostMinio();
+        $bucket  = $this->obtenerBucket();
         foreach ($canales as $canal) {
             if ($canal->user) {
                 $canal->user->foto = $this->obtenerUrlArchivo($canal->user->foto, $host, $bucket);
@@ -119,14 +119,13 @@ class CanalController extends Controller
         }
         return view('canales.listar-canales', compact('canales'));
     }
-    
 
     public function ListarVideosDeCanal(Request $request, $canalId)
     {
-        $page = $request->input('page', 1);
+        $page        = $request->input('page', 1);
         $videosQuery = Video::where('canal_id', $canalId)
             ->whereIn('estado', ['VIDEO', 'FINALIZADO']);
-        
+
         $videos = $this->paginateBuilder($videosQuery, 9, $page);
         $host   = $this->obtenerHostMinio();
         $bucket = $this->obtenerBucket();
@@ -135,7 +134,7 @@ class CanalController extends Controller
         }
         return view('canales.videos', compact('videos'));
     }
-    
+
     public function MostrarFormularioCrearCanal()
     {
         return view('canales.crear-canal');
@@ -152,6 +151,11 @@ class CanalController extends Controller
                 $query->whereIn('estado', ['VIDEO', 'FINALIZADO']);
             }])
             ->firstOrFail();
+        $host   = $this->obtenerHostMinio();
+        $bucket = $this->obtenerBucket();
+        if ($canal->portada) {
+            $canal->portada = $this->obtenerUrlArchivo($canal->portada, $host, $bucket);
+        }
 
         return view('canales.editar-canal', compact('canal'));
     }

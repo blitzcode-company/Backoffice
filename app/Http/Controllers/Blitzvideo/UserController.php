@@ -27,8 +27,13 @@ class UserController extends Controller
         if (! $user) {
             abort(404, 'Usuario no encontrado');
         }
+        $host   = $this->obtenerHostMinio();
+        $bucket = $this->obtenerBucket();
+        if (! empty($user->foto)) {
+            $user->foto = $this->obtenerUrlArchivo($user->foto, $host, $bucket);
+        }
         return view('usuario.editar-usuario', compact('user'));
-    }
+    }   
 
     public function CrearUsuario(Request $request)
     {
