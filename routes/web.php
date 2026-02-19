@@ -48,6 +48,7 @@ Route::middleware(['auth'])->group(function () {
 
     Route::prefix('transaccion')->name('transaccion.')->group(function () {
         Route::get('/', [TransaccionController::class, 'filtrar'])->name('filtrar');
+        Route::get('/exportar', [TransaccionController::class, 'exportar'])->name('exportar');
     });
 
     Route::prefix('canal')->name('canal.')->group(function () {
