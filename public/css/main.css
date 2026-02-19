@@ -736,6 +736,142 @@ label {
   color: #1b1b1b;
 }
 
+/* Estilos exclusivos para la Lista de Suscriptores */
+.subscriber-list {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+  padding: 0;
+  margin: 0 5%;
+}
+
+.subscriber-item {
+  display: flex;
+  align-items: center;
+  background-color: #fff;
+  border: 1px solid #ccc;
+  border-radius: 12px;
+  padding: 20px;
+  transition: all 0.3s ease;
+  position: relative;
+}
+.subscriber-item:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.08);
+  border-color: #0baafe;
+}
+
+.subscriber-avatar-wrapper {
+  flex-shrink: 0;
+  margin-right: 20px;
+}
+
+.subscriber-avatar {
+  width: 80px;
+  height: 80px;
+  border-radius: 50%;
+  -o-object-fit: cover;
+     object-fit: cover;
+  border: 3px solid #f8f9fa;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.subscriber-details {
+  flex: 1;
+  min-width: 0;
+}
+
+.subscriber-name {
+  font-size: 1.25rem;
+  font-weight: 700;
+  margin: 0;
+  line-height: 1.2;
+}
+.subscriber-name a {
+  color: #042234;
+  text-decoration: none;
+  transition: color 0.2s;
+}
+.subscriber-name a:hover {
+  color: #0077cc;
+}
+
+.subscriber-meta {
+  font-size: 0.9rem;
+  color: #6c757d;
+  margin-top: 5px;
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.subscriber-channels {
+  margin-top: 10px;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 5px;
+  align-items: center;
+}
+
+.subscriber-actions {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-left: 20px;
+}
+
+[data-theme=dark] .subscriber-item {
+  background-color: #1b1b1b;
+  border-color: #1f2327;
+}
+[data-theme=dark] .subscriber-item:hover {
+  background-color: #333a43;
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+}
+[data-theme=dark] .subscriber-avatar {
+  border-color: #1f2327;
+}
+[data-theme=dark] .subscriber-name a {
+  color: #ffffff;
+}
+[data-theme=dark] .subscriber-name a:hover {
+  color: #0baafe;
+}
+[data-theme=dark] .subscriber-meta {
+  color: #adb5bd;
+}
+[data-theme=dark] .subscriber-channels .badge {
+  background-color: #343a40 !important;
+  color: #e9ecef !important;
+  border-color: #495057 !important;
+}
+
+@media (max-width: 768px) {
+  .subscriber-item {
+    flex-direction: column;
+    text-align: center;
+    padding: 20px 15px;
+  }
+  .subscriber-avatar-wrapper {
+    margin-right: 0;
+    margin-bottom: 15px;
+  }
+  .subscriber-details {
+    width: 100%;
+    margin-bottom: 15px;
+  }
+  .subscriber-actions {
+    margin-left: 0;
+    width: 100%;
+    justify-content: center;
+    border-top: 1px solid #ccc;
+    padding-top: 15px;
+  }
+  [data-theme=dark] .subscriber-actions {
+    border-color: #1f2327;
+  }
+}
 .canal-portada {
   position: relative;
   width: 100%;

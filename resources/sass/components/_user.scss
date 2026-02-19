@@ -272,3 +272,156 @@
         }
     }
 }
+
+/* Estilos exclusivos para la Lista de Suscriptores */
+.subscriber-list {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    padding: 0;
+    margin: 0 5%;
+}
+
+.subscriber-item {
+    display: flex;
+    align-items: center;
+    background-color: #fff;
+    border: 1px solid v.$color-border;
+    border-radius: 12px;
+    padding: 20px;
+    transition: all 0.3s ease;
+    position: relative;
+
+    &:hover {
+        transform: translateY(-3px);
+        box-shadow: 0 5px 15px rgba(0,0,0,0.08);
+        border-color: v.$color-primary-light;
+    }
+}
+
+.subscriber-avatar-wrapper {
+    flex-shrink: 0;
+    margin-right: 20px;
+}
+
+.subscriber-avatar {
+    width: 80px;
+    height: 80px;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 3px solid #f8f9fa;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+}
+
+.subscriber-details {
+    flex: 1;
+    min-width: 0;
+}
+
+.subscriber-name {
+    font-size: 1.25rem;
+    font-weight: 700;
+    margin: 0;
+    line-height: 1.2;
+
+    a {
+        color: v.$color-primary-dark;
+        text-decoration: none;
+        transition: color 0.2s;
+
+        &:hover {
+            color: v.$color-primary-hover;
+        }
+    }
+}
+
+.subscriber-meta {
+    font-size: 0.9rem;
+    color: #6c757d;
+    margin-top: 5px;
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 10px;
+}
+
+.subscriber-channels {
+    margin-top: 10px;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 5px;
+    align-items: center;
+}
+
+.subscriber-actions {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-left: 20px;
+}
+
+// Modo Oscuro para Suscriptores
+[data-theme='dark'] {
+    .subscriber-item {
+        background-color: v.$color-sidebar-hover-dark;
+        border-color: v.$color-border-dark;
+
+        &:hover {
+            background-color: lighten(#2c323a, 3%);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+        }
+    }
+
+    .subscriber-avatar {
+        border-color: v.$color-border-dark;
+    }
+
+    .subscriber-name a {
+        color: v.$color-white;
+
+        &:hover {
+            color: v.$color-primary-light;
+        }
+    }
+
+    .subscriber-meta {
+        color: #adb5bd;
+    }
+
+    .subscriber-channels .badge {
+        background-color: #343a40 !important;
+        color: #e9ecef !important;
+        border-color: #495057 !important;
+    }
+}
+
+// Responsivo
+@media (max-width: 768px) {
+    .subscriber-item {
+        flex-direction: column;
+        text-align: center;
+        padding: 20px 15px;
+    }
+
+    .subscriber-avatar-wrapper {
+        margin-right: 0;
+        margin-bottom: 15px;
+    }
+
+    .subscriber-details {
+        width: 100%;
+        margin-bottom: 15px;
+    }
+
+    .subscriber-actions {
+        margin-left: 0;
+        width: 100%;
+        justify-content: center;
+        border-top: 1px solid v.$color-border;
+        padding-top: 15px;
+    }
+
+    [data-theme='dark'] .subscriber-actions {
+        border-color: v.$color-border-dark;
+    }
+}

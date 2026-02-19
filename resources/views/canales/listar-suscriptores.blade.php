@@ -1,13 +1,11 @@
 @extends('layouts.app')
 
 @section('content')
-    <div class="titulo">
-        <div class="navigation-buttons">
-            <a href="javascript:history.back()" class="btn btn-secondary btn-sm">
-                <i class="fas fa-arrow-left"></i>
-            </a>
-        </div>
-        <span>Suscriptores del Canal: {{ $canal->nombre }}</span>
+    <div class="d-flex align-items-center mb-4">
+        <a href="javascript:history.back()" class="btn btn-outline-secondary btn-sm me-3 rounded-circle shadow-sm" style="width: 32px; height: 32px; display: flex; align-items: center; justify-content: center;">
+            <i class="fas fa-arrow-left"></i>
+        </a>
+        <h2 class="titulo mb-0 border-0 p-0" style="font-size: 1.75rem;">Suscriptores del Canal: {{ $canal->nombre }}</h2>
     </div>
 
     <div class="row align-items-center mb-4 g-3">
@@ -30,56 +28,48 @@
         </div>
     @endif
 
-    <div class="d-flex justify-content-center">
+    <div class="d-flex justify-content-center mb-4">
         {{ $suscriptores->links('vendor.pagination.pagination') }}
     </div>
 
-    <div class="user-list-container">
+    <div class="subscriber-list-container">
         @if ($suscriptores->isEmpty())
-            <p>No hay suscriptores para este canal.</p>
+            <div class="alert alert-info text-center mx-auto shadow-sm" style="max-width: 600px;">
+                <i class="fas fa-info-circle me-2"></i> No hay suscriptores para este canal.
+            </div>
         @else
-            <ul class="user-list">
+            <div class="subscriber-list">
                 @foreach ($suscriptores as $suscriptor)
-                    <li class="user-item">
-                        <div class="user-photo">
+                    <div class="subscriber-item">
+                        <div class="subscriber-avatar-wrapper">
                             <a href="{{ route('usuario.detalle', ['id' => $suscriptor->id]) }}">
                                 <img src="{{ $suscriptor->foto ? asset($suscriptor->foto) : asset('img/default-user.png') }}"
-                                    alt="{{ $suscriptor->name }}">
+                                    alt="{{ $suscriptor->name }}" class="subscriber-avatar">
                             </a>
                         </div>
-                        <div class="user-info">
-                            <h2 style="display: flex; align-items: center;">
-                                <a href="{{ route('usuario.detalle', ['id' => $suscriptor->id]) }}">
-                                    {{ $suscriptor->name }}
-                                </a>
-                            </h2>
-
-                            <div class="email-container">
-                                <p class="d-flex align-items-center">
-                                    <span class="h4 m-0 button-separator">#{{ $suscriptor->id }}</span>
-                                    <button type="button" class="btn btn-danger btn-sm" data-bs-toggle="modal"
-                                        data-bs-target="#modalDesuscribir{{ $suscriptor->id }}">
-                                        <i class="fas fa-user-times"></i> Desuscribir
-                                    </button>
-                                    <a href="{{ route('usuario.detalle', ['id' => $suscriptor->id]) }}"
-                                        class="button-info mx-0" title="Ver Usuario">
-                                        <i class="fas fa-info-circle"></i>
+                        
+                        <div class="subscriber-details">
+                            <div class="d-flex align-items-center flex-wrap mb-1 justify-content-center justify-content-md-start">
+                                <h3 class="subscriber-name me-2">
+                                    <a href="{{ route('usuario.detalle', ['id' => $suscriptor->id]) }}">
+                                        {{ $suscriptor->name }}
                                     </a>
-                                    <button class="btn btn-secondary btn-sm copy-btn" data-copy="{{ $suscriptor->id }}">
-                                        <i class="fas fa-copy copy-icon"></i>
-                                    </button>
-                                    <span class="copy-status text-muted ml-2">Copiar</span>
-
-                                </p>
-
-                            </div>
-                            <p><strong>Premium:</strong>
+                                </h3>
                                 @if ($suscriptor->premium)
-                                    <i class="fas fa-check" style="color: green;"></i>
-                                @else
-                                    <i class="fas fa-times" style="color: red;"></i>
+                                    <span class="badge bg-warning text-dark rounded-pill" title="Usuario Premium">
+                                        <i class="fas fa-crown text-dark" style="font-size: 0.8em;"></i> Premium
+                                    </span>
                                 @endif
-                            </p>
+                            </div>
+                            
+                            <div class="subscriber-meta justify-content-center justify-content-md-start">
+                                <span title="ID de Usuario"><i class="fas fa-hashtag text-muted small me-1"></i>{{ $suscriptor->id }}</span>
+                                <span class="text-muted d-none d-md-inline">|</span>
+                                <span class="text-truncate" style="max-width: 250px;" title="{{ $suscriptor->email }}">
+                                    <i class="fas fa-envelope text-muted small me-1"></i>{{ $suscriptor->email }}
+                                </span>
+                            </div>
+
                             @php
                                 $rawChannels = $suscriptor->canales;
                                 $channelsToDisplay = collect();
@@ -94,29 +84,44 @@
                             @endphp
 
                             @if ($channelsToDisplay->isNotEmpty())
-                                <div class="user-canales">
+                                <div class="subscriber-channels justify-content-center justify-content-md-start">
+                                    <small class="text-muted me-1">Canales:</small>
                                     @foreach ($channelsToDisplay as $canalSuscrito)
-                                        <p>
-                                            <a class="custom-link"
-                                                href="{{ route('canal.detalle', ['id' => $canalSuscrito->id]) }}">
-                                                {{ $canalSuscrito->nombre }}
-                                                <i class="fas fa-link"></i>
-                                            </a>
-                                        </p>
+                                        <a href="{{ route('canal.detalle', ['id' => $canalSuscrito->id]) }}" 
+                                           class="badge bg-light text-dark border text-decoration-none fw-normal">
+                                            {{ $canalSuscrito->nombre }}
+                                        </a>
                                     @endforeach
                                 </div>
-                            @else
-                                <p>No tiene canal asociado.</p>
                             @endif
-                            @include('modals.desuscribe-modal', ['suscriptor' => $suscriptor])
                         </div>
-                    </li>
+
+                        <div class="subscriber-actions">
+                            <div class="d-flex flex-column align-items-center me-2">
+                                <button class="btn btn-outline-secondary btn-sm copy-btn rounded-circle" data-copy="{{ $suscriptor->id }}" title="Copiar ID" style="width: 32px; height: 32px; padding: 0; display: flex; align-items: center; justify-content: center;">
+                                    <i class="fas fa-copy"></i>
+                                </button>
+                                <span class="copy-status small text-muted mt-1" style="font-size: 0.7rem;">Copiar</span>
+                            </div>
+                            
+                            <a href="{{ route('usuario.detalle', ['id' => $suscriptor->id]) }}"
+                                class="btn btn-outline-primary btn-sm" title="Ver Perfil">
+                                <i class="fas fa-eye me-1"></i> Ver
+                            </a>
+                            
+                            <button type="button" class="btn btn-outline-danger btn-sm" data-bs-toggle="modal"
+                                data-bs-target="#modalDesuscribir{{ $suscriptor->id }}" title="Desuscribir">
+                                <i class="fas fa-user-minus me-1"></i> Desuscribir
+                            </button>
+                        </div>
+                    </div>
+                    @include('modals.desuscribe-modal', ['suscriptor' => $suscriptor])
                 @endforeach
-            </ul>
+            </div>
         @endif
     </div>
 
-    <div class="d-flex justify-content-center">
+    <div class="d-flex justify-content-center mt-4">
         {{ $suscriptores->links('vendor.pagination.pagination') }}
     </div>
 

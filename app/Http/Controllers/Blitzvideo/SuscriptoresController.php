@@ -1,5 +1,4 @@
 <?php
-
 namespace App\Http\Controllers\Blitzvideo;
 
 use App\Http\Controllers\Controller;
@@ -12,22 +11,57 @@ class SuscriptoresController extends Controller
 {
     use Paginable;
 
+    private function obtenerHostMinio()
+    {
+        return str_replace('minio', env('BLITZVIDEO_HOST'), env('AWS_ENDPOINT')) . '/';
+    }
+
+    private function obtenerBucket()
+    {
+        return env('AWS_BUCKET') . '/';
+    }
+
+    private function obtenerUrlArchivo($rutaRelativa, $host, $bucket)
+    {
+        if (! $rutaRelativa) {
+            return null;
+        }
+        if (str_starts_with($rutaRelativa, $host . $bucket)) {
+            return $rutaRelativa;
+        }
+        if (filter_var($rutaRelativa, FILTER_VALIDATE_URL)) {
+            return $rutaRelativa;
+        }
+        return $host . $bucket . $rutaRelativa;
+    }
+
     public function listarSuscriptores($id, Request $request)
     {
         $canal = Canal::findOrFail($id);
-        $suscriptoresQuery = $canal->suscriptores()
+
+        $suscriptores = $canal->suscriptores()
             ->select('users.id', 'users.name', 'users.email', 'users.foto', 'suscribe.id as suscribe_id')
             ->whereNull('suscribe.deleted_at')
-            ->orderBy('users.id', 'desc');
+            ->orderBy('users.id', 'desc')
+            ->paginate(6);
 
-        $suscriptores = $suscriptoresQuery->paginate(6, ['*'], 'page', $request->input('page', 1));
+        $host   = $this->obtenerHostMinio();
+        $bucket = $this->obtenerBucket();
+
+        foreach ($suscriptores as $suscriptor) {
+            if ($suscriptor->foto) {
+                $suscriptor->foto = $this->obtenerUrlArchivo($suscriptor->foto, $host, $bucket);
+            }
+        }
+
         return view('canales.listar-suscriptores', compact('canal', 'suscriptores'));
     }
 
     public function listarSuscriptoresPorNombre($canalId, Request $request)
     {
         $nombre = $request->query('nombre');
-        $canal = Canal::findOrFail($canalId);
+        $canal  = Canal::findOrFail($canalId);
+
         $suscriptoresQuery = $canal->suscriptores()
             ->select('users.id', 'users.name', 'users.email', 'users.foto', 'suscribe.id as suscribe_id')
             ->whereNull('suscribe.deleted_at')
@@ -36,8 +70,15 @@ class SuscriptoresController extends Controller
         if ($nombre) {
             $suscriptoresQuery->where('users.name', 'like', '%' . $nombre . '%');
         }
+        $suscriptores = $suscriptoresQuery->paginate(12, ['*'], 'page', $request->input('page', 1));
+        $host         = $this->obtenerHostMinio();
+        $bucket       = $this->obtenerBucket();
 
-        $suscriptores = $suscriptoresQuery->paginate(6, ['*'], 'page', $request->input('page', 1));
+        foreach ($suscriptores as $suscriptor) {
+            if ($suscriptor->foto) {
+                $suscriptor->foto = $this->obtenerUrlArchivo($suscriptor->foto, $host, $bucket);
+            }
+        }
         return view('canales.listar-suscriptores', compact('canal', 'suscriptores'));
     }
 

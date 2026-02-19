@@ -144,7 +144,6 @@
     }
 }
 
-// New Channel View Styles
 .channel-card {
     background-color: #ffffff;
     border-radius: 12px;
@@ -176,7 +175,7 @@
     position: relative;
     width: 160px;
     height: 160px;
-    margin-top: -60px; // Overlap cover
+    margin-top: -60px;
     margin-bottom: 1rem;
     z-index: 2;
     
@@ -277,7 +276,6 @@
     background-color: #f8f9fa;
 }
 
-// Dark Mode Support
 [data-theme='dark'] {
     .channel-card {
         background-color: v.$color-sidebar-hover-dark;
@@ -332,7 +330,6 @@
         }
     }
     
-    // Dropdown overrides for dark mode
     .dropdown-menu {
         background-color: v.$color-sidebar-hover-dark;
         border-color: v.$color-border-dark;
